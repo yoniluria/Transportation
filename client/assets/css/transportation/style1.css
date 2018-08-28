@@ -1,0 +1,306 @@
+body{
+	font-size: 16px;
+}
+p{
+	font-size: 16px;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+	font-family: 'Assistant', sans-serif;
+}
+.station{
+	margin-bottom: 25px;
+}
+.line{
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+.line>.btn-small{
+    float: left;
+}
+table.search td{
+	padding: 5px;
+}
+.line-station{
+    text-align: center;
+    background-color: #9b9b9b;
+    padding: 6px;
+}
+.line-station p{
+    display: inline-block;
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+.station table{
+	width: 100%;
+}
+.station table tr:not(:first-child){
+	background-color: rgb(238,238,238);
+    border-bottom: 2px solid white;
+}
+/*.station table td,*/
+.station table th{
+    padding: 6px 3px;
+    /*width: 20%;*/
+}
+.table-buttons{
+	width: 100%;
+	margin-top: 9px;
+}
+.table-buttons td{
+	background-color: #9b9b9b;
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+table.search input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: black;
+}
+table.search input::-moz-placeholder { /* Firefox 19+ */
+  color: black;
+}
+table.search input:-ms-input-placeholder { /* IE 10+ */
+  color: black;
+}
+table.search input:-moz-placeholder { /* Firefox 18- */
+  color: black;
+}
+td.time_station{
+	border-left: none;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
+    width: 40%;
+    text-align: center;
+}
+.station>div{
+    border: 1px solid #d4d1d1;
+}
+.header{
+    display: table;
+    background-color: #d1d1d1;
+    z-index: 999;
+}
+.header>h3{
+    font-weight: bold;
+    display: table-cell;
+    vertical-align: middle;
+}
+.header-btn{
+    float: left;
+    width: 45%;
+    height: 55px;
+    display: table;
+}
+.header-btn>h3{
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+.header-btn>.fa-long-arrow-left{
+    font-size: 22px;
+    margin-top: 16px;
+    margin-right: 10px;
+}
+.menu-transport{
+	background-color: #d1d1d1;
+}
+.menu-transport .tab{
+	background-color: #d1d1d1;
+	border-bottom: 1px solid white;
+}
+.menu-transport .tab:first-child{
+	height: 61px;
+}
+.modal-header .fa-times{
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    font-size: 28px;
+    cursor: pointer;
+}
+.modal-small{
+	width: 350px;
+}
+.modal-small button{
+	margin-top: 10px;
+    font-size: 20px;
+}
+.modal-small h4{
+    font-size: 20px;
+    margin-bottom: 0;
+}
+.menu-transport .tab.select{
+    background-color: #9b9b9b;
+}
+.menu .tab.select p{
+	color: white;
+}
+.radio-btn,.checkbox-btn{
+    width: 20px;
+    height: 20px;
+}
+.radio-div,.checkbox-div{
+	display: table;
+}
+.radio-div>span,.checkbox-div>span{
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+.modal-small .radio-div>span{
+    font-size: 17px;
+}
+.modal-small select{
+	margin-top: 10px;
+}
+.modal-small p,.modal-small span{
+	color:black;
+}
+.no-padding{
+	padding: 0;
+}
+/* workers */
+.col-margin_address{
+    margin-left: 3px;
+    width: 28%;
+}
+
+.col-margin{
+    margin-left: 3px;
+    width: 12.5%;
+}
+.md-datepicker{
+	margin-right:0px !important;
+	padding-right:0px !important;
+}
+.add_worker{
+    border: 1px solid #d3d7db;
+    padding: 8px;
+    margin-bottom: 55px;
+    margin-top: 45px;
+}
+.absolute-btn{
+	width: 100px;
+    position: absolute;
+    left: 0;
+}
+.float-btn{
+	width: 12.5%;
+	float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.bold_desc{
+	font-weight: bold;
+    margin-left: 3px;
+}
+.table-rows{
+	width: 100%;
+}
+.table-rows tr{
+    border: 1px solid #bfc2c4;
+    height: 50px;
+    margin-bottom: 10px;
+    display: table;
+    width: 100%;
+}
+.table-rows tr td{
+	padding: 13px;
+	position: relative;
+}
+.table-rows tr td p{
+	margin-bottom: 0;
+}
+.td-btn{
+	padding: 0 2px !important;
+    width: 100px;
+    padding: 0;
+}
+.td-btn>button{
+    height: 44px;
+}
+.checkbox-div>input[type=checkbox]{
+    margin-left: 10px;
+}
+.checkbox-div>input:not([type=checkbox]),.checkbox-div>select{
+    width: calc(100% - 72px);
+}
+.write-remark .checkbox-div{
+    width: 20%;
+    display: inline-block !important;
+}
+.write-remark textarea{
+	width: 100%;
+    padding: 8px;
+}
+.write-remark,.add-div{
+	margin-bottom: 8px;
+}
+/* lines */
+.bold{
+	font-weight: bold;
+}
+.gray-cot{
+    background-color: #9b9b9b;
+    height: 34px;
+    text-align: center;
+    padding: 5px 0;
+    font-weight: bold;
+}
+.gray-table tr{
+	border-bottom: 4px solid white !important;
+}
+.gray-table tr:last-child{
+	border-bottom: 0 !important;
+}
+
+/* keeping */
+.add-div .col-margin{
+	margin-bottom: 0;
+}
+.cot-div{
+	font-weight: bold;
+	margin: 0 0 23px 0;
+	padding: 0 3px;
+}
+table.search td:first-child{
+	padding-right: 0;
+}
+table.search td:last-child{
+	padding-left: 0;
+}
+.td-time{
+	width: 10%;
+}
+.td-time>p{
+	border-left: 1px solid black;
+}
+
+/* driver */
+.add_driver{
+	position: relative;
+    padding-bottom: 13px;
+}
+.add_driver .col-margin{
+    width: calc(14.28% - 6px);
+}
+.add_driver .cot-div{
+	margin: 5px 0 13px 0;
+}
+.add_absolute{
+	position: absolute;
+    bottom: 0;
+    width: 12.5%;
+    left: 0;
+}
+
+
+/*header,.menu{
+	display: none !important;
+}*/

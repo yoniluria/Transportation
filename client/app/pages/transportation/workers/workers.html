@@ -1,0 +1,284 @@
+<style>
+/*table .table-rows{
+	table-layout:fixed;
+}
+.table-rows th{
+	text-align:center;
+}
+.table-rows th,.table-rows td {
+    border: 1px solid black;
+    width: 100px;
+}*/
+</style>
+<!-- <form enctype="multipart/form-data"> -->
+<div class="container" >
+	<div class="line add_worker" >
+		<h3 class="cot-div" >{{text}} עובד</h3>
+		
+		<input class="col-margin" ng-model="newWorker.id" placeholder="מ.ז:" required  ng-class="{'error' :(submitted&&!newWorker.id)}">
+		<input class="col-margin" ng-model="newWorker.name" placeholder="שם:" required  ng-class="{'error' :(submitted&&!newWorker.name)}" >
+		<input class="col-margin" ng-model="newWorker.phone" placeholder="טלפון:" required>
+		<input class="col-margin" ng-model="newWorker.department" placeholder="מחלקה:" required>
+		<!-- <input class="col-margin" ng-model="newWorker.regular_instructions" placeholder="הנחיות קבועות:"> -->
+		<div style="display: inline-block;">
+			<label style="display: inline;">קו מבית חולים: </label>
+			<label style="display: inline;">{{newWorker.combined_line}}</label>
+		</div>
+		<div style="display: inline-block;">
+			<label>שבץ לתת קו:</label>
+			<select ng-model="newWorker.sub_line">
+				<option value=""></option>
+				<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
+			</select>
+		</div>
+		<!-- <input class="col-margin" list="subLinesList" ng-model="newWorker.sub_line" placeholder="שבץ לתת קו:">
+		<datalist id="subLinesList">
+			<select>
+				<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
+			</select>
+		</datalist> -->
+		<br />
+		 <div ng-repeat-start="address in addresses" style="margin-bottom: 2%;margin-top: 2%;" ng-if="$first">
+    <!-- <input vs-google-autocomplete
+				ng-model="address.original_address"
+				vs-street-number="address.street_number"
+				vs-street="address.street"
+				vs-city="address.city"
+				vs-country="address.country"
+				vs-latitude="address.lat"
+				vs-longitude="address.lng"
+				type="text"
+				name="Address"
+				placeholder="כתובת ראשית"
+				value="{{address.original_address}}"
+				class="col-margin_address" style="margin-bottom: 0;"
+				required  ng-class="{'error' :(submitted&&!address.original_address)}"/> -->
+				<input class="col-margin" style="width: 300px;" type="text" required ng-model="address.original_address" placeholder="כתובת ראשית" />
+				 <!-- ng-blur="getDistance($index)" -->
+				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
+				<!--here <span ng-show="submitted&&(!address.lat||!address.lng||!address.original_address)" class="help-block" style="position:absolute 	;display:block;">כתובת לא תקינה</span> -->
+		<!-- <input class="col-margin" ng-model="address.line_number" style="margin-bottom: 0;" placeholder="מספר קו:" >
+		<input class="col-margin" ng-model="address.sub_line" style="margin-bottom: 0;" placeholder="שבץ להצגה בתת קו:" > -->
+		
+		<div class="checkbox-div" style="display: inline;" >
+			
+			
+			<label style="display: inline">			
+				<i class="fa fa-paperclip" style="display: inline" aria-hidden="true"></i>צרף מפה
+				<input type="file" style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index)" accept="image/*"/>
+				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.map_file}}" />
+			</label>
+		</div>
+		<!-- <div class="checkbox-div" style="display: inline;" >
+			<input ng-model="address.escort" type="checkbox" class="checkbox-btn" >
+			<span>ליווי</span>
+		</div> -->
+		<input class="col-margin" ng-model="address.regular_instructions" style="margin-bottom: 0;" placeholder="הנחיות קבועות:" >
+		<input type="number" class="col-margin" ng-model="address.travel_time" style="margin-bottom: 0;" placeholder="זמן נסיעה" ng-init="address.travel_time=address.travel_time==0?'':address.travel_time" >
+  </div>
+  <div style="margin-bottom: 2%;" ng-repeat-end ng-if="!$first">
+   <!-- <input vs-google-autocomplete
+				ng-model="address.original_address"
+				vs-street-number="address.street_number"
+				vs-street="address.street"
+				vs-city="address.city"
+				vs-country="address.country"
+				vs-latitude="address.lat"
+				vs-longitude="address.lng"
+				type="text"
+				name="Address"
+				 placeholder="כתובת משנית"
+				value="{{address.original_address}}"
+				class="col-margin_address" style="margin-bottom: 0;"
+				required  ng-class="{'error' :(submitted&&(!address.original_address||!address.lat||!address.lng||!address.country||!address.city||!address.street||!address.street_number))}"/> -->
+				<input class="col-margin" style="width: 300px;" type="text" required ng-model="address.original_address" placeholder="כתובת משנית" />
+				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
+				<!--here <span ng-show="submitted&&(!address.lat||!address.lng||!address.country||!address.city||!address.street||!address.street_number)" class="help-block" style="position:absolute 	;display:block">כתובת לא תקינה</span> -->
+		<!-- <input class="col-margin" ng-model="address.line_number" style="margin-bottom: 0;" placeholder="מספר קו:" >
+		<input class="col-margin" ng-model="address.sub_line
+		" style="margin-bottom: 0;" placeholder="שבץ להצגה בתת קו:" > -->
+		
+		<div class="checkbox-div" style="display: inline;" >
+			<label style="display: inline">			
+				<i class="fa fa-paperclip" style="display: inline" aria-hidden="true"></i>צרף מפה
+				<input type="file" style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index)" accept="image/*"/>
+				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.map_file}}" />
+			</label>
+		</div>
+		<!-- <div class="checkbox-div" style="display: inline;" >
+			<input ng-model="address.escort" type="checkbox" class="checkbox-btn" >
+			<span>ליווי</span>
+		</div> -->
+		<input ng-model="address.regular_instructions" class="col-margin" style="margin-bottom: 0;" placeholder="הנחיות קבועות:" >
+		<input type="number" ng-model="address.travel_time" class="col-margin" style="margin-bottom: 0;" placeholder="זמן נסיעה" ng-init="address.travel_time=address.travel_time==0?'':address.travel_time" >
+		<div style="display: inline-block;">
+			<label style="display: inline;">קו מבית חולים: </label>
+			<input type="number" style="width: 87px;" ng-model="address.combined_line" ng-value="address.combined_line" />
+		</div>
+		<div style="display: inline-block;">
+			<label>שבץ לתת קו:</label>
+			<select ng-model="address.sub_line">
+				<option value=""></option>
+				<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
+			</select>
+		</div>
+		<span ng-show="submitted&&(!newWorker.id||!newWorker.name)" class="help-block" style="position:absolute 	;display:inline-block">מלא שדות נדרשים</span>
+  </div>
+  
+		<!--<input  class="col-margin" style="margin-bottom: 0;" placeholder="׳”׳ ׳—׳™׳•׳× ׳§׳‘׳•׳¢׳•׳×:" value="">-->
+		<button class="float-btn btn" style="margin: 0; padding: 0 16px;margin-top: 10px;" ng-disabled="!newWorker.id || !newWorker.name" ng-click="submitted=true;save()">שמור עובד</button>
+		<button style="width: calc(19% - 23px);float: left;margin-left: 28%;margin-top: 10px;" ng-click="addAddress()">הוסף כתובת משנית נוספת</button>
+	</div>
+		<!-- <button class="float-btn" style="margin: 0; padding: 0 16px;" ng-click="submitted=true;(!newWorker.name||!newWorker.phone||!newWorker.id||!newWorker.department||save())">שמור עובד</button> -->
+	<!-- <button class="float-btn" >הנחיות קבועות</button> -->
+	<!-- </form> -->
+	<table class="search" style="width: 100%;">
+		<tbody>
+			<tr>
+			<td>
+				<p style="color: black;">סנן לפי</p>
+			</td>
+			
+			<td>
+				<!-- <select ng-model="workers" ng-options="worker1.id as worker1.name for worker1 in workers">
+					<option value="">שם</option>
+				</select> -->
+				<!-- <input type="text" placeholder="Find U.S. State" list="nameList" id="search" data-list-filter="^"> -->
+
+
+			<input list="nameList" type="text" ng-model="workersFilter.name" placeholder="שם:"/>
+    			<datalist id="nameList" >
+        			<option ng-repeat="x1 in workers |unique"  value="{{x1.name}}">
+    			</datalist>
+			</td>
+			<td>
+				<input list="idList" type="" ng-model="workersFilter.id" placeholder="ת.ז.:"/>
+    			<datalist id="idList">
+    				<select>
+        			<option  ng-repeat="x1 in workers" value="{{x1.id}}">
+        				
+        			</select>
+    			</datalist>
+			</td>
+			<td>
+				<input list="addressList" type="" ng-model="selectedAddress" ng-change="getdatalist()" placeholder="כתובת.:"/>
+    			<datalist id="addressList">
+    				<!-- <select ng-repeat="x1 in workers">
+        			<option  ng-repeat="x2 in x1.addresses | unique: 'original_address'" value="{{x2.original_address}}">
+        			</select> -->
+        			
+        		    <select>
+        			<option  ng-repeat="x in addressesList | unique: 'original_address'" value="{{x.original_address}}">
+        			</select>
+    			</datalist>
+			</td>
+			<td>
+				<input list="citiesList" type="" ng-model="selectedCity" ng-change="getdatalist()" placeholder="עיר.:"/>
+    			<datalist id="citiesList">
+    				<!-- <select ng-repeat="x1 in workers">
+        			<option  ng-repeat="x2 in x1.addresses | unique: 'city'" value="{{x2.city}}">
+        			</select> -->
+        			<select>
+        			<option  ng-repeat="x in addressesList | unique: 'city'" value="{{x.city}}">
+        			</select>
+    			</datalist>
+			</td>
+			<td>
+				<input list="linesList" ng-model="workersFilter.combined_line" placeholder="קו בית חולים.:" />
+				<datalist id="linesList">
+					<select>
+						<option ng-repeat="static_line in static_lines | orderBy:'line_order'" value="{{static_line.line_number}}"></option>
+					</select>
+				</datalist>
+			</td>
+			<td>
+				<input list="subLinesList" ng-model="workersFilter.sub_line" placeholder="תת קו.:" />
+				<datalist id="subLinesList">
+					<select>
+						<option ng-repeat="sub_line in subLines" value="{{sub_line}}"></option>
+					</select>
+				</datalist>
+			</td>
+			<!-- <td>
+				<input list="linesNumbersList" type="" ng-model="selectedLineNumber"  ng-blur="getdatalist()" placeholder="מספר קו:"/>
+    			<datalist id="linesNumbersList">
+    				<!-- <select ng-repeat="x1 in workers">
+        			<option  ng-repeat="x2 in x1.addresses | unique: 'line_number'" value="{{x2.line_number}}">
+        			</select> -->
+        			
+        			
+        			<!-- 
+        			<select>
+        			<option  ng-repeat="x in addressesList | unique: 'line_number'" value="{{x.line_number}}">
+        			</select>
+    			</datalist>
+			</td> -->
+			<td style="padding-left: 0;position: relative;">
+				<input style="width: calc(100% - 60px);" ng-model="filter" placeholder="חיפוש חפשי" >
+				<button class="absolute-btn" style="width: 80px;" >חפש</button>
+			</td>
+		</tr>
+	   </tbody>
+	</table>
+	<table class="table table-rows col-md-12">
+		<thead>
+			<tr>
+				<th class="col-md-2">שם</th>
+				<th class="col-md-2">טלפון</th>
+				<th class="col-md-2">כתובת</th>
+				<th class="col-md-2">מ.ז.</th>
+				<th class="col-md-1">מחלקה</th>
+				<th class="col-md-1">תת קו</th>
+				<th class="col-md-2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="worker in selectedWorkers |filter:workersFilter |filter:filter | orderBy:'name'" ng-class="{'selected-row':worker.id==newWorker.id}">
+				<td class="col-md-2"><p ng-bind="worker.name"></p></td>
+				<td class="col-md-2"><p ng-bind="worker.phone"></p></td>
+				<td class="col-md-2"><p ng-bind="worker.addresses[worker.index].original_address"></p></td>
+				<td class="col-md-2"><p ng-bind="worker.id"></p></td>
+				<!-- <td><p ng-hide="editingData[worker.id]"><span class="bold_desc" >מספר קו:</span><span  ng-bind="worker.addresses[worker.index].line_number"></span></p><p ng-show="editingData[worker.id]"><span class="bold_desc" >מספר קו:</span><input type="text" ng-model="worker.addresses[worker.index].line_number" /></p></td> -->
+				<td class="col-md-1"><p ng-bind="worker.department"></p></td>
+				<td class="col-md-1"><p ng-bind="worker.sub_line"></p></td>
+				<!-- <td><p ng-hide="editingData[worker.id]"><span class="bold_desc" >משובץ בתת קו:</span><span ng-bind="worker.addresses[worker.index].sub_line"></span></p><p ng-show="editingData[worker.id]"><span class="bold_desc" >משובץ בתת קו:</span><input type="text" ng-model="worker.addresses[worker.index].sub_line"/></p></td> -->
+				<td style="width:50px;" class="td-btn col-md-1"><button ng-click="modify(worker)" >ערוך עובד</button></td>
+				<td style="width:50px;" class="td-btn col-md-1" style="padding-left: 4px !important;" data-toggle="modal" ng-click="sendWorkerToDelete(worker)" data-target="#delWorkerModal">
+					<button>מחק עובד</button>
+				</td>
+			</tr>
+	
+		</tbody>
+	</table>
+	<div style="background-color: red" ng-show="noReults()">
+		<h1 style="color: white">לא נמצאו עובדים המתאימים לתנאי החיפוש</h1>
+	</div>
+</div>
+
+
+<div class="modal fade popup" id="delWorkerModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את <span ng-bind="workerToDelete.name"></span>?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteWorker()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>

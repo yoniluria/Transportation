@@ -1,0 +1,146 @@
+ <div class="in-tab" id="" ng-init="initialize()">
+  	<div class="col-md-12">
+  	<h4>הגדר את פרטי העסק שלך</h4>
+  	</div>
+  	<form name="SettingsForm" ng-submit="submitted=true;(SettingsForm.$invalid||saveSettings(SettingsForm.$valid))" novalidate>
+	<div class="col-sm-4">
+		<label>שם העסק:</label>
+		<input name="business_name" type="text" ng-model="settings.business_name" maxlength="100"/>
+	</div>
+	<div class="col-sm-4">
+		<label>שם משתמש:</label>
+		<input name="user_name" type="text" ng-model="settings.user_name" maxlength="100" ng-disabled="true"/>
+	</div>
+	
+	<div class="col-sm-4">
+		<label>דוא"ל:</label>
+		<input name="email" type="email" ng-model="settings.email" ng-class="{'error' :(submitted&&SettingsForm.email.$invalid  )}"/>
+		<span ng-show="submitted&&SettingsForm.email.$invalid" class="help-block help-block-absolute">אימייל לא תקין</span>
+	</div>
+	
+	<div class="col-sm-4">
+		<label>כתובת ברירת מחדל ליציאה וחזרה של נהגים:</label>
+		<input vs-google-autocomplete                 
+               ng-model="settings.address.name"
+               vs-place="settings.address.place" 
+               vs-place-id="settings.address.components.placeId"
+               vs-street-number="settings.address.components.streetNumber" 
+               vs-street="settings.address.components.street"
+               vs-city="settings.address.components.city"
+               vs-state="settings.address.components.state"
+               vs-country-short="settings.address.components.countryCode"
+               vs-country="settings.address.components.country"
+               vs-post-code="settings.address.components.postCode"
+               vs-district="settings.address.components.district"
+               vs-latitude="settings.lat_office"
+               vs-longitude="settings.lng_office"
+               type="text" 
+               name="address"
+               id="address"
+               placeholder="הזן מיקום"
+                />	
+       </div>
+			
+	<div class="col-sm-4">
+		<label>טלפון:</label>
+		<input name="phone" type="text" ng-model="settings.phone" ng-pattern="/^\(?(\d{2,3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/"  ng-class="{'error' :(submitted&&SettingsForm.phone.$invalid)}" />
+		<span ng-show="submitted&&SettingsForm.phone.$invalid" class="help-block help-block-absolute">טלפון לא תקין</span>
+	</div>
+	<div class="col-sm-4">
+		<label>ח.פ.:</label>
+		<input name="company_id" type="number"  string-to-number ng-model="settings.company_id" maxlength="9"/>
+	</div>
+	
+	<div class="col-sm-12">
+  	<h4>הגדר את טווח הזמנים עבור ההגעה ליעדים</h4>
+  	</div>
+  	
+  	<div ng-if="getProfile()!='מובילים'">
+	<div class="col-sm-4">
+		<label>תוך כמה זמן הנהג יגיע ליעד:</label>
+		<input name="time_destination" type="number"  string-to-number ng-model="settings.time_destination" />
+	</div>
+	<div class="col-sm-4">
+		<label>זמן תחילת עבודה</label>
+		<input name="workday_start" type="time" datetime="hh:mm"  ng-model="settings.temp_workday_start" />
+	</div>
+	
+	<div class="col-sm-4">
+		<label>זמן סיום עבודה</label>
+		<input name="workday_end" type="time"   ng-model="settings.temp_workday_end" />
+	</div>  
+	<div class="col-sm-4">
+		<!--<label>זמן הגעה ליעד בזמני עומס:</label>-->
+		<label>טווח מסלול בדקות:</label>
+		<input name="time_destination_load" type="number"  string-to-number ng-model="settings.time_destination_load" />
+	</div>
+	
+	<div class="col-sm-4">
+		<label>זמן הגעה ליעד מרוחק</label>
+		<input name="remote_destination" type="number"  string-to-number ng-model="settings.remote_destination" />
+	</div>
+	<div class="col-sm-4">
+		<label>זמן שהות בתחנה</label>
+		<input name="stop_time" type="number"  string-to-number ng-model="settings.stop_time" />
+	</div>
+	<div class="col-sm-4">
+		<label>מספר כתובות מרבי למסלול</label>
+		<input name="max_order" type="number"  string-to-number ng-model="settings.max_order" />
+	</div>
+	<div class="col-sm-4">
+		<label>העלה תמונת לוגו</label>
+		<input style="display: none;" id="upload" type="file" accept="image/*" onchange="angular.element(this).scope().uploadImage(event)" />
+		<input style="" class="input-upload" type="text" ng-model="settings.image_file" />
+		<label class="upload-button" style="width: 100px;" for="upload">בחר קובץ</label>
+		<p style="line-height: 13px;font-size: 12px;margin-top: -5px;">*מומלץ להעלות קובץ בסיומת png ברקע שקוף</p>
+	</div>
+	</div>
+	
+	<div ng-if="getProfile()=='מובילים'">
+	
+	<div class="col-sm-4">
+		<!--<label>זמן הגעה ליעד בזמני עומס:</label>-->
+		<label>טווח מסלול בדקות:</label>
+		<input name="time_destination_load" type="number"  string-to-number ng-model="settings.time_destination_load" />
+	</div>
+	
+	<div class="col-sm-4">
+		<label>זמן תחילת עבודה</label>
+		<input name="workday_start" type="time" datetime="hh:mm"  ng-model="settings.temp_workday_start" />
+	</div>
+	
+	<div class="col-sm-4">
+		<label>זמן סיום עבודה</label>
+		<input name="workday_end" type="time"   ng-model="settings.temp_workday_end" />
+	</div>  
+	
+	<div class="col-sm-4">
+		<label>זמן שהות בתחנה</label>
+		<input name="stop_time" type="number"  string-to-number ng-model="settings.stop_time" />
+	</div>
+
+
+	<div class="col-sm-4">
+		<label>העלה תמונת לוגו</label>
+		<input style="display: none;" id="upload" type="file" accept="image/*" onchange="angular.element(this).scope().uploadImage(event)" />
+		<input style="" class="input-upload" type="text" ng-model="settings.image_file" />
+		<label class="upload-button" style="width: 100px;" for="upload">בחר קובץ</label>
+		<p style="line-height: 13px;font-size: 12px;margin-top: -5px;">*מומלץ להעלות קובץ בסיומת png ברקע שקוף</p>
+	</div>
+	</div>
+	
+	
+	<div class="col-md-12 no-padding">
+	<div class="col-sm-offset-4 col-sm-4">
+		<button type="submit" >שמור</button>
+	
+	</div>
+	</div>
+	</form>
+<!--
+<button class="delete-button" ng-click="logOut()"><i class="fa fa-power-off"></i></button>
+-->
+</div>
+
+
+ 

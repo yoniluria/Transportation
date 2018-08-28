@@ -1,0 +1,424 @@
+<div class="between-dates col-xs-12   no-padding">
+	<!-- <h4 class="col-xs-12" style="margin-bottom: 10px;">בחר טווח תאריכים-</h4> -->
+	<div class="col-md-3" style="    margin-top: 5px;" >
+		<div class="col-md-3">
+			<p style="margin-top: 15px;margin-bottom: 0;color: white;			font-weight: 600;">
+				תאריך:
+			</p>
+		</div>
+		<div class="col-md-9 no-padding">
+			<md-datepicker ng-model="$parent.from_date_routes" class="datepicker-route" md-placeholder="Enter date"    ng-change="getRoutesByDate()"></md-datepicker>
+		</div>
+
+	</div>
+	<div style="      text-align: right;    margin-top: 15px;     " class="col-md-2 records-num no-padding num-lines">
+		<p class="records-txt">
+			מספר רשומות:
+		</p ><span class="records-n">{{(tracks.length)}}</span>
+	</div>
+	<div style="margin-top: 7px;padding-left: 15px;    font-size: 90%;" class="col-md-7 no-padding btns-routes">
+
+		<div class="col-md-2 col-md-offset-2" style="padding: 2px">
+			<button class="save-all-btn" ng-click="save()" >
+				שמור שינויים
+			</button>
+		</div>
+		
+		<div class="col-md-2" style="padding: 2px">
+			<button style="left:16%" data-toggle="modal" data-target="#deleteAllTracksModal" class="save-all-btn" ng-click="" >
+				מחק הכל
+			</button>
+		</div>
+		<div class="col-md-2" style="padding: 2px">
+			<button style="left:9%"   class="save-all-btn" ng-click="printAll()" >
+				הדפס מסלולים
+			</button>
+		</div>
+		
+		<div class="col-md-2" style="padding: 2px">
+			<button style="left:16%" class="save-all-btn" ng-click="printInvoice()">
+				הדפס חשבוניות
+			</button>
+		</div>
+		<div class="col-md-2" style="padding: 2px">
+			<button class="save-all-btn" ng-click="colapseMap()" >
+				תצוגת מפה
+				<img style="       width: 20%; " ng-src="{{'assets/img/'+(!isColapseMap?'zoom-in.png':'zoom-out.png')}}"/>
+				<!-- <img style="     margin-right: 10px;" ng-src="{{'assets/img/'+(!isColapseMap?'zoom-in.png':'zoom-out.png')}}"/> -->
+			</button>
+		</div>
+
+	</div>
+
+</div>
+<div class="box col-md-12"  ng-if="unembedded_stops.length">
+	<!-- background: #f5f5f5; -->
+
+	<div ng-if="unembedded_stops.length"  class="col-md-12 info route-info" ng-click="toggleStops()"
+	style="border: solid 1px gainsboro;
+	height: 45px;
+	padding-top: 0px!important;
+	margin-bottom: 6px;
+	background: #5d5e62 !important;">
+		<div class="colorToRoute"></div>
+		<img id="eye" ng-if="!display_unembedded"  style="height: 50px;display: inline-block;padding: 11px;" src="assets/img/eye11.png"></img>
+		<img id="eye_line" ng-if="display_unembedded"  style="height: 45px;display: inline-block;padding: 11px;" src="assets/img/eye_line11.png"></img>
+		<p style="color: #d3d7db !important;">
+			תחנות שלא שובצו
+		</p>
+		<i  data-toggle="modal" data-target="#deleteUnembeddTrackModal" style="padding: 11px"; class="fa fa-trash-o cancel-stop cancel-track" ></i>
+	</div>
+
+	<div id="unembedded_body">
+		<ul style="padding: 0px 3px; margin: 0;" class="col-sm-12 drop-ul move-btn" dnd-list dnd-drop="onDrop(route, item, index)" >
+
+			<li class="order-drag-drop"  ng-click="show_tooltip(order.id)" ng-repeat="order in unembedded_stops | orderBy:'parseInt(stop_index)'  "   dnd-draggable="getSelectedItemsIncluding(unembedded_drag, order)"
+			dnd-dragstart="onDragstart(unembedded_drag, event)"
+			dnd-moved="onMoved(unembedded_drag)"
+			dnd-dragend="route.dragging = false"
+			dnd-selected="order.selected = !order.selected"
+			ng-class="{'selected': order.selected}"
+			ng-hide="unembedded_stops.dragging && order.selected">
+
+				<!--
+				<i ng-click="delStop(order,parseInt(order.stop_index))" style="padding: 11px;"    class="fa fa-times cancel-stop"></i>
+
+				<div class="circle-number" style="margin-bottom: 5px;">
+				<span ng-bind="order.stop_index"></span>
+				</div>-->
+
+				<p class="address center" style="" >
+					<span class="time-label" ng-if="order.time_set">{{getDate(order.time_order)| date : 'HH:mm'}} </span>
+
+					<span style="font-size: 12px; font-weight: 400; color:#5d5e62; " ><span ng-bind="::order.customer_name| limitTo:30"></span></span>
+					<br>
+					<span><span ng-bind="::order.city"></span> <span style="font-size:10px" ng-bind="::order.street| limitTo:30"></span> <span style="font-size:10px"  ng-bind="::order.number"></span> </span>
+				</p>
+				<div id="note{{::order.id}}" class="note">
+					<div id="triangle-up"></div>
+					<i class="fa fa-times fa-cancel-note" aria-hidden="true"></i>
+					<p ng-if="order.floor"><i class="fa fa-external-link-square" aria-hidden="true"></i> <label class="note-label">קומה: </label><span>{{order.floor}}</span></p>
+    				<p ng-if="order.customer_name"><i class="fa fa-user" aria-hidden="true"></i><label class="note-label"> שם לקוח: </label><span> {{order.customer_name}}</span></p>
+    				<p ng-if="order.phone"><i class="fa fa-phone" aria-hidden="true"></i><label class="note-label"> טלפון: </label><span> {{order.phone}}</span></p>
+    				<p ng-if="order.id"><i class="fa fa-hashtag" aria-hidden="true"></i><label class="note-label"> מספר הזמנה: </label><span> {{order.num_order}}</span></p>
+            		<p ng-if="time_set"><i class="fa fa-clock-o" aria-hidden="true"></i> <label class="note-label">שעת הזמנה: </label><span> {{getTime(current_stop.time_order, current_stop.time_set)}}</span></p>
+         			<p ng-if="order.remarks"><i class="fa fa-circle" aria-hidden="true"></i><label class="note-label"> הערות: </label><span> {{order.remarks}}</span></p> 
+					
+					<p>
+						
+					</p>
+				</div>
+
+			</li>
+
+		</ul>
+
+	</div>
+</div>
+
+<div id="half" class="col-md-12 half">
+
+	<!-- routes -->
+
+	<div ng-if="route.order.length" class="box col-md-12" ng-repeat="route in tracks| orderBy:'':true">
+		<!-- background: #f5f5f5; -->
+
+		<div class="col-md-12 info route-info" ng-click="selectRoute(route)"
+		style="border: solid 1px gainsboro;
+		height: 45px;
+		padding-top: 14px!important;
+		margin-bottom: 6px;
+		background: #5d5e62 !important;">
+			<div id="{{::route.id}}" class="colorToRoute"></div>
+			<p  style="color: #d3d7db !important;" class="inline p-ltr">
+				מספר מסלול: <span >{{::$index+1}} </span>
+			</p>
+			<p  style="color: #d3d7db !important;" class="inline">
+				תאריך:
+
+				<!--<span ng-if="currentRoute!=route"> {{getDate(route.track_date) | date : 'dd.M.y' }} </span>-->
+				<input class="routeHeader"  type="date" ng-model="route.tempDate"/>
+			</p>
+			<p ng-if="route.tempTime" style="color: #d3d7db !important;" class="inline">
+				שעת יציאה:
+				<select class="routeHeader" class="time" ng-model="route.tempTime"  ng-options="hour.id as hour.value for hour in hours"></select>
+			</p>
+			<p  style="color: #d3d7db !important;" class="inline" >
+				נהג:
+				<select class="routeHeader"  ng-model="route.meesenger" ng-options="m.id as (m.name+' '+m.lastname) for m in messengers"></select>
+			</p>
+
+			<p  style="color: #d3d7db !important;" class="inline p-ltr" >
+				זמן: <span ng-bind="getTime(route.time)"></span><!--:<span ng-bind="((route.time)%60||0)|number:2"> </span> -->
+			</p>
+			<p  style="color: #d3d7db !important;" class="inline p-ltr" >
+				אורך מסלול: <span ng-bind="(route.distance||0)|number:3"> </span> <span>ק"מ</span> 
+			</p>
+
+			<i ng-click="delTrack(route)"  data-toggle="modal" data-target="#deleteTrackModal" class="fa fa-trash-o cancel-stop cancel-track" ></i>
+			<i class="fa fa-print cancel-stop cancel-track" ng-click="print(route)" ></i>
+			<i class="fa fa-files-o cancel-stop cancel-track" ng-click="printInvoice(route,$index)" aria-hidden="true"></i>
+		</div>
+
+		<div>
+			<ul style="padding: 0px 3px; margin: 0;" class="col-sm-12 drop-ul move-btn" dnd-list dnd-drop="onDrop(route, item, index)" >
+
+				<li class="order-drag-drop " ng-click="show_tooltip(order.id)" ng-repeat="order in route.order | orderBy:'parseInt(stop_index)'  "   dnd-draggable="getSelectedItemsIncluding(route, order)"
+				dnd-dragstart="onDragstart(route, event)"
+				dnd-moved="onMoved(route)"
+				dnd-dragend="route.dragging = false"
+				dnd-selected="order.selected = !order.selected"
+				ng-class="{'selected': order.selected}"
+				ng-hide="route.dragging && order.selected">
+
+					<i ng-click="delStop(order,parseInt(order.stop_index))"    class="fa fa-times cancel-stop"></i>
+
+					<!--
+					<div class="circle-number" style="margin-bottom: 5px;">
+					<span ng-bind="order.stop_index"></span>
+					</div>-->
+
+					<p class="address center" style="" >
+						<span class="time-label" ng-if="order.time_set">{{getDate(order.time_order)| date : 'HH:mm'}} </span>
+
+						<span style="font-size: 12px; font-weight: 400; color:#5d5e62; " ><span ng-bind="::order.customer_name| limitTo:30"></span></span>
+						<br>
+						<span><span ng-bind="::order.city"></span> <span style="font-size:10px" ng-bind="::order.street| limitTo:30"></span> <span style="font-size:10px"  ng-bind="::order.number"></span> </span>
+					</p>
+					
+					
+				<div id="note{{::order.id}}" class="note">
+					<div id="triangle-up"></div>
+					<i class="fa fa-times fa-cancel-note"   aria-hidden="true"></i>
+					<p ng-if="order.floor"><i class="fa fa-external-link-square" aria-hidden="true"></i> <label class="note-label">קומה: </label><span>{{order.floor}}</span></p>
+    				<p ng-if="order.customer_name"><i class="fa fa-user" aria-hidden="true"></i><label class="note-label"> שם לקוח: </label><span> {{order.customer_name}}</span></p>
+    				<p ng-if="order.phone"><i class="fa fa-phone" aria-hidden="true"></i><label class="note-label"> טלפון: </label><span> {{order.phone}}</span></p>
+    				<p ng-if="order.id"><i class="fa fa-hashtag" aria-hidden="true"></i><label class="note-label"> מספר הזמנה: </label><span> {{order.num_order}}</span></p>
+            		<p ng-if="time_set"><i class="fa fa-clock-o" aria-hidden="true"></i> <label class="note-label">שעת הזמנה: </label><span> {{getTime(current_stop.time_order, current_stop.time_set)}}</span></p>
+         			<p ng-if="order.remarks"><i class="fa fa-circle" aria-hidden="true"></i><label class="note-label"> הערות: </label><span> {{order.remarks}}</span></p> 
+					
+					<p>
+						
+					</p>
+				</div>
+					
+					
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+	<style>
+		.cancel-stop {
+			float: left;
+			font-size: 15px;
+			text-align: center;
+			margin-top: 8px;
+			margin-right: 5px;
+			/* background: lightgray; */
+			border-radius: 60px;
+			padding: 2px;
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+		}
+		.cancel-track {
+			color: white !important;
+			font-size: 17px;
+			margin-top: 0px;
+		}
+		.cancel-track:hover, .cancel-stop:hover {
+			color: gray !important;
+		}
+	</style>
+
+</div>
+<div id="mymap" style="height: calc(52vh - 114px);
+
+width: 100%;
+position: fixed;
+bottom: 0;" ></div>
+
+<div id="no_driver" data-toggle="modal" data-target="#printTrackModal" style="display: none"></div>
+
+<!-- Modal -->
+<div class="modal fade popup" id="printTrackModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					לא נבחר נהג למסלול\ים, האם להמשיך בכל זאת?
+				</p>
+
+				<!--
+				<p class="center modal-title">׳‘׳�׳—׳™׳¦׳” ׳¢׳� ׳�׳—׳§ ׳”׳�׳¡׳�׳•׳� ׳™׳�׳—׳§ ׳�׳”׳�׳¢׳¨׳›׳× ׳•׳”׳”׳–׳�׳ ׳•׳× ׳™׳—׳–׳¨׳• ׳�׳�׳¡׳� ׳”׳–׳�׳ ׳•׳× ׳•׳™׳�׳×׳™׳ ׳• ׳�׳©׳™׳‘׳•׳¥ ׳�׳—׳“׳©.</p>
+				-->
+			</div>
+
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button" class="" data-dismiss="modal" >
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="printNow()" data-dismiss="modal">
+						המשך
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade popup" id="deleteAllTracksModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					האם אתה רוצה למחוק את כל המסלולים?
+				</p>
+				<p class="center modal-title">
+					ההזמנות לא ימחקו מהמערכת במחיקת המסלולים (אפשר לצפות בהם במסך הזמנות)
+				</p>
+				<!--
+				<p class="center modal-title">׳‘׳�׳—׳™׳¦׳” ׳¢׳� ׳�׳—׳§ ׳”׳�׳¡׳�׳•׳� ׳™׳�׳—׳§ ׳�׳”׳�׳¢׳¨׳›׳× ׳•׳”׳”׳–׳�׳ ׳•׳× ׳™׳—׳–׳¨׳• ׳�׳�׳¡׳� ׳”׳–׳�׳ ׳•׳× ׳•׳™׳�׳×׳™׳ ׳• ׳�׳©׳™׳‘׳•׳¥ ׳�׳—׳“׳©.</p>
+				-->
+			</div>
+
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button" class="" data-dismiss="modal" >
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteAllTrack()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<div class="modal fade popup" id="deleteUnembeddTrackModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					האם אתה רוצה למחוק הזמנות שלא שובצו?
+				</p>
+				<p class="center modal-title">
+					ההזמנות לא ימחקו מהמערכת במחיקת המסלול (אפשר לצפות בהם במסך הזמנות)
+				</p>
+				<!--
+				<p class="center modal-title">׳‘׳�׳—׳™׳¦׳” ׳¢׳� ׳�׳—׳§ ׳”׳�׳¡׳�׳•׳� ׳™׳�׳—׳§ ׳�׳”׳�׳¢׳¨׳›׳× ׳•׳”׳”׳–׳�׳ ׳•׳× ׳™׳—׳–׳¨׳• ׳�׳�׳¡׳� ׳”׳–׳�׳ ׳•׳× ׳•׳™׳�׳×׳™׳ ׳• ׳�׳©׳™׳‘׳•׳¥ ׳�׳—׳“׳©.</p>
+				-->
+			</div>
+
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button" class="" data-dismiss="modal" >
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="delUnembeddedTrack()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade popup" id="deleteTrackModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					האם אתה רוצה למחוק מסלול זה?
+				</p>
+				<p class="center modal-title">
+					ההזמנות לא ימחקו מהמערכת במחיקת המסלול (אפשר לצפות בהם במסך הזמנות)
+				</p>
+				<!--
+				<p class="center modal-title">׳‘׳�׳—׳™׳¦׳” ׳¢׳� ׳�׳—׳§ ׳”׳�׳¡׳�׳•׳� ׳™׳�׳—׳§ ׳�׳”׳�׳¢׳¨׳›׳× ׳•׳”׳”׳–׳�׳ ׳•׳× ׳™׳—׳–׳¨׳• ׳�׳�׳¡׳� ׳”׳–׳�׳ ׳•׳× ׳•׳™׳�׳×׳™׳ ׳• ׳�׳©׳™׳‘׳•׳¥ ׳�׳—׳“׳©.</p>
+				-->
+			</div>
+
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button" class="" data-dismiss="modal" >
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteTrack()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<button id="delete-modal-toggle" style="display: none" data-toggle="modal" data-target="#deleteOrderModal"></button>
+<!-- Modal -->
+<div class="modal fade popup" id="deleteOrderModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את ההזמנה מהמערכת?
+				</p>
+			</div>
+
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button" class="" data-dismiss="modal" >
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteStop()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>

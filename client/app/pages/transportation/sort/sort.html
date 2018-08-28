@@ -1,0 +1,172 @@
+<div class="divsortby" style="margin-top: 25px">
+<label style="display: inline;">סנן לפי</label>
+<!-- <select style="display: inline; width: 250px; margin-right: 10px;" ng-style="{'border':!sortfilter.track.shift_id&&(sortfilter.isHospital==1||!sortfilter.isHospital)?'1px solid red':''}" ng-change="getDataList()" ng-model="sortfilter.track.shift_id" ng-options="shift.id as shift.name for shift in shifts track by shift.id">
+	<option value="">כל המשמרות</option>
+</select> -->
+<select style="display: inline; width: 250px; margin-right: 10px;" ng-change="getDataList()" ng-model="sortfilter.track.shift_id">
+	<option value="">כל המשמרות</option>
+	<option ng-repeat="shift in shifts track by shift.id" ng-selected="shift.id==sortfilter.track.shift_id" value="{{shift.id}}">{{shift.name}}</option>
+</select>
+<select ng-change="getDataList()" style="display: inline; width: 250px; margin-right: 10px;" ng-style="{'border':!sortfilter.isHospital?'1px solid red':''}" ng-model="sortfilter.isHospital">
+	<option value="">כל המסלולים</option>
+	<option value="1" class="hospital-track">קווי בית חולים</option>
+	<option value="2" class="private-track">קווים פרטיים</option>
+</select>
+<!-- <select ng-show="sortfilter.isHospital==2" ng-change="getDataList()" style="display: inline; width: 250px; margin-right: 10px;" ng-model="sortfilter.track.meesenger" ng-options="driver.id as driver.name for driver in $parent.drivers | filter:{is_usher:false} track by driver.id">
+	<option value="">בחר נהג</option>
+</select> -->
+<select ng-show="sortfilter.isHospital==2" ng-change="getDataList()" style="display: inline; width: 250px; margin-right: 10px;" ng-model="sortfilter.track.meesenger">
+	<option value="">בחר נהג</option>
+	<option ng-repeat="driver in $parent.drivers | filter:{is_usher:false} track by driver.id" ng-selected="driver.id==sortfilter.track.meesenger" value="{{driver.id}}">{{driver.name}}</option>
+</select>
+<button class="btn" style="width: 225px;margin-right: 10px;" ng-click="resetChecking()">נקה בחירת מסלולים מסומנים</button>
+<button class="btn" style="width: 225px;margin-right: 10px;" ng-click="checkingAll()">בחר כל המסלולים</button>
+<table style="display: inline-block;margin-top: 1%;margin-left: 1%;float: left;">
+	<tbody>
+		<tr>
+			<td class="hospital-track" style="height: 50px;">קווי בית חולים</td>
+			<td class="private-track" style="height: 50px;">קווים פרטיים</td>
+		</tr>
+	</tbody>
+</table>
+<div class="col-md-12" style="border: 1px solid #bfbfbf; margin: 10px; width: 98%; padding: 0px !important;">
+<table class="col-md-12" >
+	<tr style="background-color: #e2e2e2;">
+		<th> סוג משמרת</th>
+		<!-- <th> בחר קובץ</th> -->
+		<th> בחר קו למשלוח</th>
+		<th> מספר קו</th>
+		<th> תיאור הקו</th>
+		<th> סדר הצגה</th>
+		<th ng-show="sortfilter.isHospital==2">נהג</th>
+		<th> מספר נוסעים</th>
+		<th> נשלח</th>
+	</tr>
+	<tr style="border-bottom: 1px solid rgb(199, 199, 199);" ng-class="{'hospital-track':track.isHospital==1,'private-track':track.isHospital==2}" ng-repeat="track in tracks | orderBy:['track_order'] | filter:sortfilter" data-track="{{track.track.id}}" >
+		<td>{{track.track.shift}}</td>
+		<!-- <td>
+			<select>
+	 			 <option value="volvo">pdf</option>
+	 			 <option value="volvo">pdf</option>
+		   	</select>
+		</td> -->
+		<td> <input id="{{track.track.id}}" type="checkbox" ng-checked="{{track.selected}}" class="input_select" ng-click="addToSelectedTracks(track)"></td>
+		<td>{{track.track.combined_line}}</td>
+		<td>{{track.track.region?(track.track.region+': '+track.track.description):track.track.description}}</td>
+		<td>{{track.track_order}}</td>
+		<td ng-show="sortfilter.isHospital==2">
+		   	<!-- <select ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers">
+		   	</select> -->
+		   	{{track.driver.name}}
+		</td>
+		<td>{{track.workers.length}}</td>
+		<td> <input type="checkbox" ng-checked="track.track.isSent" disabled="disabled" class="input_select"></td>
+	</tr>	
+</table>
+
+</div>
+<button data-toggle="modal" data-target="#sendTo" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">שלח</button>
+<button ng-click="print('showSelectedTracks')" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">הדפס משלוח</button>
+<button data-toggle="modal" data-target="#showSelectedTracks" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">הצג קוים למשלוח</button>
+<div id="showSelectedTracks" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small" style="width: 40%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal"></i>
+        <h4 class="modal-title">הקוים שנבחרו למשלוח הם:</h4>
+        <h3 style="background-color: yellow;">לתשומת לב: בחירת קווי בית חולים וקווים פרטיים בו זמנית עלולה לגרום לתקלות!</h3>
+        <h3 style="background-color: yellow;">במידה ומוצגים כאן קווים בשני צבעים שונים יש לבטל את בחירתם של הקווים מאחד מהצבעים.</h3>
+      </div>
+      <div class="modal-body">
+      	<table style="width: 100%;" ng-if="selectedTracks&&selectedTracks.length">
+      		<tr>
+      			<th>סוג משמרת</th>
+      			<th>מספר קו</th>
+      			<th>תיאור הקו</th>
+      			<th ng-show="sortfilter.isHospital==2">נהג</th>
+      			<th>מספר נוסעים</th>
+      		</tr>
+      		<tr ng-class="{'hospital-track':track.isHospital==1,'private-track':track.isHospital==2}" ng-repeat="track in selectedTracks">
+      			<td>{{track.track.shift}}</td>
+      			<td>{{track.track.combined_line}}</td>
+      			<td>{{track.track.description}}</td>
+      			<td ng-show="sortfilter.isHospital==2">{{track.driver.name}}</td>
+      			<td>{{track.workers.length}}</td>
+      		</tr>
+      	</table>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="sendTo" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">שלח מסלול ל:</h4>
+      </div>
+      <div class="modal-body">
+      	<form name="sendToForm" novalidate>
+	      	<table style="width: 100%">
+	      		<tr>
+	      			<th ng-show="sortfilter.isHospital==1">בית החולים</th>
+	      			<th ng-show="sortfilter.isHospital==2||sortfilter.isHospital==1">סדרן</th>
+	      			<th ng-show="sortfilter.isHospital==2">נהג</th>
+	      		</tr>
+	      		<tr>
+	      			<td ng-show="sortfilter.isHospital==1">
+	      				<input type="radio" required="required" ng-model="forward" name="send" value="0" />
+	      			</td>
+	      			<td ng-show="sortfilter.isHospital==2||sortfilter.isHospital==1">
+	      				<input type="radio" required="required" ng-model="forward" name="send" value="1" />
+						<ui-select ng-show="forward==1" multiple ng-model="$parent.ushers" search-enabled="true" append-to-body="false">
+							<ui-select-match placeholder="בחר סדרנים לשליחה">
+							{{$item.name}}
+							</ui-select-match>
+							<ui-select-choices repeat="driver in $parent.drivers | filter: $select.search | filter:{is_usher:true} | orderBy:'name'" >
+							{{driver.name}}
+							</ui-select-choices>
+						</ui-select>	      				
+	      			</td>
+	      			<td ng-show="sortfilter.isHospital==2">
+	      				<input type="radio" required="required" ng-model="forward" name="send" value="2" />
+	      			</td>
+	      		</tr>
+	      	</table>
+	      	<button data-dismiss="modal" class="btn" ng-disabled="!sortfilter.isHospital" ng-click="send()">שלח</button>
+      	</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<style>
+td, th{
+	padding-right: 10px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+#sendTo th{
+	width: 33%;
+    text-align: center;
+} 
+
+.input_select{
+    margin: auto;
+    height: 27px;
+    width: 50%;
+}	
+
+.divsortby{
+    margin-right: 10px;
+    margin-top: 8px;
+}
+select{
+	    margin-bottom: 0px !important;
+}
+</style>

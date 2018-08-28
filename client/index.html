@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RouteSpeed">
+<head>
+	<title ng-cloak>{{headline}}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <script src="assets/js/jquery.min.js"></script> -->
+  <!-- <script src="assets/js/bootstrap.min.js"></script> -->
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="icon" href="assets/img/favicon-16x16.png" type="image/gif" sizes="16x16">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="assets/css/bootstrap.css"> -->
+  <link rel="stylesheet" href="assets/css/bootstrap-rtl.css">
+ 
+  <!-- <link rel="stylesheet" href="assets/css/style-ltr.css"> -->
+  <link rel="stylesheet" href="assets/css/transportation/style1.css">
+  <link rel="stylesheet" href="assets/css/select2.min.css"> 
+  <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+  <link rel="" href="assets/fonts/glyphicons-halflings-regular.eot">
+  <link rel="" href="assets/fonts/glyphicons-halflings-regular.svg">
+  <link rel="" href="assets/fonts/glyphicons-halflings-regular.ttf">
+  <link rel="" href="assets/fonts/glyphicons-halflings-regular.woff">
+  <link href="https://fonts.googleapis.com/css?family=Assistant:200,300,400,600,700,800" rel="stylesheet">
+  
+
+
+ <link rel="stylesheet" href="assets/css/style.css">
+
+
+</head>
+<body ng-cloak>
+
+ <div ng-include="'assets/headers/transportation/header.html'" class="div_header" ></div> 
+<!--
+<div class="menu hidden-xs" ng-if="module!= 'login'">
+	<a href="#/dashbord">
+	<div  class="tab">
+	<img ng-src="{{ module == 'dashbord'?'assets/img/reddashbord.png':'assets/img/dashbord.png'}}" />
+		<p ng-class="{'red': module == 'dashbord'}">׳¨׳�׳©׳™</p>
+	</div>
+	</a>
+	<a href="#/routes">
+	<div  class="tab">
+	<img ng-src="{{ module == 'routes'?'assets/img/redroutes.png':'assets/img/routes.png'}}" />
+		<p ng-class="{'red': module == 'routes'}">׳�׳¡׳�׳•׳�׳™׳�</p>
+	</div>
+	</a>
+	<a href="#/orders">
+	<div class="tab">
+		<img ng-src="{{ module == 'orders'?'assets/img/redadd.png':'assets/img/add.png'}}" />
+		<p ng-class="{'red': module == 'orders'}">׳”׳–׳�׳ ׳•׳×</p>
+	</div>
+	
+	<a href="#/messengers">
+	<div class="tab">
+		<img ng-src="{{ module == 'messengers'?'assets/img/redmessengers.png':'assets/img/messengers.png'}}" />
+		<p ng-class="{'red': module == 'messengers'}">׳ ׳”׳’׳™׳�</p>
+	</div>
+	</a>
+	<a href="#/settings">
+	<div class="tab">
+		<img ng-src="{{ module == 'settings'?'assets/img/redsett.png':'assets/img/sett.png'}}" />
+		<p ng-class="{'red': module == 'settings'}">׳”׳’׳“׳¨׳•׳×</p>
+	</div>
+	</a>
+</div>
+<header ng-if="module!= 'login'">
+	<div style="    margin: 11px;">
+	<button class="" ng-click="logOut()" style="background: white;height: 30px;width: 30px;border-radius: 50%; color: #5d5e62;"><i class="fa fa-power-off" style="    font-size: 20px;    margin-top: 2px;    "></i></button><span style="font-size: 20px;color: white;margin: 16px;">  ׳©׳�׳•׳� - <span ng-bind="settings.user_name" ></span></span>
+	</div>
+<button type="button" class="open-mobile hidden-lg hidden-md hidden-sm" data-toggle="modal" data-target="#mobile_menu">
+	<img src="assets/img/mobile_menu_icon.png" />
+</button>
+
+<div class="personal-logo ">
+	<img ng-if="settings.image_file" class="img-responsive" ng-src="{{imgUrl+settings.image_file}}" />
+</div>
+<img style="" class="logo-route hidden-xs" src="assets/img/logoroutespeed.svg"/>
+</header> 
+
+-->
+
+
+<!-- Modal -->
+<div id="mobile_menu" class="modal fade mobile_menu" role="dialog" ng-if="module!= 'login'">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <a   data-dismiss="modal">
+			<div  class="tab" ng-click="routeTo('#/dashbord')">
+				<img ng-src="{{ module == 'dashbord'?'assets/img/reddashbord.png':'assets/img/greendashbord.png'}}" />
+				<p ng-class="{'red': module == 'dashbord'}">ראשי</p>
+			</div>
+		</a>
+		 <a   data-dismiss="modal">
+			<div  class="tab" ng-click="routeTo('#/routes')">
+				<img ng-src="{{ module == 'routes'?'assets/img/redroutes.png':'assets/img/greenroutes.png'}}" />
+				<p ng-class="{'red': module == 'routes'}">מסלולים</p>
+			</div>
+		</a>
+		<a  data-dismiss="modal">
+			<div class="tab" ng-click="routeTo('#/orders')">
+				<img ng-src="{{ module == 'orders'?'assets/img/redadd.png':'assets/img/greenadd.png'}}" />
+				<p ng-class="{'red': module == 'orders'}">הזמנות</p>
+			</div>
+		</a>
+		<a  data-dismiss="modal">
+			<div class="tab" ng-click="routeTo('#/messengers')">
+				<img ng-src="{{ module == 'messengers'?'assets/img/redmessengers.png':'assets/img/greenmessengers.png'}}" />
+				<p ng-class="{'red': module == 'messengers'}">נהגים</p>
+			</div>
+		</a>
+		<a  data-dismiss="modal">
+			<div class="tab" ng-click="routeTo('#/settings')">
+				<img ng-src="{{ module == 'settings'?'assets/img/redsett.png':'assets/img/greensett.png'}}" />
+				<p ng-class="{'red': module == 'settings'}">הגדרות</p>
+			</div>
+		</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="under-header aaa" ng-cloak ui-view >
+      	
+</div>
+
+<!-- alert modal -->
+<button id="saved-toggle" style="display: none" data-toggle="modal" data-target="#saved"></button>
+<button id="saved-cancel" style="display: none" data-dismiss="modal"></button>
+<!-- Modal -->
+  <div class="modal fade popup" id="saved" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div style="top: 60px;" class="modal-content">
+        <div style="padding-top: 11px;" class="modal-header">
+        
+          <p  class="center modal-title"><span ng-bind="message"></span></p>
+        </div>
+       
+        
+      </div>
+      
+    </div>
+  </div>
+<!-- alert modal end -->
+<div id="loader" style="display: none" class="loader"></div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+  <script src="assets/js/angular.js"></script>
+  <script src="assets/js/angular-animate.min.js"></script>
+  <script src="assets/js/angular-route.min.js"></script>
+  <script src="assets/js/angular-ui-router.min.js"></script>
+  <script src="assets/js/ui-bootstrap.min.js"></script>
+  <script src="assets/js/jquery-ui.js"></script>
+  <script src="assets/js/angular-ui.min.js"></script> 
+  <!-- datepicker -->
+	<link href="assets/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
+	<script src="assets/js/angular-datepicker.js"></script>
+	<!--end datepicker  -->
+	<!--datepicker2  -->
+		<!-- <link href="assets/angular-datepicker/app/styles/bootstrap.css" rel="stylesheet" type="text/css" /> -->
+		<link href="assets/angular-datepicker/app/styles/mixins.less" rel="stylesheet" type="text/css" />
+		<link href="assets/angular-datepicker/app/styles/style.less" rel="stylesheet" type="text/css" />
+		<link href="assets/angular-datepicker/app/styles/variables.less" rel="stylesheet" type="text/css" />
+		<!-- <script src="assets/angular-datepicker/app/templates/datepicker.html"></script> -->
+		<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script> -->
+		<script src="assets/angular-datepicker/app/scripts/datePicker.js"></script>
+		<script src="assets/angular-datepicker/app/scripts/datePickerUtils.js"></script>
+		<script src="assets/angular-datepicker/app/scripts/dateRange.js"></script>
+		<script src="assets/angular-datepicker/app/scripts/input.js"></script>
+	<!--end datepicker2  -->
+	
+	<!--drag and drop  -->
+	<!-- <script src="assets/js/angular-drag-and-drop/app.js"></script> -->
+	<!-- <script src="assets/js/angular-drag-and-drop/dragdrop.js"></script> -->
+	<!-- <script src="assets/js/angular-drag-and-drop/dragdropCtrl.js"></script> -->
+	<!-- end drag and drop -->
+	
+	
+	
+	<!-- dragular -->
+	<link href='assets/css/dragular.css' rel='stylesheet' type='text/css' />
+	<!-- <script src='assets/js/dragularDirective.js'></script> -->
+	<!-- <script src='assets/js/dragularModule.js'></script> -->
+	<!-- <script src='assets/js/dragularService.js'></script> -->
+	<script src='assets/js/dragular.js'></script>
+	<!--end dragular  -->
+	
+  <!-- x-editable-->
+  <link href="assets/css/xeditable.min.css" rel="stylesheet">
+  <script src="assets/js/xeditable.min.js"></script>
+  <!-- x-editable-->
+    <!-- datepicker -->
+  <link rel="stylesheet" href="assets/css/angular-material.min.css">
+  <script  src="assets/js/angular-aria.min.js"></script>
+  <script  src="assets/js/angular-material.min.js"></script>
+   <script  src="assets/js/moment.min.js"></script>
+
+  <!-- end-datepicker -->
+  
+  
+  <!-- toArray filter -->
+<!-- <script  src="app/theme/filters/toArrayFilter.js"></script> -->
+<!-- end toArray filter -->
+
+  <script src="app/app.js"></script>
+  <script src="app/pages/pages.module.js"></script>
+  <script src="app/theme/theme.module.js"></script>
+  
+  <script src="app/pages/login/login.module.js"></script>
+  <script src="app/pages/login/LoginCtrl.js"></script>
+    <script src="app/pages/test/test.module.js"></script>
+  <script src="app/pages/test/TestCtrl.js"></script> 
+  <script src="app/pages/dashbord/dashbord.module.js"></script>
+  <script src="app/pages/dashbord/DashbordCtrl.js"></script>
+  <script src="app/pages/routes/routes.module.js"></script>
+  <script src="app/pages/routes/RoutesCtrl.js"></script>
+  <script src="app/pages/settings/settings.module.js"></script>
+  <script src="app/pages/settings/SettingsCtrl.js"></script>
+  <script src="app/pages/orders/orders.module.js"></script>
+  <script src="app/pages/orders/OrdersCtrl.js"></script>
+  <script src="app/pages/messengers/messengers.module.js"></script>
+  <script src="app/pages/messengers/MessengersCtrl.js"></script>  
+  <script src="app/pages/messengers/details/DetailsCtrl.js"></script>
+  <script src="app/pages/messengers/redemptions/RedemptionsCtrl.js"></script>
+  <script src="app/pages/messengers/routes/RoutesCtrl.js"></script>
+  <script src="app/pages/transportation/stations/stations.module.js"></script>
+  <script src="app/pages/transportation/stations/StationsCtrl.js"></script> 
+  <script src="app/pages/transportation/workers/workers.module.js"></script>
+  <script src="app/pages/transportation/workers/WorkersCtrl.js"></script> 
+  <script src="app/pages/transportation/oneroute/oneroute.module.js"></script>
+  <script src="app/pages/transportation/oneroute/OnerouteCtrl.js"></script> 
+  <script src="app/pages/transportation/lines/lines.module.js"></script>
+  <script src="app/pages/transportation/lines/LinesCtrl.js"></script>
+  <script src="app/pages/transportation/static_lines/static_lines.module.js"></script>
+  <script src="app/pages/transportation/static_lines/Static_linesCtrl.js"></script>  
+  <script src="app/pages/transportation/shifts/shifts.module.js"></script>
+  <script src="app/pages/transportation/shifts/shiftsCtrl.js"></script>
+  <script src="app/pages/transportation/driver/driver.module.js"></script>
+  <script src="app/pages/transportation/driver/driverCtrl.js"></script>
+  <script src="app/pages/transportation/sendto/sendto.module.js"></script>
+  <script src="app/pages/transportation/sendto/SendtoCtrl.js"></script>
+  <script src="app/pages/transportation/send_to_hospital/send_to_hospital.module.js"></script>
+  <script src="app/pages/transportation/send_to_hospital/SendToHospitalCtrl.js"></script>
+  <script src="app/pages/transportation/sort/sort.module.js"></script>
+  <script src="app/pages/transportation/sort/SortCtrl.js"></script>
+  <script src="app/pages/transportation/reports/reports.module.js"></script>
+  <script src="app/pages/transportation/reports/ReportsCtrl.js"></script>
+  <script src="app/pages/transportation/definitions/definitions.module.js"></script>
+  <script src="app/pages/transportation/definitions/DefinitionsCtrl.js"></script>
+  <script src="app/pages/transportation/distances/distances.module.js"></script>
+  <script src="app/pages/transportation/distances/DistancesCtrl.js"></script>
+  
+  <script src="app/theme/services/connectGETService.js"></script>
+  <script src="app/theme/services/connectPOSTService.js"></script>
+  <script src="app/theme/services/connectPUTService.js"></script>
+  <script src="app/theme/services/connectDELETEService.js"></script>
+  <script src="app/theme/services/uploadImageService.js"></script>
+  <script src="app/theme/filters/getByIdFilter.js"></script>
+  <script src="app/theme/filters/sumByKeyFilter.js"></script>
+  <script src="app/theme/filters/dateDiffFilter.js"></script>
+  <script src="app/theme/filters/TwoCitiesFilter.js"></script>
+  <script src="app/theme/filters/zeroDisplayFilter.js"></script>
+  <script src="app/theme/directives/stringToNumberDirective.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+
+  <!-- google-address -->
+  
+<!-- Google Maps JavaScript API -->
+
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEcxlyjLXoolFB7rO7k6Ixw6GYievY7UA&sensor=false&amp;libraries=places&language=iw" type="text/javascript"></script> -->
+<!-- this works only gmaps not with vs google autocomplete-->
+<!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpXK8utXhM0j_T8GDYLXN4RQdch7cxalo&callback=myMap&language=iw&sensor=false&amp;libraries=places" async defer></script> -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8G7EMfLWN13ndOLmzIMHodF0jjvQbUIY&callback=myMap&language=iw&sensor=false&amp;libraries=places"></script> -->
+
+<!--old- working-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQpBq1mbjdOdsuUeTPFLX9Z3llJ4Iuuqs&sensor=false&amp;libraries=places&language=iw" type="text/javascript"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8G7EMfLWN13ndOLmzIMHodF0jjvQbUIY&sensor=false&amp;libraries=places&language=iw" type="text/javascript"></script> -->
+<!--
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+  -->
+<!-- vsGoogleAutocomplete -->
+<script src="assets/js/vs-google-autocomplete.js"></script>
+<script src="assets/js/vs-autocomplete-validator.js"></script>
+<script src="assets/js/jquery.easing.1.3.js"></script>
+<script src="assets/js/markerAnimate.js"></script>
+<script src="assets/js/SlidingMarker.min.js"></script>
+<script src="assets/js/select2.min.js"></script>
+
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/marker-animate-unobtrusive/0.2.8/vendor/markerAnimate.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/marker-animate-unobtrusive/0.2.8/SlidingMarker.min.js"></script> -->
+<!-- end-google-address -->
+<!-- drag-drop -->
+<script src="assets/js/angular-drag-drop/angular-drag-and-drop-lists.min.js"></script>
+<!-- If you want enter/over/leave events, add a config object to the page before you include the shim -->
+<!--
+<script>
+var iosDragDropShim = { holdToDrag: 300 } //Adds 300ms delay before draging
+</script>
+<script src="vendor/ios-drag-drop.js"></script>-->
+<!-- If you want to the user to hold to drag, add a config object to the page before you include the shim -->
+<script>
+var iosDragDropShim = { enableEnterLeave: true }
+</script>
+<script src="assets/js/angular-drag-drop/ios-drag-drop.js"></script>
+<!-- drag-drop-end -->
+
+
+<!-- load xls -->
+<script src="assets/js/xlsx.min.js"></script>
+<!-- load xls-end -->
+
+
+	 <link href="assets/css/jquery-clockpicker.min.css" rel="stylesheet" type="text/css" />
+	<script src="assets/js/jquery-clockpicker.min.js"></script> 
+	 <link href="assets/css/bootstrap-clockpicker.min.css" rel="stylesheet" type="text/css" />
+	<script src="assets/js/bootstrap-clockpicker.min.js"></script> 
+  <!-- select -->
+  <link rel="stylesheet" href="assets/css/select.min.css">
+<link rel="stylesheet" href="assets/js/angular-sc-select_files/sc-select.min.css">
+	<script src="assets/js/angular-sc-select_files/angular-sanitize.min.js"></script>
+	<script src="assets/js/angular-sc-select_files/select.min.js"></script>
+	<script src="assets/js/angular-sc-select_files/sc-select.min.js"></script>
+	<script src="assets/angular-ui-select/dist/select.js"></script>
+
+
+ <!-- select -->	
+</html>

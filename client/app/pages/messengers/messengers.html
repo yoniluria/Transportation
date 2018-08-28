@@ -1,0 +1,104 @@
+<div class="col-md-2 names hidden-xs" >
+	<!--<div  class="" ng-click="createMessenger()">
+		<p ng-class="{'active': !currentMessenger.id}">נהג חדש</p>
+	</div>-->
+	<div ng-repeat="messenger in messengers" class="" ng-click="editMessenger(messenger)">
+		<p ng-class="{'active': messenger.id == currentMessenger.id}" ng-bind="messenger.name+' '+messenger.lastname"></p>
+	</div>
+
+	
+</div>
+<div class="col-md-12 select-messanger dark hidden-lg hidden-md hidden-sm">
+	<label>בחר נהג לצפיה בנתונים</label>
+<select ng-model="currentMessenger"  ng-options="messenger as messenger.name+' '+messenger.lastname for messenger in messengers" class="hidden-sm hidden-md hidden-lg">
+
+	
+</select>
+</div>
+<div class="col-md-10 no-padding whatch">
+  <ul class="nav nav-pills">
+    <li class="no-padding col-md-4 " ng-class="{'active': subModule == 'messengers.details'}"><a href="#/messengers/details/{{currentMessenger.id}}">פרטי נהג</a></li>
+    <li class="no-padding col-md-4 " ng-class="{'active': subModule == 'messengers.redemptions','not-active':!currentMessenger.id}" ><a href="#/messengers/redemptions/{{currentMessenger.id}}" ><span class="hidden-xs">היסטורית פדיונות</span></a></li>
+    <li class="no-padding col-md-4 " ng-class="{'active': subModule == 'messengers.routes','not-active':!currentMessenger.id}" ><a href="#/messengers/routes/{{currentMessenger.id}}"><span class="hidden-xs">היסטורית מסלולים</span></a></li>
+  </ul>
+ 
+  <h4 class="hidden-xs h4-message" ng-if="allowEdit==false">בחר נהג לעדכון וצפיה בנתונים</h4>
+  <button class="delete-button" ng-click="createMessenger()" ng-if="allowEdit==false">הוסף נהג</button>
+  <ui-view ng-if="allowEdit!=false"></ui-view>
+</div>
+<button class="add-messanger circle-button" style="" class="circle-button" ng-click="createMessenger()">
+		<img src="assets/img/plus.png">
+	</button>
+
+
+</div>
+
+ <!-- Modal -->
+  <div class="modal fade popup" id="delete" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+        	<img src="assets/img/delete.png" />
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <p class="center modal-title">האם אתה בטוח רוצה למחוק את הנהג מהמערכת?</p>
+        </div>
+        <!-- <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div> -->
+        <div class="modal-footer">
+        	<div class="col-xs-offset-2 col-xs-4"><button type="button" class="" data-dismiss="modal">ביטול</button></div>
+        	<div class="col-xs-4 "><button type="button" class="red-button" ng-click="deleteMessenger()" data-dismiss="modal">מחק</button></div>
+       
+        </div>
+      </div>
+      
+    </div>
+  </div>
+ <!-- Modal -->
+  <div class="modal fade popup" id="drawing_pluck" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+        	<img src="assets/img/coins.png" />
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <p class="center modal-title">הזן סכום משיכה לפריטה עבור נהג זה לתאריך נוכחי.</p>
+          <input class="drawing" type="number" ng-model="pluckAmount" min="0" />
+        </div>
+        <!-- <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div> -->
+        <div class="modal-footer" style="    padding-bottom: 12px;    margin-top: -8px;">
+        	<div class="col-xs-offset-2 col-xs-4"><button type="button" class="" data-dismiss="modal">ביטול</button></div>
+        	<div class="col-xs-4 "><button type="button" class="" ng-click="saveDrawing()" data-dismiss="modal">אישור</button></div>
+       
+        </div>
+      </div>
+      
+    </div>
+  </div>
+   <!-- Modal -->
+  <div class="modal fade popup" id="reason" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+        	<img src="assets/img/sad.png" />
+            <h3 style="margin-top: -15px;">סיבה לדילוג תחנה</h3>
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <p class="center modal-title" ng-bind="message"></p>
+        </div>
+        <!-- <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div> -->
+        
+      </div>
+      
+    </div>
+  </div>
+  <button id="reason-toggle" style="display: none" data-toggle="modal" data-target="#reason"></button>
+<button id="reason-cancel" style="display: none" data-dismiss="modal"></button>

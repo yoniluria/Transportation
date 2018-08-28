@@ -1,0 +1,30 @@
+<div class="col-md-12" style=" margin: 10px; width: 860px; padding: 0px !important;" >
+	<input placeholder="הזן כתובת" style="width: 311px;margin-bottom: 20px;" ng-model="search" />
+	<button style=" width:78px;" ng-click="searchDistance()" >שלח</button>
+	<table class="col-md-12" style="border: 1px solid #bfbfbf;" >
+		<tbody>
+			<tr>
+				<th> כתובת מקור</th>
+				<th> כתובת יעד</th>
+				<th> משך זמן</th>
+				<th></th>
+			</tr>
+			<tr ng-repeat="distance in distances" >
+				<td ng-bind="distance.source" ></td>
+				<td ng-bind="distance.destination" ></td>
+				<td class="td_small" ><input type="text" ng-model="distance.duration" ></td>
+				<td class="td_small" ><button ng-click="setDuration(distance.source,distance.destination,distance.duration)" >שמור</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<style>
+	td, th{
+		padding-right: 10px;
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+	tr {
+	    border-bottom: 1px solid #bfc2c4;
+	}
+</style>

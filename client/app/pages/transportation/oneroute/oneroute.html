@@ -1,0 +1,414 @@
+<div id="addNewTrack1" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">הכנס פרטי קו:</h4>
+      </div>
+      <div class="modal-body">
+      	<label>מספר קו:</label>
+      	<select ng-model="newTrack.static_line" ng-options="line as 'קו '+ line.line_number + ' ' + line.description for line in static_lines | orderBy:'line_order'">
+      	</select>
+      	<label>משמרת:</label>
+      	<select ng-model="newTrack.shift" ng-options="shift as shift.name for shift in $parent.shifts">
+      	</select>      	    	      	
+      	<button class="btn" ng-click="addNewTrack()" ng-disabled="!newTrack.static_line || !newTrack.shift" data-dismiss="modal">שמור</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+<div class="row">
+<div class="col-md-3 station" style="width: 90%; margin-top: 20px;">
+			<div>
+				<div class="line-station">
+					<p title="קו {{track.track.combined_line}} | {{track.track.shift}}" style="max-width: 124px">
+						<span ng-hide="editState"> קו {{track.track.combined_line}} | {{track.track.shift}} |</span>
+						<!-- <input style="height: auto;width: auto;" ng-show="editState" type="text" ng-model="track.track.combined_line" /> -->
+						<!-- <select style="height: auto;" ng-show="editState" ng-model="track.track.combined_line" ng-options="line.line_number as line.line_number for line in static_lines"></select> -->
+						<select style="height: auto;" ng-show="editState" ng-model="track.track.combined_line">
+							<option ng-repeat="line in static_lines | orderBy : 'line_number' " value="{{line.line_number}}">{{line.line_number}}</option>
+						</select>
+					</p>
+					<p title="{{track.track.description}}" style="max-width: 155px;">
+						<span>{{track.track.description}}</span>
+					</p>
+					<p title="{{track.workers.length}} נוסע/ים" style="max-width: 155px;">
+						<span>{{track.workers.length}} נוסע/ים</span>
+					</p>
+					<p title="{{track.driver.name}}" style="max-width: 83px">
+						<span ng-hide="editState"> | {{track.driver.name}}</span>
+						<select style="height: auto;" ng-show="editState" ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false}">
+						</select>
+					</p>
+					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="setTrackToDelete(track)" data-toggle="modal" data-target="#delTrackModal"></i>
+					<i title="ערוך נתוני עובדים" ng-click="setCurrTrackForEdit(track)" class="fa fa-pencil" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true" data-toggle="modal" data-target="#editWorkers"></i>
+					<i ng-hide="editState" title="קבל מסלול נגדי וערוך נתוני מסלול" ng-click="getReverseTrack();editState = true;" class="fa fa-refresh" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true"></i>
+					<i ng-show="editState" title="שמור" ng-click="setUpdatedTrack(track);updateTrack();editState = false;" class="fa fa-floppy-o" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true"></i>
+				</div>
+				<table>
+					<thead>
+						<tr>
+						<th style="width:12%;padding-right: 11px;">{{setTh(track)}}</th>
+						<th style="width:22%">שם:</th>
+						<th style="width:8%">זמן:</th>
+						<th style="width:28%">תחנה:</th>
+						<th style="width:23%">הנחיות:</th>
+					</tr>
+					</thead>
+				</table>
+				<!-- dnd-drop="updateWorkerOtherTrack(track,track.workers)" -->
+						<ul class="station-track" dnd-list="track.workers"  >
+							<li ng-repeat="worker in track.workers"
+							dnd-draggable="worker"
+							dnd-moved="track.workers.splice($index, 1)"
+							dnd-effect-allowed="move"
+							dnd-dragstart="copyList(track,worker)"
+							dnd-dragend="updateWorkerOrder(track,track.workers)"
+							style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
+								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.hour|date:"HH:mm"}}</p>
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.track_order}}</p>
+									<p class="col-md-2" style="width: 24%;padding-left: 0px;padding-top: 10px;">{{worker.name}}</p>
+									<p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-hide="collecting&&$last||!collecting&&$first">{{worker.duration | zeroDisplay}}</p>
+									<p class="col-md-1" style="width: 7%; padding-top: 10px;" id="{{worker.id}}" ng-show="collecting&&$last||!collecting&&$first">{{worker.addresses[worker.index].travel_time | zeroDisplay}}</p>
+									<!-- <p class="col-md-1" style="width: 7%; padding-top: 10px;" id="i{{worker.id}}" ng-show="!collecting&&$first">{{worker.duration}}</p> -->
+									<div class="col-md-6" style="padding-left: 0px;    width: 28%;">
+										<select style="background-color: #efefef" ng-model="worker.selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="worker.selectedAddress=setInitialAddress(worker)" ng-class="{'errorAddress' :!worker.selectedAddress.primary_address}">
+										</select>
+									</div>
+									<div class="col-md-2" style="padding-left: 0px;    width: 14%;">
+										<p>{{worker.instructions}}</p>
+									</div>
+									<button class="btn btn-small" ng-click="setWorkerToDelete(track,worker)" data-toggle="modal" data-target="#delWorkerModal">מחק</button>
+									<button class="btn btn-small" ng-click="setWorkerToChange(track,worker)" data-toggle="modal" data-target="#change_shift">העבר משמרת</button>
+								</div>
+							</li>
+						</ul>
+				<table class="table-buttons">   
+					<tr>
+						<td ng-click="setCurrTrack(track)" data-toggle="modal" data-target="#addWorker">
+							הוסף עובד
+						</td>
+						<!-- <td ng-click="changeTrackOrder(track)">
+							הפוך מסלול
+						</td> -->
+						<td data-toggle="modal" data-target="#addNewTrack1" >
+							הוסף מסלול
+						</td>
+						<td ng-click="showMap(track)" ng-class="{'selected-track':trackOfMap.track.id==track.track.id}">
+							הצג מפה
+						</td>
+						<td id="totalDuration" style="border-left: none;cursor: unset;" class="time_station">
+							זמן מסלול: {{track.trackDuration}} דקות
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div ng-if="newTrack&&newTrack.saved==1" class="col-md-3 station" style="width: 50%; margin-top: 20px;">
+			<div>
+				<div class="line-station">
+					<p title="קו {{newTrack.track.combined_line}} | {{newTrack.track.shift}}" style="max-width: 124px;">
+						<span ng-hide="newTrack.editState"> קו {{newTrack.track.combined_line}} | {{newTrack.track.shift}} |</span>
+						<!-- <input style="height: auto;width: auto;" ng-show="reverseTrack.editState" type="text" ng-model="reverseTrack.track.combined_line" /> -->
+						<select style="height: auto;" ng-show="newTrack.editState" ng-model="newTrack.track.combined_line">
+							<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
+						</select>
+					</p>
+					<p title="{{newTrack.track.description}}" style="max-width: 155px;">
+						<span>{{newTrack.track.description}}</span>
+					</p>
+					<p title="{{newTrack.workers.length}} נוסע/ים" style="max-width: 155px;">
+						<span>{{newTrack.workers.length}} נוסע/ים</span>
+					</p>
+					<p title="{{newTrack.driver.name}}" style="max-width: 83px;">
+						<span ng-hide="newTrack.editState"> | {{newTrack.driver.name}}</span>
+						<select style="height: auto;" ng-show="newTrack.editState" ng-model="newTrack.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false}">
+						</select>
+					</p>
+					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="setTrackToDelete(newTrack)" data-toggle="modal" data-target="#delTrackModal"></i>
+					<i title="ערוך נתוני עובדים" ng-click="setCurrTrackForEdit(newTrack)" class="fa fa-pencil" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true" data-toggle="modal" data-target="#editWorkers"></i>
+					<i ng-hide="newTrack.editState" title="ערוך נתוני מסלול" ng-click="newTrack.editState = true;" class="fa fa-refresh" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true"></i>
+					<i ng-show="newTrack.editState" title="שמור" ng-click="setUpdatedTrack(newTrack);updateTrack();newTrack.editState = false;" class="fa fa-floppy-o" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true"></i>
+				</div>
+				<table>
+					<thead>
+						<tr>
+						<th style="width:12%;padding-right: 11px;">{{setTh(newTrack)}}</th>
+						<th style="width:22%">שם:</th>
+						<th style="width:8%">זמן:</th>
+						<th style="width:58%">תחנה:</th>
+					</tr>
+					</thead>
+				</table>
+						<ul class="station-track" dnd-list="newTrack.workers" dnd-drop="updateWorkerOrder(newTrack,newTrack.workers)" >
+							<li ng-repeat="worker in newTrack.workers"
+							dnd-draggable="worker"
+							dnd-moved="newTrack.workers.splice($index, 1)"
+							dnd-effect-allowed="move"
+							dnd-dragstart="copyList(newTrack,worker)"
+							>
+								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.hour|date:"HH:mm"}}</p>
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.track_order}}</p>
+									<p class="col-md-2" style="width: 24%;padding-left: 0px;padding-top: 10px;">{{worker.name}}</p>
+									<p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-hide="!collecting&&$last||collecting&&$first">{{worker.duration | zeroDisplay}}</p>
+									<p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-show="!collecting&&$last||collecting&&$first">{{worker.addresses[worker.index].travel_time | zeroDisplay}}</p>
+									<!-- <p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-show="collecting&&$first">{{worker.duration}}</p> -->
+									<div class="col-md-8" style="padding-left: 0px;    width: 49%;">
+										<select style="background-color: #efefef" ng-model="worker.selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="worker.selectedAddress=setInitialAddress(worker)" ng-class="{'errorAddress' :!worker.selectedAddress.primary_address}">
+										</select>
+									</div>
+									<button class="btn btn-small" ng-click="setWorkerToDelete(newTrack,worker)" data-toggle="modal" data-target="#delWorkerModal">מחק</button>
+								</div>
+							</li>
+						</ul>
+				<table class="table-buttons">
+					<tr>
+						<td ng-click="setCurrTrack(newTrack)" data-toggle="modal" data-target="#addWorker">
+							הוסף עובד
+						</td>
+						<td ng-click="changeTrackOrder(newTrack)">
+							הפוך מסלול
+						</td>
+						<td ng-click="showMap(newTrack)" ng-class="{'selected-track':trackOfMap.track.id==newTrack.track.id}">
+							הצג מפה
+						</td>
+						<td style="border-left: none;cursor: unset;" class="time_station">
+							זמן מסלול: {{newTrack.trackDuration}} דקות
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+<div ng-if="reverseTrack" class="col-md-3 station" style="width: 50%; margin-top: 20px;">
+			<div>
+				<div class="line-station">
+					<p title="קו {{reverseTrack.track.combined_line}} | {{reverseTrack.track.shift}}" style="max-width: 124px;">
+						<span ng-hide="reverseTrack.editState"> קו {{reverseTrack.track.combined_line}} | {{reverseTrack.track.shift}} |</span>
+						<!-- <input style="height: auto;width: auto;" ng-show="reverseTrack.editState" type="text" ng-model="reverseTrack.track.combined_line" /> -->
+						<select style="height: auto;" ng-show="reverseTrack.editState" ng-model="reverseTrack.track.combined_line">
+							<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
+						</select>
+					</p>
+					<p title="{{reverseTrack.track.description}}" style="max-width: 155px;">
+						<span>{{reverseTrack.track.description}}</span>
+					</p>
+					<p title="{{reverseTrack.workers.length}} נוסע/ים" style="max-width: 155px;">
+						<span>{{reverseTrack.workers.length}} נוסע/ים</span>
+					</p>
+					<p title="{{reverseTrack.driver.name}}" style="max-width: 83px;">
+						<span ng-hide="reverseTrack.editState"> | {{reverseTrack.driver.name}}</span>
+						<select style="height: auto;" ng-show="reverseTrack.editState" ng-model="reverseTrack.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false}">
+						</select>
+					</p>
+					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="setTrackToDelete(reverseTrack)" data-toggle="modal" data-target="#delTrackModal"></i>
+					<i title="ערוך נתוני עובדים" ng-click="setCurrTrackForEdit(reverseTrack)" class="fa fa-pencil" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true" data-toggle="modal" data-target="#editWorkers"></i>
+					<i ng-hide="reverseTrack.editState" title="ערוך נתוני מסלול" ng-click="reverseTrack.editState = true;" class="fa fa-refresh" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true"></i>
+					<i ng-show="reverseTrack.editState" title="שמור" ng-click="setUpdatedTrack(reverseTrack);updateTrack();reverseTrack.editState = false;" class="fa fa-floppy-o" style="float: left;font-size: 23px;margin-top: -1px;margin-left: 10px;cursor: pointer;" aria-hidden="true"></i>
+				</div>
+				<table>
+					<thead>
+						<tr>
+						<th style="width:12%;padding-right: 11px;">{{setTh(reverseTrack)}}</th>
+						<th style="width:22%">שם:</th>
+						<th style="width:8%">זמן:</th>
+						<th style="width:58%">תחנה:</th>
+					</tr>
+					</thead>
+				</table>
+						<ul class="station-track" dnd-list="reverseTrack.workers">
+							<li ng-repeat="worker in reverseTrack.workers"
+							dnd-draggable="worker"
+							dnd-moved="reverseTrack.workers.splice($index, 1)"
+							dnd-effect-allowed="move"
+							dnd-dragstart="copyList(reverseTrack,worker)"
+							dnd-dragend="updateWorkerOrder(reverseTrack,reverseTrack.workers)">
+								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.hour|date:"HH:mm"}}</p>
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.track_order}}</p>
+									<p class="col-md-2" style="width: 24%;padding-left: 0px;padding-top: 10px;">{{worker.name}}</p>
+									<p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-hide="!collecting&&$last||collecting&&$first">{{worker.duration | zeroDisplay}}</p>
+									<p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-show="!collecting&&$last||collecting&&$first">{{worker.addresses[worker.index].travel_time | zeroDisplay}}</p>
+									<!-- <p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-show="collecting&&$first">{{worker.duration}}</p> -->
+									<div class="col-md-8" style="padding-left: 0px;    width: 49%;">
+										<select style="background-color: #efefef" ng-model="worker.selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="worker.selectedAddress=setInitialAddress(worker)" ng-class="{'errorAddress' :!worker.selectedAddress.primary_address}">
+										</select>
+									</div>
+									<button class="btn btn-small" ng-click="setWorkerToChange(track,worker)" data-toggle="modal" data-target="#change_shift">מחק</button>
+								</div>
+							</li>
+						</ul>
+				<table class="table-buttons">
+					<tr>
+						<td ng-click="setCurrTrack(reverseTrack)" data-toggle="modal" data-target="#addWorker">
+							הוסף עובד
+						</td>
+						<td ng-click="changeTrackOrder(reverseTrack)">
+							הפוך מסלול
+						</td>
+						<td ng-click="showMap(reverseTrack)" ng-class="{'selected-track':trackOfMap.track.id==reverseTrack.track.id}">
+							הצג מפה
+						</td>
+						<td style="border-left: none;cursor: unset;" class="time_station">
+							זמן מסלול: {{reverseTrack.trackDuration}} דקות
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>		
+	</div>
+	<p id="duration" class="secondDiv"></p>
+	<div id="mymap" style="display: none"></div>
+</div>
+<div class="modal fade popup" id="delTrackModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את קו <span ng-bind="trackToDelete.track.combined_line"></span> במשמרת <span ng-bind="trackToDelete.track.shift"></span>?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteTrack()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade popup" id="delWorkerModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את שיבוצו של העובד <span ng-bind="currentWorker.name"></span> מקו {{currentTrackOfWorker.track.combined_line}}?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteWorker()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="addWorker" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">בחר עובד</h4>
+      </div>
+      <div class="modal-body">
+      	<div style="margin-bottom: 10%;">
+			<ui-select ng-model="$parent.worker" search-enabled="true" append-to-body="false">
+				<ui-select-match>{{worker.name}}</ui-select-match>
+				<ui-select-choices repeat="worker in workers | filter: $select.search| orderBy:'name'" >{{worker.name}}</ui-select-choices>
+			</ui-select>  
+			<div ng-show="worker">
+			<label>בחר כתובת לעובד הנבחר:</label> 
+			<select ng-model="worker.selected_address" ng-options="address as address.original_address for address in worker.addresses"></select> 
+			</div>
+		</div>  	
+        <button ng-click="addWorker()" data-dismiss="modal">הוסף את העובד שנבחר למסלול זה</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="change_shift" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">בחר משמרת</h4>
+      </div>
+      <div class="modal-body">
+      	<div style="margin-bottom: 10%;">
+			<!-- <select ng-model="new_shift" >
+				<option ng-repeat="(key,shift) in track_lines" value="{{shift}}" >{{key}}</option>
+			</select> -->
+			<select ng-model="new_shift" ng-options="shift as shift.name for shift in shifts">
+      	    </select> 
+			
+			<div>				
+				<!-- <select ng-model="new_line" >
+					<option ng-repeat="line in new_shift.lines" value="{{line.combined_line}}" >{{line.combined_line}}</option>
+				</select> -->
+				<select ng-model="new_line" ng-options="line as 'קו '+ line.line_number + ' ' + line.description for line in static_lines | orderBy:'line_number'">
+      			</select>
+			</div>
+			
+		</div>  
+        <button ng-click="changeWorkerShift()" ng-disabled="!new_shift || !new_line" data-dismiss="modal">העבר את העובד למשמרת שנבחרה</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="editWorkers" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small" style="width: 33%;margin: auto;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal"></i>
+        <h4 class="modal-title">ערוך פרטי עובדים</h4>
+      </div>
+      <div class="modal-body">
+      	<div>
+			<table class="table">
+				<thead class="line-station">
+					<tr>
+						<th ng-show="currTrackForEdit.isCollect">קבע שעת איסוף</th>
+						<th>קבע זמן נסיעה</th>
+						<th>עובד/ת</th>
+						<th>קבע זמן המתנה</th>
+						<th>כתובת</th>
+						<th>הנחיות</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="worker in currTrackForEdit.workers track by $index">
+						<td ng-show="currTrackForEdit.isCollect" style="width:15%">
+							<input type="time" ng-value="worker.hour|date:'HH:mm'" ng-model="worker.hour"/>
+						</td>
+						<td style="width:15%">
+							<input ng-show="currTrackForEdit.isCollect&&$last || !currTrackForEdit.isCollect&&$first" type="number" min="0" ng-model="worker.addresses[worker.index].travel_time" ng-init="worker.addresses[worker.index].travel_time==0?worker.addresses[worker.index].travel_time='':worker.addresses[worker.index].travel_time"/>
+						</td>
+						<td>{{worker.name}}</td>
+						<td style="width:15%">
+							<input ng-hide="currTrackForEdit.isCollect&&$last || !currTrackForEdit.isCollect&&$first" type="number" min="0" ng-model="worker.duration" ng-init="worker.duration==0?worker.duration='':worker.duration"/>
+						</td>					
+						<td>
+							<!-- {{worker.address}} -->
+							<select style="background-color: #efefef" ng-model="worker.selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="worker.selectedAddress=setInitialAddress(worker)" ng-class="{'errorAddress' :!worker.selectedAddress.primary_address}"></select>							
+						</td>
+						<td>
+							<input type="text" ng-model="worker.instructions" >					
+						</td>
+					</tr>
+				</tbody>
+			</table>      		
+      	</div>
+        <button ng-click="saveWorkers()" data-dismiss="modal">שמור</button>
+      </div>
+    </div>
+  </div>
+</div>

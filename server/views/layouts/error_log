@@ -1,0 +1,1 @@
+[24-Dec-2016 03:30:15 UTC] PHP Fatal error:  Class 'app\assets\AppAsset' not found in /home/taxiphoneco/public_html/routeSpeed/views/layouts/main.php on line 12

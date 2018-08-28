@@ -1,0 +1,41 @@
+<div class="menu hidden-xs" ng-if="module!= 'login'">
+	<a href="#/dashbord">
+	<div  class="tab">
+	<img ng-src="{{ module == 'dashbord'?'assets/img/reddashbord.png':'assets/img/dashbord.png'}}" />
+		<p ng-class="{'red': module == 'dashbord'}">ראשי</p>
+	</div>
+	</a>
+	<a href="#/routes">
+	<div  class="tab">
+	<img ng-src="{{ module == 'routes'?'assets/img/redroutes.png':'assets/img/routes.png'}}" />
+		<p ng-class="{'red': module == 'routes'}">מסלולים</p>
+	</div>
+	</a>
+	<a href="#/orders">
+	<div class="tab">
+		<img ng-src="{{ module == 'orders'?'assets/img/redadd.png':'assets/img/add.png'}}" />
+		<p ng-class="{'red': module == 'orders'}">הזמנות</p>
+	</div>
+	
+	<a href="#/messengers">
+	<div class="tab">
+		<img ng-src="{{ module == 'messengers'?'assets/img/redmessengers.png':'assets/img/messengers.png'}}" />
+		<p ng-class="{'red': module == 'messengers'}">שליחים</p>
+	</div>
+	</a>
+	<a href="#/settings">
+	<div class="tab">
+		<img ng-src="{{ module == 'settings'?'assets/img/redsett.png':'assets/img/sett.png'}}" />
+		<p ng-class="{'red': module == 'settings'}">הגדרות</p>
+	</div>
+	</a>
+</div>
+<header ng-if="module!= 'login'">
+<button type="button" class="open-mobile hidden-lg hidden-md hidden-sm" data-toggle="modal" data-target="#mobile_menu">
+	<img src="assets/img/mobile_menu_icon.png" />
+</button>
+<div class="personal-logo hidden-xs">
+	<img ng-if="settings.image_file" class="img-responsive" ng-src="{{imgUrl+settings.image_file}}" />
+</div>
+<img style="" class="logo-route" src="assets/img/logoroutespeed.svg"/>
+</header>

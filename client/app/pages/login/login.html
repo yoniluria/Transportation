@@ -1,0 +1,11 @@
+
+<img class="back hidden-xs" src="assets/img/background_tablet.png" />
+<img class="back hidden-lg hidden-md hidden-sm" src="assets/img/background.png" />
+<div class="col-xs-10 col-sm-4 login ">
+	<img class="" src="assets/img/lock.png" />
+	<input type="text" placeholder="שם משתמש:" ng-model="auth.username"/>
+	<input type="password" placeholder="סיסמא:" ng-model="auth.password"/>
+	<span style="  bottom: 80px;" ng-show="login_failed" class="help-block help-block-absolute">ההזדהות נכשלה</span>
+	<button ng-click="authentication()">התחבר</button>
+	
+</div>

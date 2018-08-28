@@ -1,0 +1,69 @@
+ 
+
+
+
+
+<div class="in-tab routs-history" id="">
+	<div class="col-md-12">
+  	<h4 style="margin-bottom: 20px;">היסטוריית המסלולים שביצע הנהג</h4>
+  	<p class="note">*כדי לצפות בסיבה לדילוג על תחנה, לחץ על הכתובת המסומנת באדום</p>
+  	</div>
+  	<div style="padding: 8px;" class=" col-xs-12 no-padding redemptions-dates">
+  		
+  		
+  	
+  		<div class="col-md-3 date-input"><p > מתאריך:  </p><md-datepicker ng-model="$parent.from_date_routes" md-placeholder="Enter date"  md-max-date="$parent.until_date_routes" ng-change="getRoutesByDate()"></md-datepicker></div>
+		<div class="col-md-3 date-input"><p > עד תאריך: </p><md-datepicker ng-model="$parent.until_date_routes" md-placeholder="Enter date" md-min-date="$parent.from_date_routes" ng-change="getRoutesByDate()"></md-datepicker></div>
+	</div>
+	<div class="col-md-12" ng-repeat="route in currentMessenger.track">
+	<div class="box col-md-12">
+		<div class="col-md-12 info">
+			<p class="col-md-3">
+				<span>מספר מסלול: <span ng-bind="route.id" class="bold-span" >  </span></span>
+			</p>
+			<p class="col-md-3">
+				<span>תאריך: <span ng-bind="getDate(route.track_date) | date : 'dd.M.y'" class="bold-span" > </span></span>				
+			</p>
+			<p class="col-md-3">
+				<span>שעת יציאה: <span ng-bind="route.time" class="bold-span" >  </span></span>				
+			</p>
+			<p class="col-md-3" >
+				<span>סה"כ פדיון: <span ng-bind="route.income" class="bold-span" >  <span class="bold-span" >₪</span></span></span>
+			</p>
+			
+		</div>
+		
+		<div class="">
+			<div class="col-md-3" ng-repeat="order in route.order track by $index" ng-click="reason(order)">
+				<div class="circle-number"><span ng-bind="{{$index+1}}"></span></div>
+			<p class="address center" ng-class="{'canceled-station':(order.status==2)}"><span ng-bind="order.street"></span> <span ng-bind="order.number"></span> <span ng-bind="order.city"></span></p>
+			</div>
+			
+		
+
+
+
+  <!-- Modal -->
+  <div class="modal fade popup reason" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <p class="center modal-title" style="font-weight: 800;">הסיבה לדילוג על תחנה זו:</p>
+        </div>
+        <!-- <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div> -->
+        <div class="modal-footer center">
+        	<p>הלקוח לא ענה לטלפון, התקשרתי אליו והוא השארתי את המעטפה אצל השכן עפ"י בקשת הלקוח הלקוח לא ענה לטלפון, התקשרתי אליו והוא השארתי את המעטפה אצל השכן עפ"י בקשת הלקוח</p>
+        	<div class="col-sm-4 col-sm-offset-4" style="margin-top: 15px;">
+        		<button type="button" class="red-button" data-dismiss="modal">סגור</button>
+        	</div>
+        	
+        </div>
+      </div>
+      
+    </div>
+  </div>

@@ -1,0 +1,200 @@
+<style>
+.radio-toolbar{
+	display: inline;
+}
+.radio-toolbar input[type="radio"] {
+  display: none;
+}
+
+.radio-toolbar label {
+  display: inline-block;
+  background-color: #ddd;
+  padding: 4px 11px;
+  font-family: Arial;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.radio-toolbar input[type="radio"]:checked+label {
+  background-color: #bbb;
+}	
+</style>
+<div class="container" >
+	<div class="line add_worker add_driver" style="height: 395px;">
+		<h3 class="cot-div" >{{text}} נהג</h3>
+		<form>
+			<input type="text" required="required" ng-model="newMessenger.name" class="col-margin" ng-class="{'error' :(submitted&&!newMessenger.name)}" placeholder="שם:" >
+			<input type="tel" required="required" ng-model="newMessenger.phone" class="col-margin" ng-class="{'error' :(submitted&&!newMessenger.phone)}" placeholder="טלפון:" >
+			<input required="required" ng-class="{'error' :(submitted&&!newMessenger.address)}" vs-google-autocomplete
+						ng-model="newMessenger.address"
+						vs-latitude="newMessenger.lat"
+						vs-longitude="newMessenger.lng"
+						type="text"
+						name="Address"
+						placeholder="כתובת"
+						class="col-margin"/>
+			<input ng-model="newMessenger.license_number" class="col-margin" placeholder="מספר רישוי:" >
+			<input required="required" type="email" ng-model="newMessenger.email" class="col-margin" ng-class="{'error' :(submitted&&!newMessenger.email)}" placeholder="אימייל:" >
+			<input ng-model="newMessenger.car_type" class="col-margin" placeholder="סוג הרכב:" >
+			<input type="number" ng-model="newMessenger.places_number" class="col-margin" placeholder="מספר המקומות:" >
+			<br>
+			<input type="number" ng-model="newMessenger.customer_price" class="col-margin" placeholder="מחיר לקוח:" >
+			<input type="number" ng-model="newMessenger.driver_price" class="col-margin" placeholder="מחיר נהג:" >
+			<div class="radio-toolbar">
+			  <input type="radio" ng-model="newMessenger.is_usher" id="radio1" name="is_usher" value="0">
+			  <label for="radio1">נהג</label>
+			  <input type="radio" ng-model="newMessenger.is_usher" id="radio2" name="is_usher" value="1">
+			  <label for="radio2">סדרן</label>
+			</div>			
+			<br>
+			<div id="licenses">
+				<h3 class="cot-div" >תוקפם של רשיונות</h3>
+				<div>
+					<span>רישיון נהיגה:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.driving_license_expire" >
+				</div>
+				<div>
+					<span>רישיון רכב:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.car_license_expire" >
+				</div>	
+				<div>
+					<span>ביטוח חובה:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.insurance_expire" >
+				</div>						
+				<div>
+					<span>רישיון הפעלה:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.activation_license_expire" >
+				</div>				
+				<div>
+					<span>ק.בטיחות:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.safety_expire" >
+				</div>				
+				<div>
+					<span>בדיקת חורף:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.winter_test_expire" >
+				</div>				
+				<div>
+					<span>אישורים נוספים:</span>
+					<input type="date" class="col-margin" ng-model="newMessenger.more_expire" >
+				</div>				
+			</div>			
+			<button class="add_absolute btn" style="margin-left: 45%;margin-bottom: 1.5%;" ng-click="submitted=true;(!newMessenger.name||!newMessenger.phone||!newMessenger.address||!newMessenger.email||save())">
+				שמור נהג
+			</button>
+		</form>
+	</div>
+	<table class="search" style="width: 100%;margin-top: 35px;">
+		<tbody>
+			<tr>
+				<td>
+				<p style="color: black;">
+					סנן לפי
+				</p></td>
+				<td>
+				<input list="nameList" type="text" ng-model="driverfilter.name" ng-blur="selectedMessengers=messengers" placeholder="שם:"/>
+				<datalist id="nameList" >
+					<option ng-repeat="driver in messengers |unique:'name'"  value="{{driver.name}}">
+				</datalist></td>
+				<td>					
+				<input list="phoneList" type="text" ng-model="driverfilter.phone" ng-blur="selectedMessengers=messengers" placeholder="טלפון:"/>
+				<datalist id="phoneList" >
+					<option ng-repeat="driver in messengers |unique:'phone'"  value="{{driver.phone}}">
+				</datalist></td>				
+				<td>
+				<input list="addressList" type="text" ng-model="driverfilter.address" ng-blur="selectedMessengers=messengers" placeholder="כתובת:"/>
+				<datalist id="addressList" >
+					<option ng-repeat="driver in messengers |unique:'address'"  value="{{driver.address}}">
+				</datalist></td>				
+				<td>
+				<div class="checkbox-div" style="display: inline;">
+					<input type="checkbox" ng-model="show_alerts" class="checkbox-btn">
+					<span>הצג נהגים עם אזהרות</span>
+				</div></td>
+				<td style="position: relative;">
+				<input style="width: calc(100% - 99px);" ng-model="freesearch" ng-blur="selectedMessengers=messengers" placeholder="חפש נהג">
+				<button class="absolute-btn" style="width: 100px;">
+					חפש
+				</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table-rows table col-md-12">
+		<thead>
+			<tr>
+				<th class="col-md-2">שם</th>
+				<th class="col-md-2">טלפון</th>
+				<th class="col-md-3">כתובת</th>
+				<th class="col-md-1">מספר רישוי</th>
+				<th class="col-md-1">סוג רכב</th>
+				<th class="col-md-3"></th>
+			</tr>
+		</thead>
+		<tbody>
+				<tr ng-repeat="messenger in selectedMessengers |orderBy:'name' | filter:driverfilter | filter:freesearch | filter:filterAlerts as filtered" ng-class="{'selected-row':messenger.id==newMessenger.id,'alert-driver':((messenger.driving_license_expire | dateDiff:currentDate)<-1||(messenger.car_license_expire | dateDiff:currentDate)<-1||(messenger.insurance_expire | dateDiff:currentDate)<-1||(messenger.activation_license_expire | dateDiff:currentDate)<-1||(messenger.safety_expire | dateDiff:currentDate)<-1||(messenger.winter_test_expire | dateDiff:currentDate)<-1||(messenger.more_expire | dateDiff:currentDate)<-1)}">
+				<td class="col-md-2">
+					<p>
+						<span ng-bind="messenger.name"></span>
+					</p>
+				</td>
+				<td class="col-md-2">
+					<p>
+						<span ng-bind="messenger.phone"></span>
+					</p>
+				</td>
+				<td class="col-md-3">
+					<p>
+						<span  ng-bind="messenger.address"></span>
+					</p>
+				</td>
+				<td class="col-md-1">
+					<p>
+						<span  ng-bind="messenger.license_number"></span>
+					</p>
+				</td>
+				<td class="col-md-1">
+					<p>
+						<span  ng-bind="messenger.car_type"></span>
+					</p>
+				</td>
+				<td class="td-btn" class="col-md-1">
+				<button ng-click="modify(messenger)" >
+					ערוך
+				</button>
+				</td>
+				<td class="td-btn col-md-2" style="padding-left: 4px !important;" data-toggle="modal" ng-click="sendMessengerToDelete(messenger)" data-target="#delMessengerModal">
+				<button>
+					מחק
+				</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div style="background-color: red" ng-show="filtered&&!filtered.length">
+		<h1 style="color: white">לא נמצאו עובדים המתאימים לתנאי החיפוש</h1>
+	</div>
+</div>
+<div class="modal fade popup" id="delMessengerModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את <span ng-bind="messengerToDelete.name"></span>?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteMessenger()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

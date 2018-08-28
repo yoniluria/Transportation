@@ -1,0 +1,38 @@
+<div class="container" >
+	<div ng-show="newShift">
+		<div class="line add_worker add-div" >
+			<h3 class="cot-div" >{{title_btn_save}} משמרת</h3>
+			<input class="col-margin" ng-model="newShift.hour" required id="clock_hour" ng-class="{'error' :(submitted&&!newShift.hour)}" placeholder="שעה:" >
+			<input class="col-margin" disabled="disabled" ng-model="newShift.name" required  ng-class="{'error' :(submitted&&!newShift.name)}" placeholder="שם משמרת:" >
+			<input class="col-margin" ng-model="newShift.regular_instructions"   ng-class="{'error' :(submitted&&!newShift.regular_instructions)}" placeholder="הנחיות קבועות" >
+		</div>
+		<button class="float-btn" ng-click="submitted=true;(!newShift.name||!newShift.hour||!newShift.regular_instructions||save())">{{title_btn_save}}</button>
+	</div>
+	<table class="search" style="width: 100%;margin-top: 122px;">
+		<tbody><tr>
+			<td>
+				<p style="color: black;">סנן לפי</p>
+			</td>
+			<td>
+				<input  ng-model="shiftfilter.hour" id="filter_hour" placeholder="שעה:" >
+			</td>
+			<td>
+				<select ng-model="shiftfilter.name" ng-change="filtershifts()" ng-options="shift.name as shift.name for shift in shifts | unique:'name'  track by shift.name">
+				    <option value="">כל המשמרות</option>
+				</select>
+			</td>
+		</tr>
+	   </tbody>
+	</table>
+	<table class="table-rows" >
+		<tbody>
+			<tr ng-repeat="shift in shifts | filter :shiftfilter " ng-class="{'selected-row':shift.id==newShift.id}"><!-- (((!!shiftfilter.name || undefined) && (!!shiftfilter.hour || undefined)) && ((!!shiftfilter.name || undefined) || shiftfilter.hour || {hour:shiftfilter.hour} ) && shiftfilter ) -->
+				<td class="td-time" ><p>{{shift.hour}}</p></td>
+				<td  style="width: 20%;"><p style="border-left: 1px solid black;">{{shift.name}}</p></td>
+				<td><p>{{shift.regular_instructions}}</p></td>
+				<td class="td-btn" ng-click="editshift(shift)"><button>ערוך</button></td>
+				<td class="td-btn" ng-click="deleteshift(shift)" style="padding-left: 4px !important;" ><button>מחק</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

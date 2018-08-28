@@ -1,0 +1,228 @@
+<div class="divsortby" style="margin-top: 25px">
+<label style="display: inline;">סנן לפי</label>
+<select class="sort_by_name" ng-change="getDataList()" ng-model="sendToFilter.driver.id" ng-options="driver.id as driver.name for driver in $parent.drivers | filter:{is_usher:false} track by driver.id">
+	<option value="">כל הנהגים</option>
+</select>
+
+<select class="sort_by_name" ng-change="getDataList()" ng-model="sendToFilter.track.description" ng-options="city as city for city in all_cities">
+	<option value="">כל הערים</option>
+</select>
+<button ng-click="sendEmail()" style="display: inline; width: 250px; float: left; margin-left: 50px;">שלח מסלול ל{{sendToNames[forward]}} במייל</button>
+<button ng-click="show_print('content')" style="display: inline; width: 250px; float: left; margin-left: 50px;">הדפס משלוח</button>
+</div>
+<div class="print_content" >
+	<!-- <div class="print_header" >
+		<img class="logo_img" style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
+		<div id="pageFooter" style="float: left;margin: 15px 0 0 9px;" >עמוד </div>
+	</div> -->
+	<div id="content" class="all_content" >
+		<!-- <h1 class="print_headline" >{{headline}}</h1> -->
+		<!-- ng-if="shift.tracks&&shift.tracks.length"  -->
+		<!-- ng-class="{'new_page':(!$last&&($index!=1||!$last))}" -->
+		<div class="shift" ng-repeat="shift in shifts" ng-if="shift.tracks&&shift.tracks.length" data-first="{{$first}}" data-index="{{$index}}" data-first="{{$first}}" data-last="{{$last}}"  > 
+			
+		<div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index"  on-finish-render="callMyCustomMethod()" >
+		 
+		      <div class="col-md-12 div_track" data-track="{{track.track.id}}" style="border-bottom: 3px solid #8a8a8a;padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data- page="{{j}}" >
+				<!-- ng-show="j" -->
+				<div class="height_div" ng-init="p=page" >
+					<div>
+						<p style="float: right;" >בס"ד</p>
+						<p style="float: left;" >עמוד <span class="num_page" >{{p}}</span> מתוך <span class="num_pages" >{{page}}</span></p>
+						<table class="table col-md-12" >
+							<thead>
+								<tr>
+									<th> תאריך: {{track.track.track_date | date:'dd/MM/yyyy'}} {{convertToHebrew(tracks[0].track.track_date)}}</th>
+									<th>משמרת {{shift.name}} {{shift.hour}}</th>
+									<th>נוסעים - {{shift.filteredWorkers}}</th>
+									<th style="padding: 8px;" >
+										<img class="logo_img" ng-src="{{url + 'assets/img/logo_3.png'}}" />   
+									</th>
+								</tr>
+							</thead>
+						</table>
+					</div>	
+				</div>
+				<table class="t02" ng-class="{'top_border':j}" >
+		        	<tr class="main_line" >
+		            <td style="font-weight: 700; padding:0 7px;"><span class="text_not_print" >קו {{track.track.combined_line}}</span><span class="text_print" >בס"ד</span>
+		            	<span ng-if="shift.isCollecting" > - נקודת מוצא מ{{track.from}}</span>
+		            	<span ng-if="!shift.isCollecting" > יעד נסיעה:{{track.to}}</span>
+	            	 </td>  
+		    	    <!-- <td style="font-weight: 700; padding: 5px;">יעד נסיעה:{{track.to}}</td>  -->
+		   		    <td style="font-weight: 700; padding:0 5px;">תאריך: {{track.track.track_date | date:'dd/MM/yyyy'}}</td>
+		   		    <td style="font-weight: 700; padding:0 5px;">נוסעים: {{track.workers.length}}</td>
+		   		    <td style="font-weight: 700; padding:0 5px;">נהג: {{track.driver.name}}</td> 
+		   		    <td style="font-weight: 700; padding:0 5px;">טל: {{track.driver.phone}}</td>  	
+		   		    <td></td>	    
+		    		</tr>
+		    		<tr class="consolidation" >
+		    			<td style="/*padding-top: 10px; */padding-right: 7px;" >התייצבות בשעה {{track.start_hour|date:"HH:mm"}}</td>  
+		    			<td colspan="2" style="/*padding-top: 10px;*/"><div class="white_div text_print" ></div> <input type="checkbox" name="vehicle" value="Bike" class="input_check text_not_print">
+		    				<label style="/*margin-top: 2px;*/" class="label_checkbox"> בדוק התייצבות</label></td>
+		    			<td></td>
+		    			<td></td>
+		    			<td></td>
+		    		</tr>
+		     </table>
+		               <table class="t03">
+		                  <tr>
+		                          <th style="/*padding-top:10px;*/ padding-right: 7px;"> הנחיות</th>
+		                          <th style="/*padding-top:10px;*/ "><span ng-if="shift.isCollecting" >שעה</span><span ng-if="!shift.isCollecting" >סדר</span></th>   
+		                          <!-- <th ng-if="shift.isCollecting" style="padding-top:20px; ">שעה</th> -->
+		                          <!-- <th ng-if="!shift.isCollecting" style="padding-top:20px; "> סדר</th> -->
+		                          <th style="/*padding-top:10px;*/ "> שם העובד</th>
+		                          <th style="/*padding-top:10px;*/ "> כתובת</th>
+		                          <th style="/*padding-top:10px;*/ "> עיר</th>
+		                          <th style="/*padding-top:10px;*/ "> הנחיות קבועות</th>
+		                          <th style="/*padding-top:10px;*/ " ng-if="track.hasMap"> תמונה</th>
+		                  </tr>
+		                  <tr ng-repeat-start="worker in track.workers track by $index" class="worker_line" data-track="{{track.track.id}}" ng-class="{'no_border':$last}" >
+		                          <td style="padding-right: 7px;font-weight: 700;"><span data-cnt="{{countOf(worker.track_instructions)}}" ng-if="countOf(worker.track_instructions)<9" >{{worker.track_instructions}}</span></td>
+		                          <td ng-if="shift.isCollecting" >{{worker.hour|date:"HH:mm"}}</td>
+		                          <td ng-if="!shift.isCollecting" >{{worker.track_order}}</td>
+		                          <td>{{worker.name}}</td>
+		                          <td>{{worker.address}}</td>
+		                          <td>{{worker.city}}</td>
+		                          <td style="width: 24%;font-weight: 700;" ><span ng-if="countOf(worker.instructions)<9" >{{worker.instructions}}</span></td>   
+		                          <td ng-if="track.hasMap">
+		                          	<img ng-if="worker.img" ng-src="{{imgUrl + worker.img}}" alt="לא צורפה מפה" style="width: 50px;" />	
+		                          </td>
+		                  </tr>
+		                  <tr ng-repeat-end class="worker_line" data-track="{{track.track.id}}" >
+		                  	<td colspan="8" ng-if="countOf(worker.track_instructions)>8||countOf(worker.instructions)>8" >
+		                  		<span ng-if="countOf(worker.track_instructions)>8" >{{worker.track_instructions}}</span>
+		                  		<span ng-if="countOf(worker.instructions)>8" > {{worker.instructions}} </span>
+		                  	</td>
+		                  </tr>
+		                  <tr class="no_border" >
+		                      <td style="padding-right: 7px;"></td>
+		                      <td></td>
+		                      <td></td>
+		                      <td></td>
+		                      <td></td>
+		                      <td></td>
+		                      <td></td>
+		                  </tr>
+		          </table>
+		           </div>
+		    <!-- </td>
+		    
+		  </tr> -->
+		  </div>
+		</div>
+		<div ng-repeat="map in all_maps" class="page_break" >
+			<div class="height_div" ng-init="p=page" style="height: 30px;margin-bottom: 0;" >
+				<div>
+					<p style="float: right;" >בס"ד</p>
+					<p style="float: left;" >עמוד <span class="num_page" >{{p}}</span> מתוך <span class="num_pages" >{{page}}</span></p>
+				</div>	
+			</div>
+			<img ng-src="{{imgUrl+map}}" style="max-width: 100%;" >
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<style>
+table#t01{
+	 width:100%;
+	 display: inline-block;
+	 float: right;
+	 margin-top: 8px;
+     margin-right: 8px;
+}
+
+ table.t02{
+ 	width: 100%;
+ 	background-color: #e0e0e0;
+
+ }
+
+table.t03{
+	width: 100%;
+}
+.divtitle{
+	background-color: #a7a7a7;
+	height:100px;
+    width: 100%;
+    margin-top: 8px;
+    margin-right: 8px;
+    padding-right: 8px;
+    font-size: 18px;
+    padding-top: 8px;
+}
+	
+.divsortby{
+    margin-right: 8px;
+    margin-top: 8px;
+}
+	
+.input{
+	margin-right: 10px;
+	display: inline;
+	width: 200px;
+	}
+	
+.input_select{
+	margin-right: 7px !important;
+    margin-top: 0px !important;
+    width: 30px; 
+    height: 30px;
+    margin-left: 10px !important;
+}	
+
+.input_check{
+    width: 25px; 
+    height: 25px;
+    display: inline-block;
+    float: right;
+}	
+	
+.label_sendto{
+	margin-right: 20px;
+	display: inline;
+}
+
+.label_checkbox{
+	font-weight: 500;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.sort_by_name{
+	display: inline;
+	width: 250px;
+	margin-right: 10px;
+}
+
+
+/*@media print
+{    
+	.print_content{
+	    position: fixed;
+	    width: 100%;
+	    padding-right: 4.16%;
+	    background-color: white;
+	    height: 100%;
+	    top: 0;
+	    right: 0;
+	    z-index: 9999;
+	}
+	.divsortby,.div_header{   
+		display: none;   
+	}
+	.print_headline{
+		display: block !important;    
+	}   
+	.logo_print{
+		display: list-item;
+        list-style-image: url(../images/logo_print.png);
+        list-style-position: inside;
+	}
+}*/    
+	
+</style>

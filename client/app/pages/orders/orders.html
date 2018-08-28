@@ -1,0 +1,573 @@
+<style>
+	md-datepicker {
+		background: none;
+	}
+	.md-datepicker-input-container {
+		border-bottom-width: 0px !important;
+		padding-bottom: 0px !important;
+	}
+	.mark {
+		border-color:#ffc107 !important;
+		border-width: 2px;
+	}
+	.xls_table input{
+		border-width: 2px;
+	}
+	.error {
+		border-color: red !important;
+		    border-width: 2px;
+	}
+
+	.error:focus {
+		border-color: red !important;
+	}
+
+	.dark input {
+	}
+	#ttime .second {
+		display: none;
+	}
+	.fa {
+		font-size: 22px;
+	}
+</style>
+
+<!-- <form name="orderForm" novalidate> -->
+<div id="colapseArea" style="     padding-top: 50px;   height: 60px;    overflow: hidden;" class="add-order dark row ">
+	<div class="col-md-12 col-sm-12 " style="    padding-top: 0px;   ">
+		<label class="xls-label orders-button" style="position: absolute;cursor: pointer;    top: -40px;" ng-click="colapseOrderArea()">הזמנה חדשה +</label>
+	<!--	<h3 ng-if="!newOrder.id" style="    margin-top: 10px;">הזמנה חדשה </h3><h3 ng-if="newOrder.id" style="    margin-top: 10px;">עדכון פרטי הזמנה</h3>-->
+<input style="display: none;" id="xls" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onchange="angular.element(this).scope().handleFile(event)" />
+	
+<label class="xls-label orders-button xls-btn" style="position: absolute;margin: 0;left: 18px;    top: -40px;cursor: pointer" for="xls">טען XLS</label></div>
+	<div class="col-md-12 col-sm-12 no-padding">
+		<div class="">
+			<div class="col-sm-2">
+				<label>שם לקוח:</label>
+				<input type="text" ng-model="newOrder.customer_name" name="customer_name" required  ng-class="{'error' :(submitted&&!newOrder.customer_name)}"/>
+				<span ng-show="submitted&&!newOrder.customer_name" class="help-block">מלא שם</span>
+			</div>
+			<div class="col-sm-2">
+				<label>טלפון:</label>
+				<input type="text" ng-model="newOrder.phone"  ng-pattern="/^\(?(\d{2,3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/"   name="phone" required  ng-class="{'error' :(submitted&&!newOrder.phone)}"/>
+				<span ng-show="submitted&&!newOrder.phone" class="help-block">טלפון לא תקין</span>
+			</div>
+		   <div class="col-sm-2">
+				<label>הערות:</label>
+				<input type="text" ng-model="newOrder.remarks"     name="remarks" />
+				
+			</div>
+			<div class="col-sm-2">
+				<label>כתובת:</label>
+				<input vs-google-autocomplete
+				ng-model="newOrder.address.name"
+				vs-street-number="newOrder.address.components.streetNumber"
+				vs-street="newOrder.address.components.street"
+				vs-city="newOrder.address.components.city"
+				vs-country="newOrder.address.components.country"
+				vs-latitude="newOrder.lat"
+				vs-longitude="newOrder.lng"
+				type="text"
+				name="address"
+				id="address"
+				placeholder="הזן מיקום"
+				required  ng-class="{'error' :(submitted&&!newOrder.address)}"/>
+				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
+				<span ng-show="submitted&&(!newOrder.lat||!newOrder.lng||!newOrder.address.name)" class="help-block" style="position:absolute 	;display:inline-block">כתובת לא תקינה,</span>
+				
+				<!-- <input class="searchTextField" type="text" id="place" size="50" ng-model="newOrder.address"/> -->
+				<!-- <input id="place" class="searchTextField" type="text" size="50" ng-model="newOrder.address">
+				<input type="hidden" id="city_place" name="city_place" ng-model="newOrder.city"/>
+				<input type="hidden" id="cityLat_place" name="cityLat_place" ng-model="newOrder.lat"/>
+				<input type="hidden" id="cityLng_place" name="cityLng_place" ng-model="newOrder.lng"/> -->
+			</div>
+
+			<div class="col-sm-1">
+				<label>קומה:</label>
+				<input type="number" ng-model="newOrder.floor"  required  ng-class="{'error' :(submitted&&newOrder.floor==null)}"/>
+				<span ng-show="submitted&&newOrder.floor==null" class="help-block">מלא קומה</span>
+			</div>
+		</div>
+		<div class="col-sm-1">
+			<label> מספר תעודה:</label>
+			<input type="number" ng-model="newOrder.num_order" required  ng-class="{'error' :(submitted&&!newOrder.num_order)}"/>
+			<span ng-show="submitted&&!newOrder.num_order" class="help-block">מלא מספר תעודה</span>
+		</div>
+		<div class="col-sm-1">
+			<label>כמות להזמנה:</label>
+			<input type="number" string-to-number ng-model="newOrder.amount" />
+			<!--<input type="number" ng-model="newOrder.num_order" required  ng-class="{'error' :(submitted&&!newOrder.amount)}"/>
+			<span ng-show="submitted&&!newOrder.amount" class="help-block">מלא כמות</span>-->
+		</div>
+		<div class="col-sm-1">
+			<label>איסוף תשלום:</label>
+			<input type="number" ng-model="newOrder.price" required  ng-class="{'error' :(submitted&&newOrder.price==null)}"/>
+			<span ng-show="submitted&&newOrder.price==null" class="help-block">מלא מחיר</span>
+		</div>
+		<div class="col-sm-2">
+			<label>תאריך הזמנה:</label>
+			<md-datepicker ng-model="newOrder.time_order" md-format="DD/MM/YYYY"  md-placeholder="הכנס תאריך"></md-datepicker>
+			<!-- <input ng-model="date" ui-date> -->
+		</div>
+		<div class="col-sm-3">
+
+			<div class="col-md-12 no-padding"><label>טוח הזמנה: </label></div>
+			<div class="col-md-12 no-padding" style="    height: 40px;">
+				<div class="col-md-1 no-padding">
+				<div class="checkbox checkbox-info ng-scope">
+						<input type="checkbox" id="time_set" ng-model="newOrder.time_set">
+						<label for="time_set"></label>
+  				</div></div>
+			    <div class="col-md-2 no-padding" ><label style="    margin-top: 12px;" ng-bind="(newOrder.time_set)?('מוגדר'):('לא מוגדר')"    ></label> </div>
+			    
+			    
+			    <div class="col-md-9 no-padding"><select ng-if="newOrder.time_set" ng-model="newOrder.tempTime" ng-options="hour.id as hour.value for hour in hours">
+			</select></div>
+			    </div>
+			
+			<!-- <i class="fa fa-pencil" aria-hidden="true" ng-click="writeTime=!writeTime"></i> -->
+			<!-- <select ng-hide="writeTime" ng-model="newOrder.time_order" ng-options="time.timeString for time in times"> -->
+			<!-- ng-options="time in times"> -->
+			<!-- <option ng-model="newOrder.time_order" ng-repeat="time in times">{{time|date:"HH:mm"}}</option> -->
+			<!-- <option ng-selected="{{newOrder.time_order.getTime() == time.getTime()}}"
+			ng-repeat="time in times"
+			value="{{time}}">{{time |date:"HH:mm"}}</option> -->
+			<!-- </select> -->
+			
+			<!--<input  type="time" ng-model="newOrder.time_order" datetime="hh:mm" id="ttime"/>-->
+		</div>
+		<div class="col-sm-1">
+			<label>שהות בתחנה: </label>
+			<input type="number" ng-value="{{settings.stop_time}}" ng-model="newOrder.stop_stay" />
+		</div>
+<div class="col-md-2 col-md-offset-4  ">		
+
+		<div class="" style="display: inline-block; float: left;margin-top: 25px;">
+			<button class="" style="margin: 0; padding: 0 16px;" ng-click="submitted=true;(!newOrder.customer_name||!newOrder.phone||!newOrder.num_order||newOrder.floor==null
+	||!newOrder.lng||!newOrder.lat||!newOrder.address.name||newOrder.price==null||save())">
+	<span ng-if="!newOrder.id">הוסף הזמנה</span>
+	<span ng-if="newOrder.id">שמור שינויים</span>
+		<!-- <img ng-if="!newOrder.id" src="assets/img/plus.png" />
+		<img ng-if="newOrder.id"  src="assets/img/check.png" /> -->
+	</button>
+		</div>
+	</div>
+		<!--<div class="col-sm-3">
+		<label>נהג:</label>
+		<select ng-model="newOrder.messenger" ng-options="x.name for x in messengers">
+
+		</select>
+		</div>-->
+		<!--<div>
+
+		<div class="add-option" ng-repeat="category in categories">
+		<label>{{category[0]}}</label>
+		<div style="width: 100%;">
+		<button ng-repeat="subcategory in category[1]" ng-style="{'box-shadow':(newOrder.categories | getByIdOptionFilter :subcategory.id )!=-1?'1px 1px 9px 1px #211f1f':''}"
+		ng-click="chooseCategory(subcategory)">{{subcategory.value}}</button>
+		</div>
+		</div>
+
+		</div>-->
+
+	</div>
+
+	
+	
+	
+	<!-- <button hidden data-toggle="modal" data-target="#myModal1" id="btn_modal1"></button> -->
+</div>
+<!-- </form> -->
+
+<!--  -->
+<div class=" orders " style="width: 100%;padding-bottom: 70px; */">
+
+	<!--
+	<button ng-disabled="!all" ng-click="all=!all" style="width: initial;margin-top: 8px;" ng-style="{'background-color':!all?'#d3d7db':''}" ng-style="{'background-color':!all?'#d3d7db':''}">׳”׳›׳�</button>
+	<button ng-disabled="all" ng-click="all=!all" style="width: initial;margin-top: 8px;" ng-style="{'background-color':all?'#d3d7db':''}">׳”׳™׳•׳�</button>-->
+
+	<!--<button  ng-click="createRoute()" ng-if="$parent.isNew" style="position:fixed; z-index: 10; bottom: 16px; left: 16px;    background: cornflowerblue;width: initial;" >
+		יצא מסלול
+	</button>-->
+	<h4 style="margin-bottom: 20px;" class="hidden-lg hidden-md hidden-sm"> שים <i class="fa fa-heart" aria-hidden="true"></i>
+	<br>
+	בלחיצה על כתובת תוכל לצפות בכל פרטי ההזמנה </h4>
+
+<!--	<div class="row filters" style="margin: 0;">
+		<div class="col-md-3" style="width: inherit;">
+			<label style="font-weight: 800;">מיין לפי:</label>
+			<button style="width: inherit; padding: 0px 16px;margin: 0;" ng-disabled="$parent.isNew" ng-click="$parent.isNew=!$parent.isNew;filterOrder()" class="orders-button" ng-style="{'background-color':$parent.isNew?'#5d5e62':'','color':$parent.isNew?'#d3d7db':''}">
+				הזמנות חדשות
+			</button>
+			<button style="width: inherit; padding: 0px 16px; margin: 0;" ng-disabled="!$parent.isNew" ng-click="$parent.isNew=!$parent.isNew;filterOrder()" class="orders-button" ng-style="{'background-color':!$parent.isNew?'#5d5e62':'','color':!$parent.isNew?'#d3d7db':''}">
+				הזמנות ששובצו
+			</button>
+			</div>
+		<div class="col-md-1">
+			<label ng-click="sortField = 'num_order'">תעודה</label>
+			<input type="text"    ng-model="filterOrderNum" ng-change="filterOrder()"/>
+		</div>
+		<div class="col-md-1">
+			<label ng-click="sortField = 'customer_name'">שם לקוח</label>
+			<input type="text"    ng-model="filterCustomer" ng-change="filterOrder()"/>
+		</div>
+		<div class="col-md-2">
+			<label ng-click="sortField = 'phone'">טלפון</label>
+			<input  type="tel"    ng-model="filterOrderPhone" ng-change="filterOrder()"/>
+		</div>
+		<div class="col-md-2">
+			<label ng-click="sortField = 'address.name'">כתובת</label>
+			<input type="text"    ng-model="filterAddress" ng-change="filterOrder()"/>
+		</div>
+
+		
+
+		
+
+		<div class="col-md-2">
+			<label ng-click="sortField = 'date'">החל מתאריך:</label>
+			<md-datepicker style="margin-right: 0;     padding: 0;" ng-model="$parent.order_date"  ng-change="getRoutesByDate()"></md-datepicker>
+		</div>
+		
+	
+       <div class="col-md-1" ng-if="!$parent.isNew">
+			<label  class="hidden-xs" ng-click="sortField = 'messenger'"><span >נהג</span></label>	
+			<select ng-model="$parent.filterByMessenger" ng-options="x.id as x.name for x in messengers" ng-change="filterOrder()">
+
+		    </select>
+			
+		</div>
+		
+		
+
+</div>-->
+	<!-- <div class="col-md-12" style="margin-top: 10px;"><h5>מספר רשומות:<span ng-bind="(orders | filter:{track_id:($parent.isNew?null:'')}).length"></span></h5></div> -->
+	<div class="col-md-12" style="margin-top: 10px;">
+	<div class="col-md-12 box summery hidden-xs filters dark" style="margin: 0; padding: 0 15px;">
+		<table class="" style="height: 47px;">
+			<tr>
+				<!--<td class="col-md-1" ng-if="$parent.isNew">רשימת הזמנות חדשות</td>
+				<td class="col-md-2" ng-if="!$parent.isNew">רשימת הזמנות משובצות במסלולים</td>-->
+				<td class="col-md-3">
+					
+					<div class="col-md-12 col-btns-order" style="    width: 100%;    right: -15px;    display: inline-table;    position: absolute;    top: 0px;    border-radius: none;">
+
+    
+					
+					<button style="    border-radius: 0px 3px 0 0;width: 49%;height: 47px;padding: 0px 16px;margin: 0;" ng-disabled="$parent.isNew" ng-click="$parent.isNew=!$parent.isNew;filterOrder()" class="col-md-6 orders-button new-orders" ng-style="{'background-color':$parent.isNew?'':'#5d5e62','color':$parent.isNew?'':'#d3d7db'}">
+					הזמנות חדשות <span ng-if="$parent.isNew">(<span ng-bind="(orders | filter:{track_id:($parent.isNew?null:'')}).length"></span>)</span>
+				</button>
+				<button style="  border-radius: 3px 0px 0 0; width: 49%;height: 47px;padding: 0px 16px;margin: 0px;" ng-disabled="!$parent.isNew" ng-click="$parent.isNew=!$parent.isNew;filterOrder()" class="col-md-6 orders-button" ng-style="{'background-color':!$parent.isNew?'':'#5d5e62','color':!$parent.isNew?'':'#d3d7db'}">
+					הזמנות ששובצו <span ng-if="!$parent.isNew">(<span ng-bind="(orders | filter:{track_id:($parent.isNew?null:'')}).length"></span>)</span>
+				</button></div></td>
+				<td class="col-md-2"><input style="    border-width: 0px;    color: black;    background: white;" type="text" ng-model="searchInput" ng-change="searchAll()" placeholder="חיפוש חופשי"></td>
+				<td class="col-md-1"><label style="text-align: left;    color: white;" class="to_date" >לתאריך:</label></td>
+			      	<td class="col-md-2"><md-datepicker style="margin-right: 0;     padding: 0;" ng-model="$parent.order_date"  ng-change="getRoutesByDate()"></md-datepicker></td>
+			
+				<td style="    padding: 0px;" class="col-md-2">
+					<div style="padding: 0px" class="col-md-6"><button data-toggle="modal" data-target="#ModalDrivers"   ng-style="{'visibility':$parent.isNew?'visible':'hidden'}" style=" z-index: 10;width:100%;   background: cornflowerblue;" >
+		יצא מסלול
+	</button></div>
+					<div class="col-md-2" style="     margin-top: 10px;   text-align: left;"><i style="cursor: pointer" class="fa fa-trash" aria-hidden="true" data-toggle="modal" data-target="#deleteAll" role="button" tabindex="0"></i></div>
+					<div class="col-md-4" style="    margin-top: 10px;">
+					<div style="margin-top: 0px;left: 40%;" ng-if="$parent.isNew" class="checkbox checkbox-all checkbox-info" >
+						<input type="checkbox" id="check_all" ng-model="exportAll" ng-click="checkAll()">
+						<label for="check_all" ></label>
+					</div>
+					<div style="margin-top: 0px;left: 40%;" ng-if="!$parent.isNew" class="checkbox checkbox-all checkbox-info" >
+						<input type="checkbox" id="check_all_old" ng-model="exportAllOld" ng-click="checkAllOld()">
+						<label for="check_all_old" ></label>
+					</div>
+					</div>
+				</td>
+			</tr>
+			
+				
+			
+		</table>
+	</div>
+	
+	
+		<div style="    box-shadow: -1px 3px 5px 0px rgba(128, 128, 128, 0.68);" class="orders-table col-md-12 box">
+		<table class="">
+			
+			<tr style="cursor: pointer;">
+				<td class="hidden-xs col-md-1" >מספר תעודה</td>
+				<td class="hidden-xs col-md-2"> שם לקוח </td>
+				<td class="col-md-2" >כתובת </td>
+				<td class="hidden-xs col-md-2"> הערות </td>
+		
+
+				<td class="hidden-xs col-md-2"  > תאריך ושעת הזמנה</td>
+				<!--<td class="hidden-xs col-md-1"  ><span ng-show="!$parent.isNew">מספר מסלול</span></td >-->
+				<td class="hidden-xs col-md-1"  ><span ng-show="!$parent.isNew">נהג</span></td >
+				
+				<td class="col-md-2" >
+					
+				</div></div>
+					</td>
+			</tr>
+			</table>
+		
+	</div>
+	
+	
+	<div class="orders-table col-md-12 box" ng-repeat="order in orders | orderBy:sortField" ng-if="($parent.isNew&&order.track_id==null)||(!$parent.isNew&&order.track_id!=null)" ng-hide="({{order.time_order | dateDiff:currentdate}}>=0)&&all">
+		<table class="">
+			
+			<tr style="cursor: pointer;">
+				<td class="hidden-xs col-md-1"   data-toggle="collapse" data-target="#demo{{$index}}"> {{order.num_order}} </td>
+				<td class="hidden-xs col-md-2"   data-toggle="collapse" data-target="#demo{{$index}}"> {{order.customer_name}} </td>
+	
+				<td class="col-md-2"  data-toggle="collapse" data-target="#demo{{$index}}"><i class="fa fa-map-marker" aria-hidden="true"></i> {{order.address.name}} </td>
+			    <td class="hidden-xs col-md-2"   data-toggle="collapse" data-target="#demo{{$index}}"> {{order.remarks}} </td>
+				<td class="hidden-xs col-md-2"   data-toggle="collapse" data-target="#demo{{$index}}"> {{order.time_order|formatDate|date:"dd.MM"}} <span ng-if="order.time_set">{{order.time_order|formatDate|date:"HH:mm"}}</span></td>
+				<!--<td class="hidden-xs col-md-1"   data-toggle="collapse" data-target="#demo{{$index}}"><span ng-show="!$parent.isNew">{{order.track_id}}</span></td >-->
+				<td class="hidden-xs col-md-1"   data-toggle="collapse" data-target="#demo{{$index}}"><span ng-show="!$parent.isNew">{{order.messengerr.name}}</span></td >
+				<td class="col-md-2" >
+					<div style="text-align: center;" class="col-md-4"><i style=" "  class="fa fa-pencil" aria-hidden="true" ng-click="editOrder(order)"></i></div>
+					<div style="text-align: center;" class="col-md-4"><i class="fa fa-trash" aria-hidden="true" ng-click="delOrder(order);" data-toggle="modal" data-target="#myModal"></i></div>
+				
+				<div class="col-md-4"><div style="margin-top: 0px;    left: 40%;" class="checkbox checkbox-info" ng-if="order.track_id==null" >
+					<input type="checkbox" id="{{'add_to order'+order.id}}" ng-click="toExport(order)" ng-checked="listToExport.indexOf(order)!=-1">
+					<label for="{{'add_to order'+order.id}}" ></label>
+				</div>
+				<div style="margin-top: 0px;    left: 40%;" class="checkbox checkbox-info" ng-if="order.track_id!=null" >
+					<input type="checkbox" id="{{'add_to order'+order.id}}" ng-click="toExportOld(order)" ng-checked="listToExportOld.indexOf(order)!=-1">
+					<label for="{{'add_to order'+order.id}}" ></label>
+				</div>
+				</div>
+					</td>
+			</tr>
+		</table>
+		<div class="col-md-12 no-padding more-details collapse"  id="demo{{$index}}" style="    min-height: 33px;">
+	
+		<p class="col-md-3 hidden-lg hidden-md hidden-sm">נהג:<span>{{order.messengerr.name}}</span></p>
+		<p class="col-md-3 hidden-lg hidden-md hidden-sm">שם לקוח:<span>{{order.customer_name}}</span></p>
+		<p class="col-md-3 hidden-lg hidden-md hidden-sm">שעת הזמנה:<span>{{order.time_order|formatDate|date:"dd.MM"}} </span><span>{{order.time_order|formatDate|date:"HH:mm"}}</span></p>
+		<p class="col-md-3 hidden-lg hidden-md hidden-sm">שעת הגעה משוערת:<span>{{(order.estimated_time_arrival|formatDate)!=0?(order.estimated_time_arrival|formatDate|date:"dd.mm"):''}} <span>{{(order.estimated_time_arrival|formatDate)!=0?(order.estimated_time_arrival|formatDate|date:"HH:mm"):''}}</span></span></p>
+		<p class="col-md-3 hidden-lg hidden-md hidden-sm">טלפון:<span>{{order.phone}}</span></p>
+		<p class="col-md-3 " ng-if="order.floor">קומה:<span>{{order.floor}}</span></p>
+		<p class="col-md-3 " ng-if="order.amount">כמות:<span>{{order.amount}}</span></p>
+		<p class="col-md-3 hidden-lg hidden-md hidden-sm">תעודה:<span>{{order.num_order}}</span></p>
+		<p class="col-md-3" ng-if="order.price">איסוף תשלום:<span><span>₪</span>{{order.price}}</span></p>
+		<p class="col-md-3" ></p>
+		<p class="col-md-3" ng-repeat="detail in order.orders_details">{{detail.attr}}:<span>{{detail.value}}</span></p>
+		<!-- <p class="col-md-3">סוג מנה:<span>{{order.status}}</span></p> -->
+		</div>
+	</div>
+	
+
+	
+</div>	
+
+<!-- Modal number of drivers -->
+<div class="modal fade popup" id="ModalDrivers" role="dialog">
+	<div class="modal-dialog modal-drivers">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/ride.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+				הכנס את מספר הנהגים שעומדים לרשותך:
+				</p>
+			</div>
+			<input ng-model="drivers_number" type="number" />
+			<!-- <div class="modal-body">
+			<p>Some text in the modal.</p>
+			</div> -->
+			<div class="modal-footer">
+				
+				<div class="col-xs-offset-4 col-xs-4 ">
+					<button type="button"  ng-click="createRoute()" data-dismiss="modal">
+						המשך
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade popup" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק הזמנה זו?
+				</p>
+			</div>
+			<!-- <div class="modal-body">
+			<p>Some text in the modal.</p>
+			</div> -->
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteOrder()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade popup" id="deleteAll" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					 האם ברצונך למחוק את כל ההזמנות הנבחרות?
+				</p>
+			</div>
+			<!-- <div class="modal-body">
+			<p>Some text in the modal.</p>
+			</div> -->
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteAllOrders()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+<button id="saved-toggle" style="display: none" data-toggle="modal" data-target="#saved"></button>
+<button id="saved-cancel" style="display: none" data-dismiss="modal"></button>
+<!-- Modal -->
+<div class="modal fade popup" id="saved" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div style="top: 60px;" class="modal-content">
+			<div style="padding-top: 11px;" class="modal-header">
+
+				<p  class="center modal-title">
+					<span ng-bind="message"></span>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<button id="xls_compare-toggle" style="display: none" data-toggle="modal" data-target="#xls_compare"></button>
+
+<div class="modal fade popup" id="xls_compare" role="dialog">
+	<form  name="approval_form" id="ApprovalForm" novalidate>
+	<div class="modal-dialog" style="    width: 80%;">
+
+		<!-- Modal content-->
+		<div class="modal-content" style="top:50px">
+			<div class="modal-header">
+				<img style="    margin-bottom: 0px;" src="assets/img/comparison.png" />
+			<div class="col-md-12" style="padding-right: 40px;"><p style="    text-align: right;  ">מספר רשומות :<span ng-bind="orders_result.length"></span> </p></div>
+				
+			</div>
+			<div class="modal-body">
+				
+				<div class="col-md-12 xls-div">
+					
+					<div class="col-md-12">
+					
+						<table id="xls_table" class="table">
+							
+							<tr><th><label >שם לקוח</label></th><th><label >הערות</label></th><th><label >כתובת מקורית</label></th><th><label >כתובת במפה</label></th></tr>
+							<tbody >
+
+							<tr ng-repeat="o_res in orders_result"><td>{{o_res.customer_name}}</td><td>{{o_res.remarks}}</td><td>{{o_res.original_address}}</td>
+							<td>
+									<input style="border-width: 2px;" vs-google-autocomplete
+											ng-model="o_res.address.name"
+											vs-street-number="o_res.address.components.streetNumber"
+											vs-street="o_res.address.components.street"
+											vs-city="o_res.address.components.city"
+											vs-country="o_res.address.components.country"
+											vs-latitude="o_res.lat"
+											vs-longitude="o_res.lng"
+											type="text"
+											placeholder="הזן מיקום"
+											required  ng-class="{'error' :(!o_res.address.name||!o_res.lat||!o_res.lng),'mark' :(!o_res.address.components.city||!o_res.address.components.country||!o_res.address.components.street||!o_res.address.components.streetNumber)}" />
+											
+								
+								
+							</td></tr>
+							</tbody>
+						</table>
+					</div>
+					
+				</div>
+				
+				
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button id="dissmiss_order" type="button"  class="red-button" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<a id="hidden-cancel" class="hide" data-dismiss="modal"></a>
+					<button type="submit" ng-click="o_submitted=true;(isInvalid()||saveOrders())" >
+						שמור
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	</form>
+</div>
+<style>
+	input[required="required"]{
+  border: 2px solid red;
+}
+</style>
+<!--
+
+<button id="test_order" ng-click="func()" value="test">
+	test
+</button>-->
+
+
+
+<style>
+	#test_order {
+		position: fixed;
+		bottom: 16px;
+		right: 97px;
+		width: 128px;
+	}
+	
+	
+
+</style>
+

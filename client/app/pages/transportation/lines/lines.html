@@ -1,0 +1,92 @@
+<style>
+	.station.col-md-6 tr:hover{
+		background-color: #797475 !important;
+	}
+</style>
+<div style="background-color: red;" ng-if="!tracks.length" aria-hidden="false" class="">
+	<h1 style="color: white">אין מסלולים ביום הנבחר</h1>
+</div>
+<div ng-if="tracks.length" class="container" style="    margin-top: 20px;">
+	<!-- <button class="float-btn lines">הדפס מסך</button> -->
+	<input type="text" class="float-btn btn-small lines" placeholder="סנן לפי שם ת.ז. עיר" ng-model="linesfilter"/>
+	<!-- <button class="float-btn btn-small lines fa fa-search"></button> -->
+	<!-- <button class="btn-small lines" style="margin-bottom: 4px;display: block;">הוסף מסלול</button> -->
+	<div class="col-md-12">
+	<div class="col-md-6">
+	<div class="station" style="margin-bottom: 0px;">
+		<table>
+			<thead class="line-station">
+				<tr>
+					<th>מספר קו</th>
+					<th>שם מקוצר לקו</th>
+					<th>משמרת</th>
+					<!-- <th>מיין סדר ההצגה</th> -->
+					<!-- <th>שבץ לנהג</th> -->
+					<th>נהג</th>
+				</tr>
+				</thead>		
+		</table>
+	</div>
+	<div class="station line-track" style="max-height: 795px;">
+			<table>
+			<tbody>
+				<tr style="height: 50px;" ng-class="{'selected-line':track.track.id==selectedTrack.track.id}" ng-repeat="track in tracks | orderBy:['track.shift_id','track_order']" ng-click="getWorkers(track)">
+					<td style="width:15%">
+						<!-- <input type="text" ng-value="track.track.combined_line" ng-model="track.track.combined_line"/> -->
+						{{track.track.combined_line}}
+					</td>
+					<td>
+						<!-- <input type="text" ng-value="track.track.description" ng-model="track.track.description"/> -->
+						{{track.track.description}}
+					</td>
+					<td>
+						{{track.track.shift}}
+					</td>
+					<!-- <td style="width:15%">
+						<input type="number" ng-value="track.track.track_order" ng-model="track.track.track_order"/>
+					</td> -->
+					<td>
+						<!-- <select ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers" ng-init="track.track.meesenger=track.track.meesenger"></select> -->
+						{{track.driver.name}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	</div>
+	
+	<div class="station col-md-6">
+		<table>
+			<thead class="line-station">
+				<tr>
+					<th ng-show="isCollectShift">קבע שעת איסוף</th>
+					<th>קבע זמן נסיעה</th>
+					<th>עובד/ת</th>
+					<th>קבע זמן המתנה</th>
+					<th>כתובת</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="worker in selectedTrack.workers | filter:linesfilter track by $index" ng-dblclick="updateWorker(worker.connection,worker.address)">
+					<td ng-show="isCollectShift" style="width:15%">
+						<input type="time" ng-value="worker.connection.hour|date:'HH:mm'" ng-model="worker.connection.hour"/>
+					</td>
+					<td style="width:15%">
+						<input ng-show="isCollectShift&&$last || !isCollectShift&&$first" type="number" min="0" ng-model="worker.address.travel_time"/>
+					</td>
+					<td>{{worker.worker.name}}</td>
+					<td style="width:15%">
+						<input ng-hide="isCollectShift&&$last || !isCollectShift&&$first" type="number" min="0" ng-model="worker.connection.duration"/>
+					</td>					
+					<!-- <td>{{worker.address.original_address}}</td> -->
+					<td>{{worker.connection.address}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<button ng-show="selectedTrack.workers.length" class="btn btn-small" style="float: left;margin-top: 5%;" ng-click="saveWorkers()">שמור</button>
+		<div style="background-color: red" ng-show="selectedTrack&&selectedTrack.workers&&!selectedTrack.workers.length">
+			<h1 style="color: white;text-align: center;">אין עובדים בקו זה</h1>
+		</div>		
+	</div>
+	</div>
+</div>

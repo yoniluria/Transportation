@@ -1,0 +1,2 @@
+[24-Dec-2016 03:25:37 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/taxiphoneco/public_html/routeSpeed/assets/AppAsset.php on line 17
+[02-Jan-2017 22:12:19 UTC] PHP Fatal error:  Class 'yii\web\AssetBundle' not found in /home/taxiphoneco/public_html/routeSpeed/assets/AppAsset.php on line 17

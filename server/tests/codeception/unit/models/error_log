@@ -1,0 +1,4 @@
+[03-Jan-2017 10:50:42 UTC] PHP Fatal error:  Class 'yii\codeception\TestCase' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/unit/models/ContactFormTest.php on line 10
+[03-Jan-2017 10:51:17 UTC] PHP Fatal error:  Class 'yii\codeception\TestCase' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/unit/models/LoginFormTest.php on line 11
+[03-Jan-2017 10:52:18 UTC] PHP Fatal error:  Class 'yii\codeception\TestCase' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/unit/models/UserTest.php on line 8
+[05-Jan-2017 20:03:29 UTC] PHP Fatal error:  Class 'yii\codeception\TestCase' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/unit/models/ContactFormTest.php on line 10

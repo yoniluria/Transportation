@@ -1,0 +1,129 @@
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12{
+	float: left;
+}
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12{
+	float: left;
+}
+.col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12{
+	float: left;
+}
+.col-xs-offset-2 {
+    margin-left: 16.66666667%;
+    margin-right: 0;
+}
+.menu{
+	left: 0;
+}
+header{
+	left: auto;
+	right: 0;
+}
+.logo-route{
+    right: 20px;
+    left: auto;
+}
+.under-header{
+	float: right;
+}
+.num-lines{
+	text-align: left !important;
+    padding-left: 12px !important;
+}
+.records-txt{
+    display: inline-block;
+    width: auto;
+    margin-right: 3px;
+}
+.btns-routes{
+	padding-left: 0 !important;
+	padding-right: 15px !important;
+}
+.cancel-stop{
+	float: right !important;
+}
+.move-btn > li{
+	float: left;
+}
+.p-ltr span{
+    float: right;
+    padding-left: 3px;
+}
+.move-btn p{
+	text-align: left;
+}
+.xls-btn{
+	right: 13px;
+	left: auto !important;
+}
+#test_order{
+	left: 97px;
+}
+.orders .summery{
+    padding: 0 15px 0 0 !important;
+}
+.md-button.md-icon-button{
+	left: 27px;
+}
+.filters .md-datepicker-input{
+	padding-right: auto;
+	padding-left: 60px;
+}
+.new-orders,.col-btns-order{
+	left: 0;
+}
+.to_date{
+	text-align: right !important;
+}
+.md-button.md-icon-button{
+	left: 16px;
+}
+.between-dates .md-datepicker-input, .date-input .md-datepicker-input{
+    padding-left: 52px;
+    padding-right: 10px;
+}
+.route-info input{
+	margin-right: 0;
+	margin-left: 5px;
+	text-align: right;
+}
+.nav-pills>li+li{
+	margin-left: auto;
+}
+.delete-button{
+	right: 15px;
+    left: auto;
+}
+.h4-message{
+    margin-left: 32px;
+    margin-right: auto;
+}
+.add-messanger{
+    left: 18%;
+    right: auto;
+}
+.total h3{
+	display: inline-block;
+}
+.total h3 span{
+    float: right;
+    padding-left: 3px;
+}
+.redemptions-dates .md-datepicker-input-container{
+	margin-left: 0;
+}
+.routs-history .circle-number{
+    margin-right: 5px;
+    margin-left: auto;
+}
+.info p span{
+	font-weight: normal;
+    display: inline-block;
+}
+.info p span.bold-span{
+    font-weight: 800;
+    float: right;
+    padding-left: 4px;
+}
+.upload-button{
+	float: right;
+}

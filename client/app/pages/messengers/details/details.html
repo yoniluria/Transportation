@@ -1,0 +1,108 @@
+ <div class="in-tab" id="details" ng-init="initialize()">
+  	<div class="col-md-12">
+  	<h4>עדכן כאן את פרטי הנהג</h4>
+ 
+  	</div>
+  	<form name="messengerDetailsForm" ng-submit="submitted=true;(messengerDetailsForm.$invalid||saveMessenger(messengerDetailsForm.$valid))" novalidate>
+  	<div class="col-md-12">	
+		<div class="col-md-6" >
+			<label>שם פרטי(שם משתמש):</label>
+			<input name="name"   type="text" ng-model="$parent.currentMessenger.name" required  ng-class="{'error' :(submitted&&!$parent.currentMessenger.name)}"/>
+			<span ng-show="submitted&&!$parent.currentMessenger.name" class="help-block help-block-absolute">מלא שם פרטי</span>
+		</div>
+		<div class="col-md-6">
+			<label>משפחה:</label>
+			<input name="lastname" type="text" ng-model="$parent.currentMessenger.lastname" required ng-class="{'error' :(submitted&&!$parent.currentMessenger.lastname)}"/>
+			<span ng-show="submitted&&!$parent.currentMessenger.lastname" class="help-block help-block-absolute">מלא שם משפחה</span>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="col-md-6">
+			<label>כתובת:</label>
+			<input vs-google-autocomplete 
+	               ng-model="$parent.currentMessenger.address.name"
+	               vs-place="$parent.currentMessenger.address.place" 
+	               vs-place-id="$parent.currentMessenger.address.components.placeId"
+	               vs-street-number="$parent.currentMessenger.address.components.streetNumber" 
+	               vs-street="$parent.currentMessenger.address.components.street"
+	               vs-city="$parent.currentMessenger.address.components.city"
+	               vs-state="$parent.currentMessenger.address.components.state"
+	               vs-country-short="$parent.currentMessenger.address.components.countryCode"
+	               vs-country="$parent.currentMessenger.address.components.country"
+	               vs-post-code="$parent.currentMessenger.address.components.postCode"
+	               vs-district="$parent.currentMessenger.address.components.district"
+	               vs-latitude="$parent.currentMessenger.lat"
+	               vs-longitude="$parent.currentMessenger.lng"
+	               type="text" 
+	               name="address"
+	               id="address"
+	               placeholder="הזן מיקום"
+	               ng-class="{'error' :(submitted&&!$parent.currentMessenger.address.name)}"/>
+	           <span ng-show="submitted&&(!$parent.currentMessenger.address.name||!$parent.currentMessenger.lat||!$parent.currentMessenger.lng)" class="help-block help-block-absolute">כתובת לא תקינה</span>	
+	        <!--
+			  <span ng-show="submitted&&!$parent.currentMessenger.address.components.streetNumber" class="help-block" style="position:relative;display:inline-block">×ž×¡×¤×¨ ×‘×™×ª,</span> 	
+						  <span ng-show="submitted&&!$parent.currentMessenger.address.components.street" class="help-block" style="position:relative;display:inline-block">×¨×—×•×‘,</span>
+						  <span ng-show="submitted&&!$parent.currentMessenger.address.components.city" class="help-block" style="position:relative;display:inline-block">×¢×™×¨,</span>
+						  <span ng-show="submitted&&!$parent.currentMessenger.address.components.country" class="help-block" style="position:relative;display:inline-block">×�×¨×¥,</span>
+					-->
+			
+		
+		</div>
+		
+		<div class="col-md-6">
+			<label>טלפון:</label>
+			<input name="phone" type="tel" ng-model="$parent.currentMessenger.phone" ng-pattern="/^\(?(\d{2,3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/"   name="phone" required  ng-class="{'error' :(submitted&&messengerDetailsForm.phone.$invalid)}"/>
+				<span ng-show="submitted&&messengerDetailsForm.phone.$invalid" class="help-block help-block-absolute">טלפון לא תקין</span>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="col-md-6" >
+			<label>דוא"ל:</label>
+			<input type="email" name="email"  ng-model="$parent.currentMessenger.email" required ng-class="{'error' :(submitted&&messengerDetailsForm.email.$invalid)}"/>
+			<span ng-show="submitted&&messengerDetailsForm.email.$invalid" class="help-block help-block-absolute">אימייל לא תקין</span>
+		</div>
+			<div class="col-md-6">
+			<label>סיסמא:</label>
+			<input type="text" ng-model="$parent.currentMessenger.password"/>
+			<span ng-show="invalidPassword" class="help-block help-block-absolute">שם משתמש וסיסמא תפוסים, נסה ערכים אחרים.</span>
+		</div>
+		
+	</div>
+	<div class="col-md-12">
+		
+		<div class="col-md-6">
+			<label>מספר רכב:</label>
+			<input type="text" ng-model="$parent.currentMessenger.car_number"/>
+		</div>
+		<div class="col-md-6">
+			<label>תוקף רישיון:</label>
+			<input type="date" ng-model="$parent.currentMessenger.license_expired"/>
+		</div>
+		
+	</div>
+	<div class="col-md-offset-3 col-md-6">
+		<button  type="submit" >שמור</button>
+		
+	</div>
+	</form>
+	
+	<button data-toggle="modal" data-target="#delete" style="" class="delete-button" type="submit" ng-if="$parent.currentMessenger.id">מחק נהג</button>
+	
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

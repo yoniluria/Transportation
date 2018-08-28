@@ -1,0 +1,256 @@
+<div class="divsortby" style="margin-top: 25px">
+<button ng-click="sendEmail()" style="display: inline; width: 250px; float: left; margin-left: 50px;">שלח מסלול ל{{sendToNames[forward]}} במייל</button>
+<button ng-click="show_print('content')" style="display: inline; width: 250px; float: left; margin-left: 50px;">הדפס משלוח</button>
+</div>
+<div class="print_content" >
+	<div id="content" class="all_content" >
+		<!-- <h1 class="print_headline" >{{headline}}</h1> -->
+		<div ng-repeat="shift in all_shifts" ng-if="shift.tracks&&shift.tracks.length" class="shift" ng-class="{'new_page':!$last}" >
+			
+			<div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index"  on-finish-render="callMyCustomMethod()" >
+				
+			<div class="col-md-12 div_track" data-track="{{track.track.id}}" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data- page="{{j}}" >
+				<!-- <div>
+					<table class="table col-md-12 big-th" >
+						<thead>
+							<tr>
+								<th>
+									<span ng-if="$first">בס"ד - </span>
+								</th>
+								<th>תאריך: {{shift.tracks[0].track.date | date:'dd/MM/yyyy'}} {{convertToHebrew(tracks[0].track.date)}}</th>
+								<th>משמרת {{shift.name}} {{shift.hour}}</th>
+								<th>נוסעים: {{shift.filteredWorkers}}</th>
+								<th>
+									<img ng-if="$first" style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div> -->
+				
+				<div class="height_div" ng-init="p=page" >
+						<div>
+							<p style="float: right;" >בס"ד שלח זמנים למרכז הרפואי מעיני הישועה</p>
+							<p style="float: left;" >עמוד <span class="num_page" >{{p}}</span> מתוך <span class="num_pages" >{{page}}</span></p>
+							<table class="table col-md-12 height_div_table" >
+								<thead>
+									<tr>
+										<th> תאריך: {{track.track.date | date:'dd/MM/yyyy'}} {{convertToHebrew(tracks[0].track.date)}}</th>
+										<th>משמרת {{shift.name}} {{shift.hour}}</th>
+										<th>נוסעים - {{shift.filteredWorkers}}</th>
+										<th style="padding: 8px;" >
+											<img class="logo_img" ng-src="{{url + 'assets/img/logo_3.png'}}" />   
+										</th>
+									</tr>
+								</thead>
+							</table>
+						</div>	
+					</div>
+					
+				<!-- <div class="col-md-11" style="padding-right: 2%;">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>סמן</th>
+								<th>שעה</th>
+								<th>שם העובד</th>
+								<th>טלפון</th>
+								<th>כתובת</th>
+								<th>עיר</th>
+								<th>מחלקה</th>
+							</tr>
+						</thead>
+					</table>
+				</div>	 -->
+			<div style="/*display: inline-block;*/width: 100%;">
+			      <div class="col-md-12" style="padding: 0px;">
+			               <table class="table col-md-12 table_workers" >
+			               	<thead>
+								<tr class="bottom_border" >
+									<th>סמן</th>
+									<th><span ng-if="shift.isCollecting" >שעה</span><span ng-if="!shift.isCollecting" >סדר</span></th>
+									<th>שם העובד</th>
+									<th>טלפון</th>
+									<th>כתובת</th>
+									<th>עיר</th>
+									<!-- <th>מחלקה</th>-->
+									<th>הנחיות</th> 
+								</tr>
+							</thead>
+							<tbody>
+								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
+								<tr style="font-weight: bold;" >
+				                  	<td colspan="3" >קו {{track.track.combined_line}} {{track.track.description}}</td>
+				                  	<td >נוסעים: {{track.workers.length}}</td>    
+				                  	<td></td>
+				                  	<td></td>
+				                  	<td></td>
+				                  	<!-- <td></td> -->
+				                  	<!-- <td></td>-->
+				                  	<!-- <td></td>  -->
+				                  </tr>
+				                  <!-- ng-class="{'border_thick':$last}" -->
+				                  <tr ng-repeat="worker in track.workers track by $index" class="worker_line" data-id="{{worker.track_id}}" data-track="{{track.track.id}}" ng-class="{'bottom_border':$last}"  >
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;" ></div><input style="display: none;" type="checkbox" /></td>
+				                  		  <td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{worker.hour|date:'HH:mm'}}</td>
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <td ng-if="!shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{$index+1}}</td>    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;">{{worker.worker_name}}  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;">{{worker.phone}}</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 215px;">{{worker.address}}</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;">{{worker.city}}</td>
+				                          <!-- <td style="/*padding-top:7px; padding-bottom: 7px;*/">{{worker.department}}</td>-->
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;">{{worker.track_instructions}}</td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- <tr ng-repeat-end="" ></tr> -->
+							</tbody>
+			      		   </table>
+			           </div>
+			    </td>
+			  </tr>
+			</div>	
+	<!--		<div style="display: inline-block;width: 100%;margin-right: 2%;" ng-repeat="track in shift.tracks as filtered track by $index">
+			      <div class="col-md-11" style="border-bottom: 8px solid #8a8a8a;padding: 0px;">
+			               <table class="table col-md-12">
+			                  <!-- <tr>
+			                  		  <th style="padding-top:20px; "> סמן</th>	
+			                  		  <th style="padding-top:20px; "> שעה</th>
+			                          <th style="padding-top:20px; "> שם העובד</th>
+			                          <th style="padding-top:20px; "> תז עובד</th>
+			                          <th style="padding-top:20px; "> כתובת</th>
+			                          <th style="padding-top:20px; "> עיר</th>
+			                          <th style="padding-top:20px; "> טלפון</th>
+			                          <th style="padding-top:20px; "> תאריך</th>
+			                          <th style="padding-top:20px; "> משמרת</th>
+			                          <th style="padding-top:20px; "> מסלול</th>
+			                  </tr> -->
+	<!--		                  <tr>
+			                  	<td>קו {{track.track.combined_line}} {{track.track.description}}</td>
+			                  	<td>נוסעים: {{track.workers.length}}</td>
+			                  	<td></td>
+			                  	<td></td>
+			                  	<td></td>
+			                  	<td></td>
+			                  	<td></td>
+			                  	<td></td>
+			                  </tr>
+			                  <tr ng-repeat="worker in track.workers track by $index" ng-class="{'no_border':$last}" >
+			                  		  <td style="padding-top:7px; padding-bottom: 7px;"><input type="checkbox" /></td>
+			                  		  <td ng-if="shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.hour|date:'HH:mm'}}</td>
+			                  		  <td ng-if="!shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.track_order}}</td>
+			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.worker_name}}  </td>
+			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.phone}}</td>
+			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.address}}</td>
+			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.city}}</td>
+			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.department}}</td>
+			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.instructions}}</td>
+			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+	<!--		                  </tr>
+			          </table>
+			           </div>
+			    </td>
+			  </tr>
+			</div>-->
+			</div>
+			
+	  </div>
+	  </div>
+	  <div ng-repeat="map in all_maps" class="page_break" >
+			<div class="height_div" ng-init="p=page" style="height: 30px;margin-bottom: 0;" >
+				<div>
+					<p style="float: right;" >בס"ד</p>
+					<p style="float: left;" >עמוד <span class="num_page" >{{p}}</span> מתוך <span class="num_pages" >{{page}}</span></p>
+				</div>	
+			</div>
+			<img ng-src="{{imgUrl+map}}" style="max-width: 100%;" >
+	  </div>
+	</div>
+</div>
+<a target="_blank" href="#/print_page" class="printPage" ></a>
+<style>
+table#t01{
+	 width:100%;
+	 display: inline-block;
+	 float: right;
+	 margin-top: 8px;
+     margin-right: 8px;
+}
+
+ table#t02{
+ 	width: 100%;
+ 	background-color: #e0e0e0;
+
+ }
+
+table.t03{
+	width: 100%;
+}
+table.big-th th{
+	font-size: 26px;
+}
+.divtitle{
+	background-color: #a7a7a7;
+	height:100px;
+    width: 100%;
+    margin-top: 8px;
+    margin-right: 8px;
+    padding-right: 8px;
+    font-size: 18px;
+    padding-top: 8px;
+}
+	
+.divsortby{
+    margin-right: 8px;
+    margin-top: 8px;
+}
+	
+.input{
+	margin-right: 10px;
+	display: inline;
+	width: 200px;
+	}
+	
+.input_select{
+	margin-right: 7px !important;
+    margin-top: 0px !important;
+    width: 30px; 
+    height: 30px;
+    margin-left: 10px !important;
+}	
+
+.input_check{
+    width: 25px; 
+    height: 25px;
+    display: inline-block;
+    float: right;
+}	
+	
+.label_sendto{
+	margin-right: 20px;
+	display: inline;
+}
+
+.label_checkbox{
+	font-weight: 500;
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.sort_by_name{
+	display: inline;
+	width: 250px;
+	margin-right: 10px;
+}
+
+/*table:not(.height_div_table) td,table:not(.height_div_table) th{
+	padding: 0 !important;
+}*/
+
+
+	
+</style>

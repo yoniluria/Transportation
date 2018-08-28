@@ -1,0 +1,464 @@
+<div id="addNewTrack" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">הכנס פרטי קו:</h4>
+      </div>
+      <div class="modal-body">
+      	<label>מספר קו:</label>
+      	<select ng-model="newTrack.static_line" ng-options="line as 'קו '+ line.line_number + ' ' + line.description for line in static_lines | orderBy:'line_order'">
+      	</select>
+      	<label>משמרת:</label>
+      	<select ng-model="newTrack.shift" ng-options="shift as shift.name for shift in $parent.shifts">
+      	</select>      	    	      	
+      	<button class="btn" ng-click="addNewTrack()" ng-disabled="!newTrack.static_line || !newTrack.shift" data-dismiss="modal">שמור</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="confirm" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">ביטול שורות שעודכנו:</h4>
+      </div>
+      <div class="modal-body">
+      	<p>האם אתה בטוח שברצונך לבטל סימון לכל השורות שעודכנו בתאריך זה?</p>   	    	
+      	<button class="btn" data-dismiss="modal" style="width: 40%;" >בטל</button>      	
+      	<button class="btn" data-dismiss="modal" ng-click="remove_updated_by_date()" style="width: 40%;float: left;" >שמור</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="chooseAction" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">בחר פעולה</h4>
+      </div>
+      <div class="modal-body">
+        <button >הוסף מסלול</button>
+        <button >פצל מסלול</button>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+<div id="dayInWeek" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">בחר יום בשבוע</h4>
+        <h3 style="background-color: yellow;">שים לב, קריאת אקסל לתאריך שכבר נקלט בעבר תמחק את כל סידור העבודה עבור אותו תאריך!</h3>
+      </div>
+      <div class="modal-body">
+      	<div class="col-md-6 radio-div" >
+			<input type="radio" class="radio-btn" name="radio_day" ng-model="radio_day" value="all_week" id="all_week" >
+			<span>יום חול</span>
+      	</div>
+      	<div class="col-md-6 radio-div" >
+			<input type="radio" class="radio-btn" name="radio_day" ng-model="radio_day" value="shabat" id="shabat">
+			<span>שבת</span>
+      	</div>
+      	<div ng-show="radio_day=='all_week'" style="margin-top: 45px;">
+      		<!-- <select>
+	      		<option>מיין קליטת קווים להצגה</option>
+	      	</select> -->
+			<p>
+				<span ng-repeat="line in static_lines | orderBy:'line_order' | filter:{is_active:true}">
+					קו {{line.line_number}}<span ng-if="!$last">,</span>
+				</span>
+			</p>	      	
+	      	<!-- <p>קו 16, קו 86</p> -->
+      	</div>
+        <button ng-click="file()" data-dismiss="modal">קרא xlsx</button>
+        <!-- <label class="load-xlsx" data-dismiss="modal"> הצג-->
+        <input id="xlsx_load" style="display: none;" type="file" accept=".xlsx" onchange="angular.element(this).scope().handleFile(event,1)" />	
+        <!-- </label> -->
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+<div id="updateXls" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">בחר יום בשבוע</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="col-md-6 radio-div" >
+			<input type="radio" class="radio-btn" name="radio_day" ng-model="radio_day_update_xls" value="all_week" id="all_week" >
+			<span>יום חול</span>
+      	</div>
+      	<div class="col-md-6 radio-div" >
+			<input type="radio" class="radio-btn" name="radio_day" ng-model="radio_day_update_xls" value="shabat" id="shabat">
+			<span>שבת</span>
+      	</div>
+      	<div ng-show="radio_day_update_xls=='all_week'" style="margin-top: 45px;">
+			<p>
+				<span ng-repeat="line in static_lines | orderBy:'line_order' | filter:{is_active:true}">
+					קו {{line.line_number}}<span ng-if="!$last">,</span>
+				</span>
+			</p>	      	
+      	</div>
+        <button ng-click="update_file()" data-dismiss="modal">עדכן xlsx</button>
+        <input id="xlsx_update" style="display: none;" type="file" accept=".xlsx" onchange="angular.element(this).scope().handleFile(event,0)" />
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modalError" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">שים לב,</h4>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 20px;text-align: center;">בעקבות שינויי בכתובת אירנהעברה לקו 54</p>
+        <button >תקין</button>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+	<div id="serach" class="text_not_print" >
+		<div class="line" >
+			<h1 style="display: inline;margin-right: 10px;" >סה"כ נקלטו  {{workers.length}} נוסעים, {{tracks.length}} מסלולים</h1>
+			<!-- <h2>{{date | date:'dd-MM-yyyy'}}</h2> -->
+			<!-- <button class="btn-small" data-toggle="modal" data-target="#dayInWeek" >קרא xls</button> -->
+			<label class="btn-small xls" data-toggle="modal" data-target="#dayInWeek">
+			  	קרא xlsx
+			<!-- <input style="display: none;" type="file" accept=".xlsx" onchange="angular.element(this).scope().handleFile(event,1)" />	 -->
+			</label>
+			<label class="btn-small xls" data-toggle="modal" data-target="#updateXls">
+			  	עדכן xlsx
+			<!-- <input id="xlsx_update" style="display: none;" type="file" accept=".xlsx" onchange="angular.element(this).scope().handleFile(event,0)" />	 -->
+			</label>
+			
+			<!-- <input style="display: none;" type="file" accept=".csv, .xlsx application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onchange="angular.element(this).scope().handleFile(event)" /> -->
+			<!-- <button class="btn-small" data-toggle="modal" data-target="#modalError" >עדכן xxl</button> -->
+			<!-- <button class="btn-small" >צור מסלול ידנית</button> -->
+			<!-- <button class="btn-small" >בחר כיוון נסיעה<i class="fa fa-chevron-down" aria-hidden="true" style="margin-right: 6px;" ></i></button> -->
+			<!-- <select class="btn-small" ng-model="selectedRegion" ng-options="region for region in regions">
+				<option value="">בחר כיוון נסיעה</option>
+			</select> -->
+			<select class="btn-small">
+				<option>בחר כיוון נסיעה</option>
+				<option>צפון</option>
+				<option>דרום</option>
+			</select>
+			<button class="btn btn-small xls" ng-click="$parent.checked = false;getDataList()">
+				נקה
+			</button>
+			<button class="btn btn-small xls" ng-click="sort_tracks=1;$parent.checked = true;getDataList()">
+				סנן לפי מסלולים מסומנים
+			</button>
+			<button class="btn btn-small xls" ng-if="sort_tracks==1&&selectedTracks.length<5" ng-click="show_map_for_tracks()">
+				הצג מפה למסלולים מסומנים
+			</button>
+			<button class="btn btn-small xls" data-toggle="modal" data-target="#addNewTrack">
+				מסלול חדש
+			</button>
+			<button class="btn btn-small xls" data-toggle="modal" data-target="#confirm">
+				בטל שורות שעודכנו
+			</button>
+			<button class="btn btn-small xls" ng-click="print_tracks()" >
+				הדפס מסלולים
+			</button>	
+		</div>	
+		<table class="search" style="width: 100%;" >
+			<tr>
+				<td>
+					<p style="color: black;" >סנן לפי</p>
+				</td>
+				<td>
+					<!-- <select ng-change="getDataList()" ng-model="selectedShift" ng-options="track.track as track.track.shift  for track in tracks">
+						<option value="">משמרת</option>
+					</select> -->
+					<!-- <select ng-change="getDataList()" ng-model="selectedShift">
+						<option ng-repeat="shift in shifts" value="{{shift}}">
+							{{shift}}
+						</option>
+					</select> -->
+					<!-- <select ng-change="getDataList()" ng-model="selectedShift" ng-options="shift for shift in shifts|orderBy">
+						<option value="">משמרת</option>
+					</select> -->
+					<select ng-change="getDataList()" ng-model="trackfilter.track.shift">
+						<option value="">כל המשמרות</option>
+						<option value="בוקר - איסוף">בוקר - איסוף</option>
+						<option value="בוקר - פיזור">בוקר - פיזור</option>
+						<option value="צהריים - איסוף">צהריים - איסוף</option>
+						<option value="צהריים - פיזור">צהריים - פיזור</option>
+						<option value="לילה - איסוף">לילה - איסוף</option>
+						<option value="לילה - פיזור">לילה - פיזור</option>
+					</select>
+				</td>
+				<!-- <td style="padding-top: 4px !important;">
+					<md-datepicker style="padding-right: 0 !important; margin-right: 0 !important;" ng-change="getTracksByDate()" ng-model="selectedDate" md-format="DD/MM/YYYY"  md-placeholder="הכנס תאריך"></md-datepicker>	
+				</td> -->
+				<!-- <td>
+					<input ng-change="getDataList()" placeholder="מיין לפי שם ת.ז עיר" ng-model="selectedNameIdCity">
+				</td> -->
+				<td>
+					<select ng-change="getDataList()" ng-model="selectedDriver" ng-options="driver.id as driver.name for driver in $parent.drivers|filter:{is_usher:false}">
+						<option value="">כל הנהגים</option>
+					</select>
+				</td>
+				<td>
+					<!-- <select ng-change="getDataList()" ng-model="trackfilter.track.combined_line"  ng-options="line.line_number as line.line_number for line in static_lines | orderBy:'line_order'">
+						<option value="">מסלולים פעילים</option>
+					</select> -->
+					<select ng-change="getDataList()" ng-model="trackfilter.track.combined_line">
+						<option value="">מסלולים פעילים</option>
+						<option ng-repeat="line in lines | orderBy : sortLines track by $index" value="{{line}}">{{line}}</option>
+					</select>
+					<!-- <select ng-change="getDataList()" ng-model="trackfilter.track.combined_line" ng-options="track.track.combined_line as track.track.combined_line for track in selectedTracks | filter: trackfilter">
+						<option value="">כל המסלולים</option>
+					</select> -->
+					<!-- <select ng-change="getDataList()" ng-model="trackfilter.track.combined_line" ng-options="line for line in lines | filter: trackfilter">
+						<option value="">כל המסלולים</option>
+					</select> -->
+					<!-- <select ng-change="getDataList()" ng-model="trackfilter.track.combined_line" ng-options="line as line for line in lines|unique">
+						<option value="">כל המסלולים</option>
+					</select> -->
+					<!-- <select ng-change="getDataList()" ng-model="selectedTrack" ng-options="track.track.combined_line for track in tracks">
+						<option value="">מסלול</option>
+					</select> -->
+				</td>
+				<td style="padding-left: 0;">
+					<select ng-change="getDataList()" ng-model="selectedError">
+						<option value="">שגיאות רישום</option>
+						<option value="1" class="register-error">איסוף או פיזור בלבד</option>
+						<option value="2" class="different-addresses">איסוף ופיזור בשתי כתובות שונות</option>
+						<option value="3" class="double-error">איסוף ופיזור כפולים</option>
+						<option value="4" class="double-in-track-error">עובד כפול במסלול</option>
+					</select>
+				</td>
+			</tr>
+		</table>			
+	</div>
+	<div id="differences" ng-show="show_differences">
+		<i style="font-size: xx-large;float: left;cursor: pointer;" title="הסתר הודעת שינויים" class="fa fa-times" aria-hidden="true" data-dismiss="modal" ng-click="$parent.show_differences = false;"></i>
+		<div ng-if="differences.length">
+		<h1 style="background-color: yellow;width: 241px;display: inline-block;">שינויים באקסל:</h1>
+		<table style="display: inline-block;margin-top: 1%;margin-left: 1%;float: left;">
+			<tr>
+				<td class="removed-worker" style="height: 50px;">עובד נמחק ממסלול</td>
+				<td class="added-worker" style="height: 50px;">עובד נוסף למסלול</td>
+			</tr>
+		</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>מספר קו</th>
+						<th>משמרת</th>
+						<th>כיוון</th>
+						<th>תאור</th>
+						<th>תז</th>
+						<th>שם עובד</th>
+						<th>כתובת</th>
+						<th>מחלקה</th>
+						<th>טלפון</th>
+					</tr>
+				</thead>
+				<tr ng-repeat="difference in differences" ng-class="{'added-worker':difference.status,'removed-worker':!difference.status}">
+					<td>{{difference.details.combined_line}}</td>
+					<td>{{difference.details.shift}}</td>
+					<td>{{difference.details.region}}</td>
+					<td>{{difference.details.description}}</td>
+					<td>{{difference.details.worker_id}}</td>
+					<td>{{difference.details.worker_name}}</td>
+					<td>{{difference.details.address}}</td>
+					<td>{{difference.details.department}}</td>
+					<td>{{difference.details.phone}}</td>
+				</tr>
+			</table>			
+		</div>
+		<div ng-if="!differences.length">
+			<h1 style="background-color: yellow;width: 385px;">אין עובדים שנמחקו מהאקסל</h1>
+		</div>	
+	</div>
+<div class="container" style="width: 96%;margin-top: 160px;" ng-style="{'margin-top':show_differences&&differences.length?'355px':show_differences&&!differences.length?'220px':'160px'}">
+	<div class="row">
+		<!--  | orderBy:'track_order' -->
+		<div ng-repeat="track in selectedTracks | orderBy:['track.shift_id','track.track_order'] | filter: trackfilter as filtered  track by $index" data-track="{{track.track.id}}" class="col-md-3 station station_div" style="page-break-inside: avoid;padding-left: 8px; padding-right: 8px;">
+			<div>
+				<div>
+					<div class="line-station move" style="cursor: pointer;display: inline;" ng-click="showByRoute(track)">
+						<input type="checkbox" ng-checked="track.checked" class="text_not_print" ng-click="$event.stopPropagation();changeTrackChecking(track.track.id);" style="width: 20px;height: 20px;background-color: white;float: right;border: 1px solid black;margin-top: -1.5px;"/>
+						<!-- <table>
+							<tr>
+								<td>קו {{track.track.combined_line}}</td>
+								<td>{{track.track.shift}}</td>
+								<td>{{track.track.description | TwoCities}}</td>
+								<td>{{track.workers.length}}</td>
+								<td>{{track.driver.name}}</td>
+							</tr>
+						</table> -->
+						<p style="max-width: 9%;" class="text_not_print" > קו {{track.track.combined_line}} |</p>
+						<p style="max-width: 19%;" title="{{track.track.shift}}" class="text_not_print" >{{track.track.shift}} |</p>
+						<p title="{{track.track.description}}">{{track.track.description | TwoCities}} | </p>
+						<p title="{{track.workers.length}} נוסע/ים">{{track.workers.length}} נוסע/ים</p>
+						<p title="{{track.driver.name}}" style="max-width: 13%;"> | {{track.driver.name}}</p>
+					</div>
+					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="sendTrackToDelete(track)" data-toggle="modal" data-target="#delTrackModal"></i>
+				</div>
+				<table>
+					<thead>
+						<tr>
+						<th style="width:12%;padding-right: 5px;">{{setTh(track.track.shift)}}</th>
+						<th style="width:24%">שם:</th>
+						<th style="width:9%" class="text_not_print" >זמן:</th>
+						<th style="width:58%">תחנה:</th>
+					</tr>
+					</thead>
+				</table>
+				<!-- <div class="station-track"> -->
+				<!-- <table> -->
+					<!-- <tr ng-class="{'register-error' :oneError(worker.id)}" ng-repeat="worker in track.workers">
+						<td>06:15</td>
+						<td>{{worker.name}}</td>
+						<td>7</td>
+						<td>
+							<select style="background-color: #efefef" ng-model="selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="selectedAddress=setInitialAddress(worker.addresses)" ng-class="{'errorAddress' :!selectedAddress.primary_address}">
+							</select>
+						</td>
+					</tr> -->
+					<!-- |orderBy:sortMe() -->
+					<!-- li dnd-dragend="updateWorkerOrder(track,track.workers)" -->
+						<ul class="station-track height_track" dnd-list="track" dnd-drop="onDrop(track.track.id)" >
+							<li ng-repeat="worker in track.workers"
+							dnd-draggable="worker"
+							dnd-effect-allowed="move"
+							dnd-moved="track.workers.splice($index, 1)"
+							dnd-dragstart="setDraggedWorker(worker,track)"
+							ng-hide="!exists&&track.track.id==old_track.track.id&&worker.id==draggedWorker.id"
+							style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;">
+								 <div class="col-md-12" data-update="{{worker.updated}}" style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;" ng-class="{'register-error' :oneError(worker.id),'double-error':doubleError(worker.id),'double-in-track-error':doubleInTrackError(worker.id),'different-addresses':differentAddresses(worker),'updated-worker':worker.updated==1}">
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.hour|date:"HH:mm"}}</p>
+									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.track_order||$index+1}}</p>
+									<p class="col-md-2" style="width: 24%;padding-left: 0px;padding-top: 10px;">{{worker.name}}</p>
+									<p class="col-md-1 text_not_print" style="width: 7%; padding-top: 10px;" ng-if="collecting&&!$last||!collecting&&!$first">{{worker.duration | zeroDisplay}}</p>
+									<!-- <p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-if="collecting&&worker.id!=track.workers[track.workers.length-1].id||!collecting&&worker.id!=track.workers[0].id">{{worker.duration}}</p> -->
+									<!-- <p style="width: 20%" ng-if="collecting&&worker.id==track.workers[track.workers.length-1].id||!collecting&&worker.id==track.workers[0].id">{{worker.addresses[0].travel_time}}</p> -->
+									<p class="col-md-1 text_not_print" style="width: 7%; padding-top: 10px;" ng-if="collecting&&$last||!collecting&&$first">{{worker.addresses[worker.index].travel_time | zeroDisplay}}</p>
+									<div class="col-md-8" style="padding-left: 0px;    width: 60%;">
+										<select style="background-color: rgb(243, 243, 243); padding-right: 6px;padding-left: 6px;" ng-model="selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="selectedAddress=setInitialAddress(worker.addresses,worker.address)" ng-class="{'errorAddress' :!selectedAddress.primary_address}">
+										</select>
+										<!-- {{setInitialAddress(worker.addresses).original_address}} -->
+									</div>
+								</div>
+							</li>
+						</ul>
+				<!-- </table> -->
+				<!-- </div> -->
+				<table class="table-buttons">
+					<tr>
+						<!-- <td style="border-right: none;" data-toggle="modal" data-target="#chooseAction" >
+							הוסף מסלול
+						</td>
+						<td>
+							הוסף עובד
+						</td>
+						<td>
+							הפוך מסלול
+						</td> -->
+						<td style="border-left: none;cursor: unset;" class="time_station text_not_print">
+							זמן מסלול: {{track.track_duration}} דקות
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+</div>
+	<div class="col-md-12" style="text-align: center;padding: 0;" >
+		<!-- <button class="btn-small" style="float: right;margin-right: 0;" >מיין מסלולים להצגה</button>
+		<button class="btn-small" >שלח מסלולים למייל</button> -->
+		<!-- <button class="btn-small" >הדפס מסך קליטת נתונים</button>
+		<button class="btn-small" style="float: left" >הצג מפה<i class="fa fa-chevron-up" style="margin-right: 6px;" aria-hidden="true"></i></button> -->
+		<!-- <button ng-show="checked" ng-click="showMap()" class="btn-small" style="float: left" >הצג מפה<i class="fa fa-chevron-up" style="margin-right: 6px;" aria-hidden="true"></i></button> -->
+	</div>
+	<p id="duration" class="secondDiv"></p>
+	<div id="mymap" style="display: none" ></div> 
+</div>
+<div class="modal fade popup" id="delTrackModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את קו <span ng-bind="trackToDelete.track.combined_line"></span>?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteTrack()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<style>
+	@media print
+	{
+		.div_header{
+			display: block;
+		}
+		.div_header .menu,.header *{
+			display: none;
+		}
+		.header{
+			position: relative;
+		}
+		.header>.heder_cot{
+			display: block !important;
+			margin-top: 0;
+		}
+		.container{
+			margin-top: 20px !important;
+		}
+		/*.station-track{
+			min-height: auto;
+    		max-height: initial;
+		}*/
+	}
+</style>

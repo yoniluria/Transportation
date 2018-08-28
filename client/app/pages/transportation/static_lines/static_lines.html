@@ -1,0 +1,68 @@
+<div class="container" >
+	<div class="line add_worker add-div" >
+		<h3 class="cot-div" >{{title_btn_save}} קו</h3>
+		<input class="col-margin" type="number" min="0" ng-model="newLine.line_number" required ng-class="{'error' :(submitted&&!newLine.line_number)}" placeholder="מספר קו:" >
+		<!-- <input class="col-margin" ng-model="newLine.region" required  ng-class="{'error' :(submitted&&!newLine.region)}" placeholder="כיוון:" > -->
+		<input class="col-margin" style="width: 30%;" ng-model="newLine.description" ng-class="{'error' :(submitted&&!newLine.description)}" placeholder="תאור קו:" >
+		<!-- <select class="col-margin" ng-model="newLine.driver_id" ng-options="driver.id as driver.name for driver in drivers |filter:{is_usher:false} track by driver.id">
+			<option value="">בחר נהג</option>
+		</select> -->
+		<select class="col-margin" ng-model="newLine.driver_id">
+			<option value="">בחר נהג</option>
+			<option ng-repeat="driver in drivers | filter:{is_usher:false} track by driver.id" ng-selected="newLine.driver_id==driver.id" value="{{driver.id}}">{{driver.name}}</option>
+		</select>
+		<input class="col-margin" type="number" min="1" ng-model="newLine.line_order" placeholder="סדר הצגה:" >
+		<div style="display: inline-block;">
+			<span>האם פעיל ביום חול?</span>
+			<input type="checkbox" ng-model="newLine.is_active" >
+		</div>
+	</div>
+	<button class="float-btn btn" ng-disabled="!newLine.line_number||!newLine.description" ng-click="submitted=true;save()">{{title_btn_save}}</button>
+	<table class="table table-rows">
+		<thead>
+			<tr>
+				<th class="col-md-1">מספר קו</th>
+				<th class="col-md-5">תאור קו</th>
+				<th class="col-md-2">נהג</th>
+				<th class="col-md-1">סדר הצגה</th>
+				<th class="col-md-1">פעיל ליום חול?</th>
+				<th class="col-md-2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="line in static_lines | orderBy:'line_order'" ng-class="{'selected-row':line.id==newLine.id}">
+				<td class="col-md-1"><p style="border-left: 1px solid black;">{{line.line_number}}</p></td>
+				<td class="col-md-5"><p>{{line.description}}</p></td>
+				<td class="col-md-2"><p>{{line.driver.name}}</p></td>
+				<td class="col-md-1"><p>{{line.line_order}}</p></td>
+				<td class="col-md-1"><input type="checkbox" ng-checked="line.is_active" disabled="disabled" /></td>
+				<td class="col-md-1 td-btn btn" ng-click="editLine(line)"><button>ערוך</button></td>
+				<td class="col-md-1 td-btn btn" ng-click="setLineToDelete(line)" data-toggle="modal" data-target="#delLineModal" style="padding-left: 4px !important;" ><button>מחק</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="modal fade popup" id="delLineModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<img src="assets/img/delete.png" />
+				<p class="center modal-title">
+					האם אתה בטוח רוצה למחוק את קו <span ng-bind="lineToDelete.line_number"></span>?
+				</p>
+			</div>
+			<div class="modal-footer">
+				<div class="col-xs-offset-2 col-xs-4">
+					<button type="button"  class="" data-dismiss="modal">
+						ביטול
+					</button>
+				</div>
+				<div class="col-xs-4 ">
+					<button type="button" class="red-button" ng-click="deleteLine()" data-dismiss="modal">
+						מחק
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

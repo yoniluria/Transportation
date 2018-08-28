@@ -1,0 +1,81 @@
+<div class="menu menu-transport hidden-xs" ng-if="module!= 'login'" style="display: block !important;" >
+	<div  class="tab">
+		<p ng-class="{'red': module == 'dashbord'}">בס"ד</p>
+	</div>
+	<a href="#/stations">
+	<div  class="tab" ng-class="{'select': module == 'stations'}" > 
+		<p ng-class="{'red': module == 'dashbord'}">קליטת נתונים</p>
+	</div>
+	</a>
+	<!-- <div  class="tab">
+		<p ng-class="{'red': module == 'dashbord'}">שגיאת רישום</p>
+	</div> -->
+	<!-- <div  class="tab">
+		<p ng-class="{'red': module == 'dashbord'}">הצג כל המסלולים</p>
+	</div> -->
+
+	<a href="#/oneroute">
+	<div  class="tab" ng-class="{'select': module == 'oneroute'}" >
+		<p ng-class="{'red': module == 'dashbord'}">נהול מסלול</p>
+	</div>
+	</a>
+	<a href="#/static_lines">
+	<div  class="tab" ng-class="{'select': module == 'static_lines'}">
+		<p ng-class="{'red': module == 'dashbord'}">נהול קווים</p>
+	</div>
+	</a>	
+	<a href="#/workers">
+	<div  class="tab" ng-class="{'select': module == 'workers'}" >
+		<p ng-class="{'red': module == 'dashbord'}">עובדים</p>
+	</div>
+	</a>
+	<a href="#/lines">
+	<div  class="tab" ng-class="{'select': module == 'lines'}" >
+		<p ng-class="{'red': module == 'dashbord'}">קווי הסעות</p>
+	</div>
+	</a>
+	<a href="#/shifts">
+	<div  class="tab" ng-class="{'select': module == 'shifts'}" >
+		<p ng-class="{'red': module == 'dashbord'}">משמרות</p>
+	</div>
+	</a>
+	<a href="#/driver">
+	<div  class="tab" ng-class="{'select': module == 'driver'}" >
+		<p ng-class="{'red': module == 'dashbord'}">נהגים</p>
+	</div>
+	</a>	
+	<a href="#/sort">
+		<div  class="tab" ng-class="{'select': module == 'sort'}">
+			<p ng-class="{'red': module == 'dashbord'}">מיין משלוח</p>
+		</div>
+	</a>
+	<!-- <a href="#/sendto">
+		<div  class="tab" ng-class="{'select': module == 'sendto'}">
+			<p ng-class="{'red': module == 'dashbord'}">שלח ל</p>
+		</div>
+	</a> -->
+	<a href="#/reports">
+		<div  class="tab" ng-class="{'select': module == 'reports'}">
+			<p ng-class="{'red': module == 'reports'}">דוחות</p>
+		</div>
+	</a>
+	<a href="#/distances">
+		<div  class="tab" ng-class="{'select': module == 'distances'}">
+			<p ng-class="{'red': module == 'distances'}">זמני המתנה</p>
+		</div>
+	</a>
+	<a href="#/definitions">
+		<div  class="tab" ng-class="{'select': module == 'definitions'}">
+			<p ng-class="{'red': module == 'definitions'}">הגדרות</p>
+		</div>
+	</a>
+</div>
+<header class="header" ng-if="module!= 'login'" style="display: table !important;" >
+	<h3 style="padding-right: 13px;" class="heder_cot" >{{headline}}</h3>
+	<img style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
+	<!-- <div class="header-btn" ><h3>אמנון הסעות</h3></div> -->
+	<div ng-click="back()" class="header-btn" style="background-color: #b8b8b8;cursor: pointer;" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i><h3>חזור למסך קודם</h3></div>
+	<div style="display: inline-block;margin-right: -134px;">
+		<md-datepicker style="padding-right: 0 !important; margin-right: 0 !important;" ng-model="$root.date" md-format="DD/MM/YYYY"></md-datepicker>
+	</div>
+</header>

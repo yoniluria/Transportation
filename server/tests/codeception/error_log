@@ -1,0 +1,1 @@
+[24-Dec-2016 03:30:41 UTC] PHP Fatal error:  Class 'Codeception\Configuration' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/_bootstrap.php on line 5

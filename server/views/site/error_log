@@ -1,0 +1,1 @@
+[24-Dec-2016 03:27:35 UTC] PHP Fatal error:  Using $this when not in object context in /home/taxiphoneco/public_html/routeSpeed/views/site/index.php on line 5

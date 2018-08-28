@@ -1,0 +1,5 @@
+[24-Dec-2016 03:37:25 UTC] PHP Fatal error:  Class 'FunctionalTester' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/functional/HomeCept.php on line 5
+[24-Dec-2016 03:37:51 UTC] PHP Fatal error:  Class 'FunctionalTester' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/functional/AboutCept.php on line 7
+[24-Dec-2016 03:37:57 UTC] PHP Fatal error:  Class 'FunctionalTester' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/functional/LoginCept.php on line 7
+[24-Dec-2016 03:38:05 UTC] PHP Fatal error:  Class 'yii\web\Application' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/functional/_bootstrap.php on line 2
+[24-Dec-2016 03:38:35 UTC] PHP Fatal error:  Class 'FunctionalTester' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/functional/ContactCept.php on line 7

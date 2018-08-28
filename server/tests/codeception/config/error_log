@@ -1,0 +1,3 @@
+[24-Dec-2016 03:34:33 UTC] PHP Fatal error:  Class 'yii\helpers\ArrayHelper' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/config/acceptance.php on line 5
+[24-Dec-2016 03:35:31 UTC] PHP Fatal error:  Class 'yii\helpers\ArrayHelper' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/config/unit.php on line 5
+[24-Dec-2016 03:36:51 UTC] PHP Fatal error:  Class 'yii\helpers\ArrayHelper' not found in /home/taxiphoneco/public_html/routeSpeed/tests/codeception/config/functional.php on line 8
