@@ -813,6 +813,12 @@ class TrackController extends Controller
 			for($index = 0;$index<$length;$index++){
 				
 					if(!isset($sheet[$index]->SSN)){
+						if(isset($track)&&$track){
+							$all_workers = Track_for_worker::find()->where("track_id = ".$track->id)->all();
+							if(!$all_workers){
+								$track->delete();
+							}
+						}
 					$i = 1;
 					
 					// if(!$sheet[$index]->SSN)
@@ -965,16 +971,17 @@ class TrackController extends Controller
 						$address->worker_id = $worker->id;
 						$address->save(false);
 						}
-						
 						//if($worker->sub_line){
-						if($track_address&&$track_address->sub_line&&$track_address->sub_line!=""){	
-							$sub_line = Staticlines::findOne(['line_number'=>$track_address->sub_line]);
-							$sub_track = Track::findOne(['track_date'=>$curr_date,'shift_id'=>Shift::findOne(['name'=>$shift_name])->id,'combined_line'=>$track_address->sub_line]);
+						if($track_address&&(($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)||($track_address->sub_line&&$track_address->sub_line!=""))){
+							$search_line = ($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)?$worker->sub_line:$track_address->sub_line;
+							$sub_line = Staticlines::findOne(['line_number'=>$search_line]);
+							
+							$sub_track = Track::findOne(['track_date'=>$curr_date,'shift_id'=>Shift::findOne(['name'=>$shift_name])->id,'combined_line'=>$search_line]);
 							if(!$sub_track){
 								$sub_track = new Track();
 								$sub_track->meesenger = $sub_line->driver_id;
 								$sub_track->line_number = $combined_line;
-								$sub_track->combined_line = $track_address->sub_line;
+								$sub_track->combined_line = $search_line;
 								if(!$track_address->combined_line){
 									$track_address->combined_line = $combined_line;
 									$track_address->save(false);
@@ -1200,22 +1207,36 @@ class TrackController extends Controller
 				$worker->id = $workers_arr[8];
 			}
 			$subline = $worker->sub_line?$worker->sub_line:$combined_line;
-			$address_model = Address::find()->where("worker_id = ".$workers_arr[8]." and original_address  = '".$workers_arr[7]."'")->one();
-			$line_search = $combined_line;
-			if($address_model&&$address_model->sub_line){
+			$original_address = str_replace("'","''",$workers_arr[7]);
+			$address_model = Address::find()->where("worker_id = ".$workers_arr[8]." and original_address  = '".$original_address."'")->one();
+		    $line_search = $combined_line;
+			/*if($address_model&&$address_model->sub_line){
 				$subline = $address_model->sub_line;
 				$line_search = $subline;
 			}
 			if($address_model&&$address_model->combined_line){
 				$combined_line = $address_model->combined_line;
+			}*/
+			
+			$address_string = $workers_arr[7];
+			$address_string = str_replace('(ללא ליווי)', '', $address_string);
+			$address_string = str_replace('(ללא מלווה)', '', $address_string);
+			$track_address = Address::findOne(['worker_id'=>$worker->id,'original_address'=>$address_string]);
+			
+			if($track_address&&(($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)||($track_address->sub_line&&$track_address->sub_line!=""))){
+				$line_search = ($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)?$worker->sub_line:$track_address->sub_line;
 			}
+			/*if($worker->id==208413146){
+				echo $line_search;
+				print_r($track_address);die();
+			}*/		
 			$track = Track::findOne(['track_date'=>$curr_date,'shift_id'=>Shift::findOne(['name'=>$shift_name])->id,'combined_line'=>$line_search,'description'=>$description,'region'=>$region]);
 			$shift_details = Shift::findOne(['name'=>$shift_name]);
 			if(!$track){
 				$track = new Track();
 				$track->region = $region;
 				$track->line_number = $combined_line;
-				$track->combined_line = $subline;
+				$track->combined_line = $line_search;
 				$track->shift = $shift_name;
 				$track->shift_id = $shift_details->id;
 				$static_line = Staticlines::findOne(['line_number'=>$combined_line]);
@@ -1231,7 +1252,7 @@ class TrackController extends Controller
 			}
 			
 			$hospital_track = new HospitalTrack();
-			$hospital_track->combined_line = $track->combined_line;
+			$hospital_track->combined_line = $track->line_number;
 			$hospital_track->region = $track->region;
 			$hospital_track->description = $track->description;
 			$hospital_track->shift = $track->shift;
@@ -1284,7 +1305,7 @@ class TrackController extends Controller
 				}
 				$curr_address->save(false);
 			}
-			$track_address = Address::findOne(['worker_id'=>$worker->id,'original_address'=>$address_string]);
+			//$track_address = Address::findOne(['worker_id'=>$worker->id,'original_address'=>$address_string]);
 			if(!$last_address || !$track_address){
 			$address = new Address();
 				if(!Address::findOne(['worker_id'=>$worker->id,'primary_address'=>1])){
@@ -1421,12 +1442,14 @@ class TrackController extends Controller
 							// foreach ($hospital_tracks as $track) {
 								
 							foreach ($workers_details as $track) {
+								$track_details = explode('|', $track);
 								if(!in_array($track, $workers)){
 									$diff = new \stdClass();
 									$track_details = explode('|', $track);
 									$hospital_track = new HospitalTrack();									
 									$worker = Worker::findOne($track_details[8]);
-									$address_model = Address::find()->where("worker_id = ".$track_details[8]." and original_address  = '".$track_details[7]."'")->one();
+									$original_address = str_replace("'","''",$track_details[7]);
+									$address_model = Address::find()->where("worker_id = ".$track_details[8]." and original_address  = '".$original_address."'")->one();
 									
 									//if($worker->sub_line){
 									if($address_model&&$address_model->sub_line){
