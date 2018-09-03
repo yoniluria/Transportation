@@ -813,7 +813,7 @@ class TrackController extends Controller
 			for($index = 0;$index<$length;$index++){
 				
 					if(!isset($sheet[$index]->SSN)){
-						if(isset($track)&&$track){
+						if(isset($track)&&$track&&isset($track->id)&&$track->id>0){
 							$all_workers = Track_for_worker::find()->where("track_id = ".$track->id)->all();
 							if(!$all_workers){
 								$track->delete();
