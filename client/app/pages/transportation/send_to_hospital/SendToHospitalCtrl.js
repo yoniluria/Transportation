@@ -139,6 +139,7 @@
 							$scope.all_maps.push(worker.img);
 						}
 					});	
+					track.workers = $filter('orderBy')(track.workers, 'worker_name');
 				});					
 			});			
 			var address;
