@@ -43,7 +43,7 @@ class SortController extends Controller
 			$tracks[$index]['isHospital'] = 2;
 			$tracks[$index]['track'] = $track;
 			$tracks[$index]['driver'] = Messengers::findOne($track->meesenger);
-			$connections = Track_for_worker::find()->where(['track_id'=>$track->id])->all();
+			$connections = Track_for_worker::find()->where(['track_id'=>$track->id])->joinWith("worker")->orderBy("worker.name")->all();
 			$tracks[$index]['workers'] = array();
 			foreach ($connections as $connection) {
 				$curr_worker = Worker::findOne($connection->worker_id);
@@ -84,7 +84,7 @@ class SortController extends Controller
 			$tracks[$index]['isHospital'] = 1;
 			$tracks[$index]['track'] = $hospital_track;
 			$tracks[$index]['workers'] = array();
-			$workers = HospitalTrack::find()->where(['combined_line'=>$hospital_track['combined_line'],'region'=>$hospital_track['region'],'description'=>$hospital_track['description'],'shift_id'=>$hospital_track['shift_id'],'date'=>$hospital_track['date']])->all();
+			$workers = HospitalTrack::find()->where(['combined_line'=>$hospital_track['combined_line'],'region'=>$hospital_track['region'],'description'=>$hospital_track['description'],'shift_id'=>$hospital_track['shift_id'],'date'=>$hospital_track['date']])->orderBy("worker_name")->all();
 			foreach ($workers as $worker) {
 				$curr_worker = new \stdClass();
 				// $tracks_of_line_number = Track::find()->where(['line_number'=>$worker->combined_line,'shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
