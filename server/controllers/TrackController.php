@@ -836,7 +836,7 @@ class TrackController extends Controller
 					// }
 					$track = new Track();
 					$details = explode(':', $sheet[$index]->ShemSidur);
-					if($details[1]=="")
+					if(!isset($details[1])||$details[1]=="")
 						$track->region = "";
 					else
 						$track->region = preg_replace("/[0-9]+/", "", $details[0]);
