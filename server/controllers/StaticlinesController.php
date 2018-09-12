@@ -138,6 +138,7 @@ class StaticlinesController extends Controller
 		foreach ($static_lines as $static_line) {
 			$all_static_lines[$index]['id'] = $static_line->id;
 			$all_static_lines[$index]['line_number'] = $static_line->line_number;
+			$all_static_lines[$index]['combined_line'] = $static_line->combined_line;
 			$all_static_lines[$index]['description'] = $static_line->description;
 			$all_static_lines[$index]['driver_id'] = $static_line->driver_id;
 			$all_static_lines[$index]['driver'] = Messengers::findOne($static_line->driver_id);
@@ -161,6 +162,9 @@ class StaticlinesController extends Controller
 		}
 		if(isset($data->line_number)){
 			$model->line_number = $data->line_number;
+		}
+		if(isset($data->combined_line)){
+			$model->combined_line = $data->combined_line;
 		}
 		if(isset($data->description)){
 			if($model->description!=$data->description){

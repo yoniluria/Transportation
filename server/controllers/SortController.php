@@ -80,12 +80,13 @@ class SortController extends Controller
 			}
 		}
 		//$hospital_tracks = HospitalTrack::find()->select(['*'])->where(['date'=>$date])->andWhere(['<>','shift_id',$morning_shift])->orWhere(['shift_id'=>$morning_shift,'date'=>$tomorrow])->groupBy(['combined_line','shift_id'])->all();
-		$hospital_tracks = HospitalTrack::find()->select(['*'])->where(['date'=>$date])->groupBy(['combined_line','shift_id'])->all();
+		$hospital_tracks = HospitalTrack::find()->select(['*'])->where(['date'=>$date])->groupBy(['combined_line','shift_id','description'])->all();
 		foreach ($hospital_tracks as $hospital_track) {
 			$tracks[$index]['isHospital'] = 1;
 			$tracks[$index]['track'] = $hospital_track;
 			$tracks[$index]['workers'] = array();
-			$workers = HospitalTrack::find()->where(['combined_line'=>$hospital_track['combined_line'],'region'=>$hospital_track['region'],'description'=>$hospital_track['description'],'shift_id'=>$hospital_track['shift_id'],'date'=>$hospital_track['date']])->all();
+			//$workers = HospitalTrack::find()->where(['combined_line'=>$hospital_track['combined_line'],'region'=>$hospital_track['region'],'description'=>$hospital_track['description'],'shift_id'=>$hospital_track['shift_id'],'date'=>$hospital_track['date']])->all();
+			$workers = HospitalTrack::find()->where(['combined_line'=>$hospital_track['combined_line'],'description'=>$hospital_track['description'],'shift_id'=>$hospital_track['shift_id'],'date'=>$hospital_track['date']])->all();
 			foreach ($workers as $worker) {
 				$curr_worker = new \stdClass();
 				// $tracks_of_line_number = Track::find()->where(['line_number'=>$worker->combined_line,'shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
