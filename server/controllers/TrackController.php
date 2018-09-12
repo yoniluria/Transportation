@@ -183,9 +183,19 @@ class TrackController extends Controller
  	{
 		$data = json_decode(file_get_contents("php://input"));
 		$track_id = $data->track_id;
+		$track_model = Track::findOne($track_id);
 		
-		Track_for_worker::deleteAll(['track_id'=>$track_id]);
-		Track::deleteAll(['id'=>$track_id]);
+		$all_workers = Track_for_worker::find()->where("track_id = ".$track_id)->all();
+		foreach ($all_workers as $key => $value) {
+			$hospital_track_model = HospitalTrack::find()->where(['shift'=>$track_model->shift,'date'=>$track_model->track_date,'worker_id'=>$value->worker_id])->one();
+			if($hospital_track_model){
+				$hospital_track_model->delete();
+			}
+			$value->delete();
+		}
+		
+		//Track_for_worker::deleteAll(['track_id'=>$track_id]);
+		Track::deleteAll(['id'=>$track_id]);		
 		
 		die('deleted');
  	}
@@ -913,7 +923,7 @@ class TrackController extends Controller
 							$hospital_track->phone = $worker->phone;
 						}
 						
-						$worker->combined_line = $combined_line;
+//						$worker->combined_line = $combined_line;
 						
 						$worker->save(false);
 						
@@ -957,6 +967,8 @@ class TrackController extends Controller
 							if(!Address::findOne(['worker_id'=>$worker->id,'primary_address'=>1])){
 								$address->primary_address = 1;
 								$address->is_current = 1;
+								$worker->combined_line = $combined_line;					
+								$worker->save(false);
 							}
 						// $address->primary_address = 1;
 						// $address->is_current = 1;
@@ -972,6 +984,10 @@ class TrackController extends Controller
 						$address->save(false);
 						}
 						//if($worker->sub_line){
+						if($track_address&&!$track_address->combined_line){
+							$track_address->combined_line = $combined_line;
+							$track_address->save(false);
+						}
 						if($track_address&&(($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)||($track_address->sub_line&&$track_address->sub_line!=""))){
 							$search_line = ($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)?$worker->sub_line:$track_address->sub_line;
 							$sub_line = Staticlines::findOne(['line_number'=>$search_line]);
@@ -1277,7 +1293,7 @@ class TrackController extends Controller
 				$hospital_track->phone = $worker->phone;
 			}
 			
-			$worker->combined_line = $combined_line;
+//			$worker->combined_line = $combined_line;
 			
 			$worker->save(false);
 			
@@ -1311,6 +1327,8 @@ class TrackController extends Controller
 				if(!Address::findOne(['worker_id'=>$worker->id,'primary_address'=>1])){
 					$address->primary_address = 1;
 					$address->is_current = 1;
+					$worker->combined_line = $combined_line;
+					$worker->save(false);
 				}
 			$address->original_address = $address_string;
 			if(strchr($address_string, ",")){
@@ -1319,6 +1337,11 @@ class TrackController extends Controller
 			$address->escort = $escort;
 			$address->worker_id = $worker->id;
 			$address->save(false);
+			}			
+			$track_address = Address::findOne(['worker_id'=>$worker->id,'original_address'=>$address_string]);
+			if($track_address&&!$track_address->combined_line){
+				$track_address->combined_line = $combined_line;
+				$track_address->save(false);
 			}
 			/*if($worker->sub_line){
 				$sub_line = Staticlines::findOne(['line_number'=>$worker->sub_line]);
@@ -1493,14 +1516,14 @@ class TrackController extends Controller
 					unset($workers);
 					$workers = array();
 					$details=explode(':', $row->ShemSidur);
-					if($details[1]==""){
+					if(!isset($details[1])||$details[1]==""){
 						$region = "";
 					}
 					else{
 						$region = preg_replace("/[0-9]+/", "", $details[0]);
 					}
 					$combined_line=filter_var($details[0], FILTER_SANITIZE_NUMBER_INT);
-					$description = $details[1];
+					$description = isset($details[1])?$details[1]:$details[0];
 					$shift_name = $row->ShiftName;					
 				}
 				else{
@@ -3055,7 +3078,7 @@ class TrackController extends Controller
 		$workerModel = Worker::findOne($worker_id);
 		
 		$hospital_track = new HospitalTrack();
-		$hospital_track->combined_line = $track->combined_line;
+		$hospital_track->combined_line = $track->line_number>0?$track->line_number:$track->combined_line;
 		$hospital_track->region = $track->region;
 		$hospital_track->description = $track->description;
 		$hospital_track->shift = $track->shift;
@@ -3095,7 +3118,7 @@ class TrackController extends Controller
 		
 		//add new line
 		$track = new Track();
-		$track->line_number = $new_line->static_line->line_number;
+		$track->line_number = $new_line->static_line->combined_line>0?$new_line->static_line->combined_line:$new_line->static_line->line_number;
 		$track->combined_line = $new_line->static_line->line_number;
 		$track->description = $new_line->static_line->description;
 		$track->meesenger = $new_line->static_line->driver_id;
