@@ -1,7 +1,8 @@
 <div class="container" >
 	<div class="line add_worker add-div" >
 		<h3 class="cot-div" >{{title_btn_save}} קו</h3>
-		<input class="col-margin" type="number" min="0" ng-model="newLine.line_number" required ng-class="{'error' :(submitted&&!newLine.line_number)}" placeholder="מספר קו:" >
+		<input class="col-margin" type="number" min="0" ng-model="newLine.line_number" required ng-class="{'error' :(submitted&&!newLine.line_number)}" placeholder="מספר קו:" >		
+		<input class="col-margin" type="number" min="0" ng-model="newLine.combined_line" required ng-class="{'error' :(submitted&&!newLine.combined_line)}" placeholder="קו בית חולים:" >
 		<!-- <input class="col-margin" ng-model="newLine.region" required  ng-class="{'error' :(submitted&&!newLine.region)}" placeholder="כיוון:" > -->
 		<input class="col-margin" style="width: 30%;" ng-model="newLine.description" ng-class="{'error' :(submitted&&!newLine.description)}" placeholder="תאור קו:" >
 		<!-- <select class="col-margin" ng-model="newLine.driver_id" ng-options="driver.id as driver.name for driver in drivers |filter:{is_usher:false} track by driver.id">
@@ -22,6 +23,7 @@
 		<thead>
 			<tr>
 				<th class="col-md-1">מספר קו</th>
+				<th class="col-md-1">קו בית חולים</th>
 				<th class="col-md-5">תאור קו</th>
 				<th class="col-md-2">נהג</th>
 				<th class="col-md-1">סדר הצגה</th>
@@ -32,6 +34,7 @@
 		<tbody>
 			<tr ng-repeat="line in static_lines | orderBy:'line_order'" ng-class="{'selected-row':line.id==newLine.id}">
 				<td class="col-md-1"><p style="border-left: 1px solid black;">{{line.line_number}}</p></td>
+				<td class="col-md-1"><p style="border-left: 1px solid black;">{{line.combined_line}}</p></td>
 				<td class="col-md-5"><p>{{line.description}}</p></td>
 				<td class="col-md-2"><p>{{line.driver.name}}</p></td>
 				<td class="col-md-1"><p>{{line.line_order}}</p></td>
