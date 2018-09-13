@@ -28,8 +28,8 @@
 			<label>שבץ לתת קו:</label>
 			<select ng-model="newWorker.sub_line">
 				<option value=""></option>
-				<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
-			</select>
+				<option ng-repeat="line in static_lines | orderBy:'line_order'" value="{{line.line_number}}">{{'קו '+ line.line_number + ' ' + line.description}}</option>
+			</select> 
 		</div>
 		<!-- <input class="col-margin" list="subLinesList" ng-model="newWorker.sub_line" placeholder="שבץ לתת קו:">
 		<datalist id="subLinesList">
@@ -53,7 +53,7 @@
 				value="{{address.original_address}}"
 				class="col-margin_address" style="margin-bottom: 0;"
 				required  ng-class="{'error' :(submitted&&!address.original_address)}"/> -->
-				<input class="col-margin" style="width: 300px;" type="text" required ng-model="address.original_address" placeholder="כתובת ראשית" />
+				<input class="col-margin" style="width: 270px;" type="text" required ng-model="address.original_address" placeholder="כתובת ראשית" />
 				 <!-- ng-blur="getDistance($index)" -->
 				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
 				<!--here <span ng-show="submitted&&(!address.lat||!address.lng||!address.original_address)" class="help-block" style="position:absolute 	;display:block;">כתובת לא תקינה</span> -->
@@ -91,7 +91,7 @@
 				value="{{address.original_address}}"
 				class="col-margin_address" style="margin-bottom: 0;"
 				required  ng-class="{'error' :(submitted&&(!address.original_address||!address.lat||!address.lng||!address.country||!address.city||!address.street||!address.street_number))}"/> -->
-				<input class="col-margin" style="width: 300px;" type="text" required ng-model="address.original_address" placeholder="כתובת משנית" />
+				<input class="col-margin" style="width: 270px;" type="text" required ng-model="address.original_address" placeholder="כתובת משנית" />
 				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
 				<!--here <span ng-show="submitted&&(!address.lat||!address.lng||!address.country||!address.city||!address.street||!address.street_number)" class="help-block" style="position:absolute 	;display:block">כתובת לא תקינה</span> -->
 		<!-- <input class="col-margin" ng-model="address.line_number" style="margin-bottom: 0;" placeholder="מספר קו:" >
@@ -119,8 +119,11 @@
 			<label>שבץ לתת קו:</label>
 			<select ng-model="address.sub_line">
 				<option value=""></option>
-				<option ng-repeat="line in static_lines" value="{{line.line_number}}">{{line.line_number}}</option>
+				<option ng-repeat="line in static_lines | orderBy:'line_order'" value="{{line.line_number}}">{{'קו '+ line.line_number + ' ' + line.description}}</option>
 			</select>
+			<!-- <select ng-model="address.sub_line" ng-options="line as 'קו '+ line.line_number + ' ' + line.description for line in static_lines | orderBy:'line_order'">
+				<option value=""></option>    
+      		</select> -->
 		</div>
 		<span ng-show="submitted&&(!newWorker.id||!newWorker.name)" class="help-block" style="position:absolute 	;display:inline-block">מלא שדות נדרשים</span>
   </div>
