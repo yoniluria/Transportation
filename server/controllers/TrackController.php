@@ -886,49 +886,18 @@ class TrackController extends Controller
 					}
 					if($radio_day=="shabat"||($radio_day=="all_week"&&in_array($combined_line, $filter))){
 						
-						//save hospital details
-						$hospital_track = new HospitalTrack();
-						$hospital_track->combined_line = $track->combined_line;
-						$hospital_track->region = $track->region;
-						$hospital_track->description = $track->description;
-						$hospital_track->shift = $track->shift;
-						$hospital_track->shift_id = Shift::findOne(['name'=>$track->shift])->id;
-						//$hospital_track->date = $hospital_track->shift_id==$morning_shift?$tommotow:$curr_date;
-						$hospital_track->date = $curr_date;
 						$worker = Worker::findOne($sheet[$index]->SSN);
 						if(!$worker){
 							$worker = new Worker();
 							$worker->id = $sheet[$index]->SSN;
 						}
-						$hospital_track->worker_id = $worker->id;
 						if(isset($sheet[$index]->Address1)){
 							$address_string = ltrim($sheet[$index]->Address1).', '.ltrim($sheet[$index]->City);
 						}
 						else{
 							$address_string = ltrim($sheet[$index]->City);
-						}						
-
+						}	
 						
-						if(isset($sheet[$index]->Telephone)){
-							$worker->department = $sheet[$index]->Telephone;
-							$hospital_track->department = $worker->department;	
-						}
-						if(isset($sheet[$index]->CompanyName)){
-							$name = explode(',',$sheet[$index]->CompanyName);
-							$worker->name = ltrim($name[0]).$name[1];
-							$hospital_track->worker_name = $worker->name;
-						}
-						if(isset($sheet[$index]->Watts)){
-							$worker->phone = $sheet[$index]->Watts;
-							$hospital_track->phone = $worker->phone;
-						}
-						
-//						$worker->combined_line = $combined_line;
-						
-						$worker->save(false);
-						
-						$hospital_track->address = $address_string;
-						$hospital_track->save(false);
 						$escort = FALSE;
 						if(isset($sheet[$index]->Address1)&&strstr($sheet[$index]->Address1, 'ללא ליווי')===FALSE){
 							$escort = true;
@@ -1008,6 +977,7 @@ class TrackController extends Controller
 								//$sub_track->track_date = $sub_track->shift_id==$morning_shift?$tommotow:$curr_date;
 								$sub_track->track_date = $curr_date;
 								$sub_track->save(FALSE);
+								$track = $sub_track;
 							}
 							$connection = new Track_for_worker();
 							$connection->track_id = $sub_track->id;
@@ -1043,6 +1013,42 @@ class TrackController extends Controller
 							$track_for_worker->save(false);
 							$i++;							
 						}
+						
+						//save hospital details
+						$hospital_track = new HospitalTrack();
+						//$hospital_track->combined_line = $track->combined_line;
+						$hospital_track->combined_line = $track->line_number;
+						$hospital_track->region = $track->region;
+						$hospital_track->description = $track->description;
+						$hospital_track->shift = $track->shift;
+						$hospital_track->shift_id = Shift::findOne(['name'=>$track->shift])->id;
+						//$hospital_track->date = $hospital_track->shift_id==$morning_shift?$tommotow:$curr_date;
+						$hospital_track->date = $curr_date;
+						
+						$hospital_track->worker_id = $worker->id;
+											
+
+						
+						if(isset($sheet[$index]->Telephone)){
+							$worker->department = $sheet[$index]->Telephone;
+							$hospital_track->department = $worker->department;	
+						}
+						if(isset($sheet[$index]->CompanyName)){
+							$name = explode(',',$sheet[$index]->CompanyName);
+							$worker->name = ltrim($name[0]).$name[1];
+							$hospital_track->worker_name = $worker->name;
+						}
+						if(isset($sheet[$index]->Watts)){
+							$worker->phone = $sheet[$index]->Watts;
+							$hospital_track->phone = $worker->phone;
+						}
+						
+//						$worker->combined_line = $combined_line;
+						
+						$worker->save(false);
+						
+						$hospital_track->address = $address_string;
+						$hospital_track->save(false);
 					}
 				}	
 				catch (ErrorException $e){
