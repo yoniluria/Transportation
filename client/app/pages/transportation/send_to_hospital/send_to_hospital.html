@@ -9,7 +9,7 @@
 			
 			<div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index"  on-finish-render="callMyCustomMethod()" >
 				
-			<div class="col-md-12 div_track" data-track="{{track.track.id}}" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data- page="{{j}}" >
+			<div class="div_track bottom_border" data-track="{{track.track.id}}" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data- page="{{j}}" >
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -63,8 +63,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers" >
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers" >
 			               	<thead>
 								<tr class="bottom_border" >
 									<th>סמן</th>
@@ -89,8 +89,8 @@
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <tr ng-repeat-start="worker in track.workers track by $index" class="worker_line" data-id="{{worker.track_id}}" data-track="{{track.track.id}}" ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}"  >
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <tr ng-repeat-start="worker in track.workers track by $index" class="worker_line" data-id="{{worker.track_id}}" data-track="{{track.track.id}}"  >
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;" ></div><input style="display: none;" type="checkbox" /></td>
 				                  		  <td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{worker.hour|date:'HH:mm'}}</td>
 				                  		  <!-- {{worker.track_order}} -->
@@ -105,7 +105,8 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end class="worker_line" data-track="{{track.track.id}}" ng-class="{'bottom_border':$last}" >
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end class="worker_line" data-track="{{track.track.id}}" >
 				                  	<td colspan="8" style="font-weight: 700;" ng-if="countOf(worker.track_instructions)>2" >
 				                  		<span ng-if="countOf(worker.track_instructions)>2" >{{worker.track_instructions}}</span>
 				                  	</td>
