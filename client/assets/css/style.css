@@ -1841,7 +1841,7 @@ table.search td{
     height: 22px;
 }
 .top_border{
-	border-top: 3px solid #8a8a8a;
+	border-top: 3px solid #8a8a8a !important;
 }
 .bottom_border{
 	border-bottom: 3px solid #8a8a8a !important;
@@ -1863,10 +1863,10 @@ table.search td{
 	margin-bottom: 0;
 }
 .table_workers tr{
-    border-bottom: 1px solid #8a8a8a;
+    /*border-bottom: 1px solid #8a8a8a !important;*/
 }
 .table_workers th{
-    border-bottom: none !important;
+    /*border-bottom: none !important;*/
 }
 .table_workers td,.table_workers th{
 	padding: 0 !important;
