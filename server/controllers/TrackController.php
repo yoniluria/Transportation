@@ -977,7 +977,7 @@ class TrackController extends Controller
 								//$sub_track->track_date = $sub_track->shift_id==$morning_shift?$tommotow:$curr_date;
 								$sub_track->track_date = $curr_date;
 								$sub_track->save(FALSE);
-								$track = $sub_track;
+//								$track = $sub_track;
 							}
 							$connection = new Track_for_worker();
 							$connection->track_id = $sub_track->id;
