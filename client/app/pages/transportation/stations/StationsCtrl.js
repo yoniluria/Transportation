@@ -340,7 +340,7 @@
 					   else{
 					   	$http.post($rootScope.baseUrl+$scope.controller+'/updateordersfromxls',{data:tmp,filter:$scope.update_xls_filter_lines.map(l=>l.line_number),radio_day:$scope.radio_day_update_xls})
 						.success(function(data) {
-									if(data[0]!=undefined&&data[0].startsWith("line")){
+									if(data[0]!=undefined&&data[0]['details']==undefined&&data[0].startsWith("line")){
 					       	  			data = data[0].replace("line","");
 					       	  			$rootScope.message = "הקובץ לא עלה בהצלחה, נמצאה שגיאה באקסל בשורה "+data;
 					       	  			angular.element('#saved-toggle').trigger('click');
