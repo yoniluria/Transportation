@@ -811,11 +811,11 @@ class TrackController extends Controller
 							// $curr_connection->delete();
 						// }						
 					// }
-					$all_addresses_of_workers = Address::find()->all();
+					/*$all_addresses_of_workers = Address::find()->all();
 					foreach ($all_addresses_of_workers as $curr_address) {
 						$curr_address->regular_instructions = null;
 						$curr_address->save(FALSE);
-					}
+					}*/
 					$old_track->delete();
 				}
 			}
