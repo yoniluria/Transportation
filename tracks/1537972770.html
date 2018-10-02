@@ -12,7 +12,7 @@
 			
 			<!-- ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79531" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="true">
+			<div class="div_track bottom_border" data-track="82495" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="true">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -38,9 +38,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -66,8 +66,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -83,32 +83,33 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 10 אריאל</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 1</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 190.8px;">קו 12 אלפי מנשה</td>
+				                  	<td class="ng-binding" style="width: 106.8px;">נוסעים: 1</td>    
+				                  	<td style="width: 144px;"></td>
+				                  	<td style="width: 81.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79531" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82495">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:15</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">מורגנשטרו אלה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">526659401</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">שער הגיא  14</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אריאל</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding"></td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">בן זאב רינה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527886652</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">עצמון 7</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלפי מנשה</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">חדר לידה       </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79531">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82495">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -166,7 +167,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79539" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
+			<div class="div_track bottom_border" data-track="82497" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -192,9 +193,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -220,8 +221,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="display: none;">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -237,32 +238,33 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 12 אלפי מנשה</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 1</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 190.8px;">קו 14 טירה</td>
+				                  	<td class="ng-binding" style="width: 106.8px;">נוסעים: 1</td>    
+				                  	<td style="width: 144px;"></td>
+				                  	<td style="width: 81.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79539" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82497">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:10</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">ברבשטיין מרינה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527024950</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">ערבי נחל 192</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> צופים</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">יולדות 3       </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">גזאוי גמלאת    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">050-3332747    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">תחנת דלק  פז- כניסה</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> טירה</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">נשים פסיכיאטריה</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79539">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82497">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -320,7 +322,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79545" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
+			<div class="div_track bottom_border" data-track="82500" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -346,9 +348,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -374,8 +376,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="display: none;">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -391,412 +393,111 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 13 כפר סבא</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 2</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 190.8px;">קו 1 תל אביב</td>
+				                  	<td class="ng-binding" style="width: 106.8px;">נוסעים: 11</td>    
+				                  	<td style="width: 144px;"></td>
+				                  	<td style="width: 81.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79545" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:32</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">גורביץ' אלה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">054-4543792    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הר סיני 4/סופר וקטורי</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> רעננה</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">ח.לידה         </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">אביר מלכה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">522222248</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">רש"י 30</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> רמת גן</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">ט. נמרץ        </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79545">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79545" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:35</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">דומב ציפי    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">548307940</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">בר אילן  26</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> רעננה</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79545">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
-				                  <!-- <tr ng-repeat-end="" ></tr> -->
-							</tbody>
-			      		   </table>
-			           </div>
-			    
-			  
-			</div>	
-	<!--		<div style="display: inline-block;width: 100%;margin-right: 2%;" ng-repeat="track in shift.tracks as filtered track by $index">
-			      <div class="col-md-11" style="border-bottom: 8px solid #8a8a8a;padding: 0px;">
-			               <table class="table col-md-12">
-			                  <!-- <tr>
-			                  		  <th style="padding-top:20px; "> סמן</th>	
-			                  		  <th style="padding-top:20px; "> שעה</th>
-			                          <th style="padding-top:20px; "> שם העובד</th>
-			                          <th style="padding-top:20px; "> תז עובד</th>
-			                          <th style="padding-top:20px; "> כתובת</th>
-			                          <th style="padding-top:20px; "> עיר</th>
-			                          <th style="padding-top:20px; "> טלפון</th>
-			                          <th style="padding-top:20px; "> תאריך</th>
-			                          <th style="padding-top:20px; "> משמרת</th>
-			                          <th style="padding-top:20px; "> מסלול</th>
-			                  </tr> -->
-	<!--		                  <tr>
-			                  	<td>קו {{track.track.combined_line}} {{track.track.description}}</td>
-			                  	<td>נוסעים: {{track.workers.length}}</td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  </tr>
-			                  <tr ng-repeat="worker in track.workers track by $index" ng-class="{'no_border':$last}" >
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;"><input type="checkbox" /></td>
-			                  		  <td ng-if="shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.hour|date:'HH:mm'}}</td>
-			                  		  <td ng-if="!shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.track_order}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.worker_name}}  </td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.phone}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.address}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.city}}</td>
-			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.department}}</td>
-			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.instructions}}</td>
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-	<!--		                  </tr>
-			          </table>
-			           </div>
-			    </td>
-			  </tr>
-			</div>-->
-			</div>
-			
-	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
-				
-			<div class="col-md-12 div_track" data-track="79555" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
-				<!-- <div>
-					<table class="table col-md-12 big-th" >
-						<thead>
-							<tr>
-								<th>
-									<span ng-if="$first">בס"ד - </span>
-								</th>
-								<th>תאריך: {{shift.tracks[0].track.date | date:'dd/MM/yyyy'}} {{convertToHebrew(tracks[0].track.date)}}</th>
-								<th>משמרת {{shift.name}} {{shift.hour}}</th>
-								<th>נוסעים: {{shift.filteredWorkers}}</th>
-								<th>
-									<img ng-if="$first" style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div> -->
-				
-				<div class="height_div hide_cot" ng-init="p=page">
-						<div>
-							<p style="float: right;">בס"ד שלח זמנים למרכז הרפואי מעיני הישועה</p>
-							<p style="float: left;">עמוד <span class="num_page ng-binding">1</span> מתוך <span class="num_pages ng-binding">2</span></p>
-							<table class="table col-md-12 height_div_table">
-								<thead>
-									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
-										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
-										<th style="padding: 8px;">
-											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
-										</th>
-									</tr>
-								</thead>
-							</table>
-						</div>	
-					</div>
-					
-				<!-- <div class="col-md-11" style="padding-right: 2%;">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>סמן</th>
-								<th>שעה</th>
-								<th>שם העובד</th>
-								<th>טלפון</th>
-								<th>כתובת</th>
-								<th>עיר</th>
-								<th>מחלקה</th>
-							</tr>
-						</thead>
-					</table>
-				</div>	 -->
-			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
-			               	<thead style="display: none;">
-								<tr class="bottom_border">
-									<th>סמן</th>
-									<th><!-- ngIf: shift.isCollecting --><span ng-if="shift.isCollecting" class="ng-scope">שעה</span><!-- end ngIf: shift.isCollecting --><!-- ngIf: !shift.isCollecting --></th>
-									<th>שם העובד</th>
-									<th>טלפון</th>
-									<th>כתובת</th>
-									<th>עיר</th>
-									<th>מחלקה</th>
-									<th>הנחיות</th> 
-								</tr>
-							</thead>
-							<tbody>
-								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
-								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 15 נתניה</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 1</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
-				                  	<td style="width: 43.2px;"></td>
-				                  	<!-- <td></td>-->
-				                  	<!-- <td></td>  -->
-				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79555" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">מושיאב שושי    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">548459971</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">חטיבת הראל 2</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> נתניה</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79555">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
-				                  <!-- <tr ng-repeat-end="" ></tr> -->
-							</tbody>
-			      		   </table>
-			           </div>
-			    
-			  
-			</div>	
-	<!--		<div style="display: inline-block;width: 100%;margin-right: 2%;" ng-repeat="track in shift.tracks as filtered track by $index">
-			      <div class="col-md-11" style="border-bottom: 8px solid #8a8a8a;padding: 0px;">
-			               <table class="table col-md-12">
-			                  <!-- <tr>
-			                  		  <th style="padding-top:20px; "> סמן</th>	
-			                  		  <th style="padding-top:20px; "> שעה</th>
-			                          <th style="padding-top:20px; "> שם העובד</th>
-			                          <th style="padding-top:20px; "> תז עובד</th>
-			                          <th style="padding-top:20px; "> כתובת</th>
-			                          <th style="padding-top:20px; "> עיר</th>
-			                          <th style="padding-top:20px; "> טלפון</th>
-			                          <th style="padding-top:20px; "> תאריך</th>
-			                          <th style="padding-top:20px; "> משמרת</th>
-			                          <th style="padding-top:20px; "> מסלול</th>
-			                  </tr> -->
-	<!--		                  <tr>
-			                  	<td>קו {{track.track.combined_line}} {{track.track.description}}</td>
-			                  	<td>נוסעים: {{track.workers.length}}</td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  </tr>
-			                  <tr ng-repeat="worker in track.workers track by $index" ng-class="{'no_border':$last}" >
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;"><input type="checkbox" /></td>
-			                  		  <td ng-if="shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.hour|date:'HH:mm'}}</td>
-			                  		  <td ng-if="!shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.track_order}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.worker_name}}  </td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.phone}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.address}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.city}}</td>
-			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.department}}</td>
-			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.instructions}}</td>
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-	<!--		                  </tr>
-			          </table>
-			           </div>
-			    </td>
-			  </tr>
-			</div>-->
-			</div>
-			
-	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
-				
-			<div class="col-md-12 div_track" data-track="79577" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
-				<!-- <div>
-					<table class="table col-md-12 big-th" >
-						<thead>
-							<tr>
-								<th>
-									<span ng-if="$first">בס"ד - </span>
-								</th>
-								<th>תאריך: {{shift.tracks[0].track.date | date:'dd/MM/yyyy'}} {{convertToHebrew(tracks[0].track.date)}}</th>
-								<th>משמרת {{shift.name}} {{shift.hour}}</th>
-								<th>נוסעים: {{shift.filteredWorkers}}</th>
-								<th>
-									<img ng-if="$first" style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div> -->
-				
-				<div class="height_div hide_cot" ng-init="p=page">
-						<div>
-							<p style="float: right;">בס"ד שלח זמנים למרכז הרפואי מעיני הישועה</p>
-							<p style="float: left;">עמוד <span class="num_page ng-binding">1</span> מתוך <span class="num_pages ng-binding">2</span></p>
-							<table class="table col-md-12 height_div_table">
-								<thead>
-									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
-										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
-										<th style="padding: 8px;">
-											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
-										</th>
-									</tr>
-								</thead>
-							</table>
-						</div>	
-					</div>
-					
-				<!-- <div class="col-md-11" style="padding-right: 2%;">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>סמן</th>
-								<th>שעה</th>
-								<th>שם העובד</th>
-								<th>טלפון</th>
-								<th>כתובת</th>
-								<th>עיר</th>
-								<th>מחלקה</th>
-							</tr>
-						</thead>
-					</table>
-				</div>	 -->
-			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
-			               	<thead style="display: none;">
-								<tr class="bottom_border">
-									<th>סמן</th>
-									<th><!-- ngIf: shift.isCollecting --><span ng-if="shift.isCollecting" class="ng-scope">שעה</span><!-- end ngIf: shift.isCollecting --><!-- ngIf: !shift.isCollecting --></th>
-									<th>שם העובד</th>
-									<th>טלפון</th>
-									<th>כתובת</th>
-									<th>עיר</th>
-									<th>מחלקה</th>
-									<th>הנחיות</th> 
-								</tr>
-							</thead>
-							<tbody>
-								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
-								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 1 תל אביב</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 10</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
-				                  	<td style="width: 43.2px;"></td>
-				                  	<!-- <td></td>-->
-				                  	<!-- <td></td>  -->
-				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">אייזנר שירה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">528109889</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">מסריק/רייך בככר</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> תל אביב</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">דבוש רעות    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527131399</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">דנגור27/פתיה</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">אהרון ברכה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527653143</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הר סיני 19/עוזיאל</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני ברק</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">קבלה           </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:30</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">הלוי מיה  </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">054-8476778    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">צבי הרלינג 21/אברמסקי</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">בלוך יפה  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">03-5790853     </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">דבורה הנביאה 18</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני-ברק</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">מיון           </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">חדר לידה       </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:37</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">הרשוביץ רחל    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">052-7694570    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">סוקולוב/אבן גבירול</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">ברס נחמה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">504151430</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">סוקולוב 48/אבן שפרוט</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני ברק</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">מיון ילדים     </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">תינוקות        </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:38</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <!-- ngIf: !shift.isCollecting -->    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">גלבוע מור    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">533135365</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">ראב"ד17/מהרש"ל19</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני ברק</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פגים           </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --></td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
+				                  	<!-- ngIf: countOf(worker.track_instructions)>2 --><td colspan="8" style="font-weight: 700;" ng-if="countOf(worker.track_instructions)>2" class="ng-scope">
+				                  		<!-- ngIf: countOf(worker.track_instructions)>2 --><span ng-if="countOf(worker.track_instructions)>2" class="ng-binding ng-scope">לחכות במהרשל 19</span><!-- end ngIf: countOf(worker.track_instructions)>2 -->
+				                  	</td><!-- end ngIf: countOf(worker.track_instructions)>2 -->
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:38</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">ויסמן הדסה  </td>
@@ -809,11 +510,12 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:35</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">חורי נורית    </td>
@@ -826,67 +528,35 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:15</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">ממן סיון  </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">548590096</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">תחנת רכבת ת"א מרכז</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">יגודיוב לובה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">509394699</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">בושם 56</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> תל אביב</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">ילודים         </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">סופר אתי    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">544330117</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">אבוחצירא34/הרב פתאיה</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני ברק</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:35</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">עמנואל  תרצה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">546702186</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">ארלוזורוב 77</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> רמת גן</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פגיה           </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79577" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">קהלני אורלי    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">542063066</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">יגאל אלון 12</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">פריד שרה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527611626</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">סוקולוב20/חשב סופר1</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני ברק</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">תינוקות        </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
@@ -894,7 +564,44 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79577">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
+				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:35</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <!-- ngIf: !shift.isCollecting -->    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">פרמד מרים  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">052-7637309    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הר סיני13/אדמור מקוצק</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני-ברק</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">מיון           </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
+				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82500">
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:35</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <!-- ngIf: !shift.isCollecting -->    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">רוזנברג מירי    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">548486320</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">סוקולוב7/רבי עקיבא 95</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בני ברק</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">מיון           </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82500">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -952,7 +659,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79620" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
+			<div class="div_track bottom_border" data-track="82525" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -978,9 +685,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -1006,8 +713,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="display: none;">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -1023,19 +730,19 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 2 בת ים</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 2</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 190.8px;">קו 2 בת ים</td>
+				                  	<td class="ng-binding" style="width: 106.8px;">נוסעים: 2</td>    
+				                  	<td style="width: 144px;"></td>
+				                  	<td style="width: 81.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79620" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82525">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:05</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">בנריי כרמלה  </td>
@@ -1048,195 +755,26 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79620">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82525">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79620" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82525">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:20</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">סיידה ברוריה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">506387223</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הרב צבי יהודה 10</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> בת ים</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">יולדות ב'      </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79620">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
-				                  <!-- <tr ng-repeat-end="" ></tr> -->
-							</tbody>
-			      		   </table>
-			           </div>
-			    
-			  
-			</div>	
-	<!--		<div style="display: inline-block;width: 100%;margin-right: 2%;" ng-repeat="track in shift.tracks as filtered track by $index">
-			      <div class="col-md-11" style="border-bottom: 8px solid #8a8a8a;padding: 0px;">
-			               <table class="table col-md-12">
-			                  <!-- <tr>
-			                  		  <th style="padding-top:20px; "> סמן</th>	
-			                  		  <th style="padding-top:20px; "> שעה</th>
-			                          <th style="padding-top:20px; "> שם העובד</th>
-			                          <th style="padding-top:20px; "> תז עובד</th>
-			                          <th style="padding-top:20px; "> כתובת</th>
-			                          <th style="padding-top:20px; "> עיר</th>
-			                          <th style="padding-top:20px; "> טלפון</th>
-			                          <th style="padding-top:20px; "> תאריך</th>
-			                          <th style="padding-top:20px; "> משמרת</th>
-			                          <th style="padding-top:20px; "> מסלול</th>
-			                  </tr> -->
-	<!--		                  <tr>
-			                  	<td>קו {{track.track.combined_line}} {{track.track.description}}</td>
-			                  	<td>נוסעים: {{track.workers.length}}</td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  	<td></td>
-			                  </tr>
-			                  <tr ng-repeat="worker in track.workers track by $index" ng-class="{'no_border':$last}" >
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;"><input type="checkbox" /></td>
-			                  		  <td ng-if="shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.hour|date:'HH:mm'}}</td>
-			                  		  <td ng-if="!shift.isCollecting" style="padding-top:7px; padding-bottom: 7px;">{{worker.track_order}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.worker_name}}  </td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.phone}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.address}}</td>
-			                  		  <td style="padding-top:7px; padding-bottom: 7px;">{{worker.city}}</td>
-			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.department}}</td>
-			                          <td style="padding-top:7px; padding-bottom: 7px;">{{worker.instructions}}</td>
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-			                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-	<!--		                  </tr>
-			          </table>
-			           </div>
-			    </td>
-			  </tr>
-			</div>-->
-			</div>
-			
-	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
-				
-			<div class="col-md-12 div_track" data-track="79653" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
-				<!-- <div>
-					<table class="table col-md-12 big-th" >
-						<thead>
-							<tr>
-								<th>
-									<span ng-if="$first">בס"ד - </span>
-								</th>
-								<th>תאריך: {{shift.tracks[0].track.date | date:'dd/MM/yyyy'}} {{convertToHebrew(tracks[0].track.date)}}</th>
-								<th>משמרת {{shift.name}} {{shift.hour}}</th>
-								<th>נוסעים: {{shift.filteredWorkers}}</th>
-								<th>
-									<img ng-if="$first" style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div> -->
-				
-				<div class="height_div hide_cot" ng-init="p=page">
-						<div>
-							<p style="float: right;">בס"ד שלח זמנים למרכז הרפואי מעיני הישועה</p>
-							<p style="float: left;">עמוד <span class="num_page ng-binding">1</span> מתוך <span class="num_pages ng-binding">2</span></p>
-							<table class="table col-md-12 height_div_table">
-								<thead>
-									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
-										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
-										<th style="padding: 8px;">
-											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
-										</th>
-									</tr>
-								</thead>
-							</table>
-						</div>	
-					</div>
-					
-				<!-- <div class="col-md-11" style="padding-right: 2%;">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>סמן</th>
-								<th>שעה</th>
-								<th>שם העובד</th>
-								<th>טלפון</th>
-								<th>כתובת</th>
-								<th>עיר</th>
-								<th>מחלקה</th>
-							</tr>
-						</thead>
-					</table>
-				</div>	 -->
-			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
-			               	<thead style="display: none;">
-								<tr class="bottom_border">
-									<th>סמן</th>
-									<th><!-- ngIf: shift.isCollecting --><span ng-if="shift.isCollecting" class="ng-scope">שעה</span><!-- end ngIf: shift.isCollecting --><!-- ngIf: !shift.isCollecting --></th>
-									<th>שם העובד</th>
-									<th>טלפון</th>
-									<th>כתובת</th>
-									<th>עיר</th>
-									<th>מחלקה</th>
-									<th>הנחיות</th> 
-								</tr>
-							</thead>
-							<tbody>
-								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
-								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 4 אשדוד</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 2</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
-				                  	<td style="width: 43.2px;"></td>
-				                  	<!-- <td></td>-->
-				                  	<!-- <td></td>  -->
-				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79653" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">יוחנן רחל    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527689579</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">אדמור מבעלז 41</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אשדוד</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">ח.לידה         </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79653">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79653" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">מריאנובסקי נלי    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">503038996</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">העצמאות 85</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אשדוד</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">סמכוב לריסה  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527249255</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">אסירי ציון 9</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> תל אביב - יפו</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">ילדים          </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79653">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82525">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -1294,7 +832,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79672" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
+			<div class="div_track bottom_border" data-track="82533" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -1320,9 +858,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -1348,8 +886,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="display: none;">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -1365,19 +903,37 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 5 אור יהודה</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 1</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 190.8px;">קו 5 אור יהודה</td>
+				                  	<td class="ng-binding" style="width: 106.8px;">נוסעים: 2</td>    
+				                  	<td style="width: 144px;"></td>
+				                  	<td style="width: 81.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79672" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82533">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:30</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <!-- ngIf: !shift.isCollecting -->    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">גדייב אילה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">508111784</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">יקותיאל אדם 14</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אור יהודה</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">מיון           </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82533">
+				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82533">
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:30</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">קלנדרוב אלה    </td>
@@ -1390,7 +946,8 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79672">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82533">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -1448,7 +1005,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79695" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
+			<div class="div_track bottom_border" data-track="82537" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -1474,9 +1031,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -1502,8 +1059,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="display: none;">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -1519,66 +1076,33 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 188.4px;">קו 7 מודיעין עילית</td>
-				                  	<td class="ng-binding" style="width: 105.6px;">נוסעים: 3</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 78px;"></td>
-				                  	<td style="width: 74.4px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 190.8px;">קו 6 רמלה</td>
+				                  	<td class="ng-binding" style="width: 106.8px;">נוסעים: 1</td>    
+				                  	<td style="width: 144px;"></td>
+				                  	<td style="width: 81.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79695" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82537">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:13</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">כהן עמית    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">526776014</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">יגאל ידין 53</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> מודיעין</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">חדר לידה       </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79695">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79695" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">קרייטמן דבורה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527675802</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">רבי טרפון 15</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> מודיעין עילית</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">בנימינוב שרה  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">523617184</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">שדרות האלונים 7</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> באר יעקב</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79695">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79695" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">שמיר מאיה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527616138</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">שדרות הרב מפונוביז 2</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> מודיעין עילית</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">נשים           </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79695">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82537">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -1636,7 +1160,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79729" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="true">
+			<div class="div_track bottom_border" data-track="82540" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="true">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -1662,9 +1186,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -1690,8 +1214,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -1707,53 +1231,55 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 186px;">קו 8 אלעד</td>
+				                  	<td colspan="3" class="ng-binding" style="width: 182.4px;">קו 8 אלעד</td>
 				                  	<td class="ng-binding" style="width: 104.4px;">נוסעים: 9</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 80.4px;"></td>
-				                  	<td style="width: 75.6px;"></td>
+				                  	<td style="width: 135.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
+				                  	<td style="width: 100.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:15</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">הרוש שירן    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">504130813</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הלל 5</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">חכון גבריאל    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">584550456</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">יהודה הנשיא 70</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלעד</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">יולדות         </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">דיאליזה/כירוגיה</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:25</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">חיימוב צפורה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">504142141</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">רבי שמעון בן שטח 19</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלעד</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">טוקוב אנג'לה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">528472277</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">מול יצחק שדה32/הפורצים</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> פתח תקוה</td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פגים           </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:20</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">טימסיט אורלי    </td>
@@ -1766,45 +1292,66 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:23</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">לוצוב פאינה  </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">542455226</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">קק"ל  7</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> פתח תקוה****</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">מעבדה          </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">מלאייב גילה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">548519729</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">רבי שמעון בן שטח 19</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">טראב פנינה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527146186</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">מול בן זכאי 44</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלעד</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">נשים           </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">תינוקות        </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:05</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <!-- ngIf: !shift.isCollecting -->    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">יעקב חגית    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">546697761</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">אלברט אינשטיין 31</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> ראש העין</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">פנימית         </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
+				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:17</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- {{worker.track_order}} -->
+				                  		  <!-- ngIf: !shift.isCollecting -->    
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">מזרחי לינדה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">526771003</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הרב המאירי 24/הנשיא 94</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלעד</td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">יולדות7        </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
+				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
+				                  </tr>
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
+				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:30</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">פיויו רבקה    </td>
@@ -1817,45 +1364,30 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:20</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">ציצרבה סבטלנה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">547557172</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">מחנה יהודה 8 /הארי הקדוש</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">רוזנבלום ויויאנה  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">504251105</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">רמב"ם 39</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> פתח תקווה</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">יילודים        </td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">תינוקות        </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
+				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82540">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">קרביץ חיה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527151464</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">רבן יוחנן בן זכאי 3 בתחנת אוטובוס</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלעד</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">בנק הדם        </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79729" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:20</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">ריטרמן הדסה    </td>
@@ -1868,7 +1400,8 @@
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79729">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82540">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
@@ -1926,7 +1459,7 @@
 			
 	  </div><!-- end ngRepeat: track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index --><div style="/*display: inline-block;width: 100%;*/" ng-repeat="track in shift.tracks | orderBy:['track_order'] | filter:sendToFilter as filtered track by $index" on-finish-render="callMyCustomMethod()" class="ng-scope">
 				
-			<div class="col-md-12 div_track" data-track="79847" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
+			<div class="div_track bottom_border" data-track="82564" style="padding: 0;page-break-inside: avoid;" ng-init="j=calcHeight(track.track.id,1)" data-="" page="false">
 				<!-- <div>
 					<table class="table col-md-12 big-th" >
 						<thead>
@@ -1952,9 +1485,9 @@
 							<table class="table col-md-12 height_div_table">
 								<thead>
 									<tr>
-										<th class="ng-binding"> תאריך: 15/09/2018 שבת קדש</th>
+										<th class="ng-binding"> תאריך: 26/09/2018 יום רביעי</th>
 										<th class="ng-binding">משמרת לילה - איסוף 22:00</th>
-										<th class="ng-binding">נוסעים - 34</th>
+										<th class="ng-binding">נוסעים - 28</th>
 										<th style="padding: 8px;">
 											<img class="logo_img" ng-src="http://185.70.251.252/transportation/client/assets/img/logo_3.png" src="http://185.70.251.252/transportation/client/assets/img/logo_3.png">   
 										</th>
@@ -1980,8 +1513,8 @@
 					</table>
 				</div>	 -->
 			<div style="/*display: inline-block;*/width: 100%;">
-			      <div class="col-md-12" style="padding: 0px;">
-			               <table class="table col-md-12 table_workers">
+			      <div class="" style="padding: 0px;">
+			               <table class="table table_workers">
 			               	<thead style="display: none;">
 								<tr class="bottom_border">
 									<th>סמן</th>
@@ -1997,49 +1530,33 @@
 							<tbody>
 								<!-- ng-repeat-start="track in shift.tracks as filtered track by $index" -->
 								<tr style="font-weight: bold;">
-				                  	<td colspan="3" class="ng-binding" style="width: 186px;">קו 9 אלקנה</td>
-				                  	<td class="ng-binding" style="width: 104.4px;">נוסעים: 2</td>    
-				                  	<td style="width: 138px;"></td>
-				                  	<td style="width: 80.4px;"></td>
-				                  	<td style="width: 75.6px;"></td>
+				                  	<td colspan="3" class="ng-binding" style="width: 182.4px;">קו 91 נסיעה מיוחדת</td>
+				                  	<td class="ng-binding" style="width: 104.4px;">נוסעים: 1</td>    
+				                  	<td style="width: 135.6px;"></td>
+				                  	<td style="width: 76.8px;"></td>
+				                  	<td style="width: 100.8px;"></td>
 				                  	<td style="width: 43.2px;"></td>
 				                  	<!-- <td></td>-->
 				                  	<!-- <td></td>  -->
 				                  </tr>
-				                  <!-- ng-class="{'border_thick':$last}" -->
-				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="79847" ng-class="{'bottom_border':$last}">
+				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
+				                  <!-- ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope" data-id="" data-track="82564">
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
+				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:05</td><!-- end ngIf: shift.isCollecting -->
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">זילבר מילי    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">506437657</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">הרי בשמים 10</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> אלקנה</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">תינוקות        </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">אייזנבך לאה    </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">527608792</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">יסודות</td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"></td>
+				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">יולדות         </td>
 				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
 				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
 				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79847">
-				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
-				                  </tr><!-- end ngRepeat: worker in track.workers track by $index --><tr ng-repeat-start="worker in track.workers track by $index" class="worker_line ng-scope bottom_border" data-id="" data-track="79847" ng-class="{'bottom_border':$last}">
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;"></div><input style="display: none;" type="checkbox"></td>
-				                  		  <!-- ngIf: shift.isCollecting --><td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;" class="ng-binding ng-scope">22:00</td><!-- end ngIf: shift.isCollecting -->
-				                  		  <!-- {{worker.track_order}} -->
-				                  		  <!-- ngIf: !shift.isCollecting -->    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">מימון ברכה    </td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;" class="ng-binding">528037091</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;" class="ng-binding">אודם 11</td>
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;" class="ng-binding"> שערי תקווה</td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 78px;padding-left: 10px !important;" class="ng-binding">כירורגית       </td>
-				                          <td style="/*padding-top:7px; padding-bottom: 7px;*/font-weight: 700;"><!-- ngIf: countOf(worker.track_instructions)<3 --><span ng-if="countOf(worker.track_instructions)<3" class="ng-binding ng-scope"></span><!-- end ngIf: countOf(worker.track_instructions)<3 --></td> 
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.date}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.shift}}</span></td> -->
-				                          <!-- <td style="padding-top:7px; padding-bottom: 7px;"><span ng-if="$first">{{track.track.combined_line}} {{track.track.region}}: {{track.track.description}}</span></td> -->
-				                  </tr>
-				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="79847">
+				                  <!-- ng-class="{'bottom_border':$last}" -->
+				                  <tr ng-repeat-end="" class="worker_line ng-scope" data-track="82564">
 				                  	<!-- ngIf: countOf(worker.track_instructions)>2 -->
 				                  </tr><!-- end ngRepeat: worker in track.workers track by $index -->
 				                  <!-- <tr ng-repeat-end="" ></tr> -->
