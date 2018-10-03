@@ -423,7 +423,7 @@ class SendtoController extends Controller {
 	
 				$mail->IsSMTP();
 	
-				$mail->setFrom('hasaot11@gmail.com','מערכת ניהול');
+				$mail->setFrom('hasaot11@gmail.com','אמנון אהרון הסעות בע"מ');   
 	
 				$mail->addReplyTo('hasaot11@gmail.com');
 	
