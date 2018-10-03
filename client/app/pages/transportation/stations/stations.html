@@ -22,7 +22,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
-        <h4 class="modal-title">ביטול שורות שעודכנו:</h4>
+        <h4 class="modal-title">ביטול שורות שעודכנו:</h4> 
       </div>
       <div class="modal-body">
       	<p>האם אתה בטוח שברצונך לבטל סימון לכל השורות שעודכנו בתאריך זה?</p>   	    	
@@ -147,6 +147,7 @@
 
   </div>
 </div>
+	<p class="text_print" style="/*position: fixed;top: 0;left: 0;*/" >עמוד <span id="pageFooter1" ></span></p>        
 	<div id="serach" class="text_not_print" >
 		<div class="line" >
 			<h1 style="display: inline;margin-right: 10px;" >סה"כ נקלטו  {{workers.length}} נוסעים, {{tracks.length}} מסלולים</h1>
@@ -188,7 +189,7 @@
 			<button class="btn btn-small xls" data-toggle="modal" data-target="#confirm">
 				בטל שורות שעודכנו
 			</button>
-			<button class="btn btn-small xls" ng-click="print_tracks()" >
+			<button class="btn btn-small xls" ng-click="print_tracks()" > 
 				הדפס מסלולים
 			</button>	
 		</div>	
@@ -307,7 +308,7 @@
 <div class="container" style="width: 96%;margin-top: 160px;" ng-style="{'margin-top':show_differences&&differences.length?'355px':show_differences&&!differences.length?'220px':'160px'}">
 	<div class="row">
 		<!--  | orderBy:'track_order' -->
-		<div ng-repeat="track in selectedTracks | orderBy:['track.shift_id','track.track_order'] | filter: trackfilter as filtered  track by $index" data-track="{{track.track.id}}" class="col-md-3 station station_div" style="page-break-inside: avoid;padding-left: 8px; padding-right: 8px;">
+		<div ng-repeat="track in selectedTracks | orderBy: orderTracks  | filter: trackfilter as filtered  track by $index" data-track="{{track.track.id}}" class="col-md-3 station station_div" style="page-break-inside: avoid;padding-left: 8px; padding-right: 8px;">
 			<div>
 				<div>
 					<div class="line-station move" style="cursor: pointer;display: inline;" ng-click="showByRoute(track)">
@@ -326,6 +327,7 @@
 						<p title="{{track.track.description}}">{{track.track.description | TwoCities}} | </p>
 						<p title="{{track.workers.length}} נוסע/ים">{{track.workers.length}} נוסע/ים</p>
 						<p title="{{track.driver.name}}" style="max-width: 13%;"> | {{track.driver.name}}</p>
+						<p>{{track.num_workers}} עובדים</p>
 					</div>
 					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="sendTrackToDelete(track)" data-toggle="modal" data-target="#delTrackModal"></i>
 				</div>
@@ -360,19 +362,20 @@
 							dnd-dragstart="setDraggedWorker(worker,track)"
 							ng-hide="!exists&&track.track.id==old_track.track.id&&worker.id==draggedWorker.id"
 							style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;">
-								 <div class="col-md-12" data-update="{{worker.updated}}" style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;" ng-class="{'register-error' :oneError(worker.id),'double-error':doubleError(worker.id),'double-in-track-error':doubleInTrackError(worker.id),'different-addresses':differentAddresses(worker),'updated-worker':worker.updated==1}">
+								 <div class="col-md-12 li_line" data-update="{{worker.updated}}" style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;" ng-class="{'register-error' :oneError(worker.id),'double-error':doubleError(worker.id),'double-in-track-error':doubleInTrackError(worker.id),'different-addresses':differentAddresses(worker),'updated-worker':worker.updated==1}">
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.hour|date:"HH:mm"}}</p>
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.track_order||$index+1}}</p>
 									<p class="col-md-2" style="width: 24%;padding-left: 0px;padding-top: 10px;">{{worker.name}}</p>
+									<p class="col-md-8 text_print" style="padding-left: 0px;padding-top: 10px;" ng-init="selectedAddress=setInitialAddress(worker.addresses,worker.address)" >{{selectedAddress.original_address}}</p>
 									<p class="col-md-1 text_not_print" style="width: 7%; padding-top: 10px;" ng-if="collecting&&!$last||!collecting&&!$first">{{worker.duration | zeroDisplay}}</p>
 									<!-- <p class="col-md-1" style="width: 7%; padding-top: 10px;" ng-if="collecting&&worker.id!=track.workers[track.workers.length-1].id||!collecting&&worker.id!=track.workers[0].id">{{worker.duration}}</p> -->
 									<!-- <p style="width: 20%" ng-if="collecting&&worker.id==track.workers[track.workers.length-1].id||!collecting&&worker.id==track.workers[0].id">{{worker.addresses[0].travel_time}}</p> -->
 									<p class="col-md-1 text_not_print" style="width: 7%; padding-top: 10px;" ng-if="collecting&&$last||!collecting&&$first">{{worker.addresses[worker.index].travel_time | zeroDisplay}}</p>
-									<div class="col-md-8" style="padding-left: 0px;    width: 60%;">
+									<div class="col-md-8 text_not_print" style="padding-left: 0px;    width: 60%;">
 										<select style="background-color: rgb(243, 243, 243); padding-right: 6px;padding-left: 6px;" ng-model="selectedAddress" ng-options="address.original_address for address in worker.addresses" ng-init="selectedAddress=setInitialAddress(worker.addresses,worker.address)" ng-class="{'errorAddress' :!selectedAddress.primary_address}">
 										</select>
-										<!-- {{setInitialAddress(worker.addresses).original_address}} -->
 									</div>
+									<!-- {{setInitialAddress(worker.addresses).original_address}} -->
 								</div>
 							</li>
 						</ul>

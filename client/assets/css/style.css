@@ -1743,14 +1743,14 @@ table.search td{
 	    display: table;
 	}
 	
-	/*#pageFooter {
-	    display: table-footer-group;
+	#pageFooter { 
+	    display: table-footer-group;   
 	}
 	
 	#pageFooter:after {
 	    counter-increment: page;
 	    content: counter(page);
-	}*/
+	}
 	.height_div{
 		height: 80px;
 		width: 100%;
@@ -1800,8 +1800,24 @@ table.search td{
 	.station-track{
 	    min-height: initial;
     	max-height: initial;
+    	font-weight: bold;
+    	overflow-y: hidden; 
+	}
+	.station-track p{
+		font-weight: bold;
+	}
+	.li_line{
+		height: auto !important;
 	}
 } 
+.line_print{
+	font-weight: bold;
+	overflow-y: hidden; 
+	height: auto !important;
+}
+.line_print p{
+	font-weight: bold;
+}
 .print_content{
 	padding: 0 2%;
 	/*width: 755.9px;*/

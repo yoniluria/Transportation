@@ -103,6 +103,7 @@
 	        connectGETService.fn($scope.controller + '/getallallroute&date='+ $filter('date')($rootScope.date,'yyyy-MM-dd').toString()).then(function success(data) {
 	        document.getElementById('loader').style.display = 'none';
 			$scope.tracks = data.data;
+			$scope.orderTracks = ['track.shift_id','track.track_order'];
 			if($scope.new_line_id){
 				$scope.changeTrackChecking($scope.new_line_id);
 			}
@@ -117,6 +118,7 @@
 			
 			//set primary address index
 			for(var i = 0;$scope.tracks.length&&i<$scope.tracks.length;i++){
+				$scope.tracks[i]['num_workers'] = $scope.tracks[i].workers.length;
 				for(var j = 0;$scope.tracks[i].workers&&$scope.tracks[i].workers.length&&j<$scope.tracks[i].workers.length;j++){
 					for(var k = 0;$scope.tracks[i].workers[j].addresses&&$scope.tracks[i].workers[j].addresses.length&&k<$scope.tracks[i].workers[j].addresses.length;k++){
 						// if($scope.tracks[i].workers[j].addresses[k].primary_address==1)
@@ -1146,22 +1148,28 @@ var xlf = document.getElementById('xlf');
 		
 		$scope.print_tracks = function(){
 			var i = 1;var arr = [];var num;var max;
-			$('.station-track').removeClass('height_track');
-			$('.station_div').each(function(){
-				num = ($('.station_div').eq(parseInt(i)-parseInt(1)).find('.station-track').css('height')).replace('px','');   
-				arr.push(num);
-				if(i%4==0){
-					max = Math.max.apply(null, arr);
-					$('.station_div').eq(parseInt(i)-parseInt(1)).find('.station-track').css('height',max+'px');
-					$('.station_div').eq(parseInt(i)-parseInt(1)).prev().find('.station-track').css('height',max+'px');
-					$('.station_div').eq(parseInt(i)-parseInt(1)).prev().prev().find('.station-track').css('height',max+'px');
-					$('.station_div').eq(parseInt(i)-parseInt(1)).prev().prev().prev().find('.station-track').css('height',max+'px');
-					arr = [];
-				}
-				i++;
-			});
-			$('.station-track').addClass('height_track');
-			window.print();
+			$scope.orderTracks = ['num_workers'];			
+	    	setTimeout(function(){
+	    		$('.station-track').removeClass('height_track');
+				$('.li_line').addClass('line_print');
+				$('.station_div').each(function(){
+					num = ($('.station_div').eq(parseInt(i)-parseInt(1)).find('.station-track').css('height')).replace('px','');   
+					arr.push(num);
+					if(i%4==0){
+						max = Math.max.apply(null, arr);
+						$('.station_div').eq(parseInt(i)-parseInt(1)).find('.station-track').css('height',max+'px');
+						$('.station_div').eq(parseInt(i)-parseInt(1)).prev().find('.station-track').css('height',max+'px');
+						$('.station_div').eq(parseInt(i)-parseInt(1)).prev().prev().find('.station-track').css('height',max+'px');
+						$('.station_div').eq(parseInt(i)-parseInt(1)).prev().prev().prev().find('.station-track').css('height',max+'px');
+						arr = [];
+					}
+					i++;
+				});
+				$('.station-track').addClass('height_track');  
+				$('.li_line').removeClass('line_print');
+   	  			window.print();
+   	  		} ,1000);
+			
 		}
 		
 		var map;
