@@ -116,8 +116,8 @@ class MessengersController extends Controller
 			$driver->is_usher = $data->is_usher;
 		}
 		if($driver->save(false))
-	   		die('saved');
-		die('error');
+	   		return json_encode(["saved"]);
+		return json_encode(["error"]);
    }	
    
    //מחיקת נהג
