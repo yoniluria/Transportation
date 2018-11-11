@@ -118,7 +118,7 @@
 			
 			//set primary address index
 			for(var i = 0;$scope.tracks.length&&i<$scope.tracks.length;i++){
-				$scope.tracks[i]['num_workers'] = $scope.tracks[i].workers.length;
+				$scope.tracks[i]['num_workers'] = $scope.tracks[i].workers?$scope.tracks[i].workers.length:0;
 				for(var j = 0;$scope.tracks[i].workers&&$scope.tracks[i].workers.length&&j<$scope.tracks[i].workers.length;j++){
 					for(var k = 0;$scope.tracks[i].workers[j].addresses&&$scope.tracks[i].workers[j].addresses.length&&k<$scope.tracks[i].workers[j].addresses.length;k++){
 						// if($scope.tracks[i].workers[j].addresses[k].primary_address==1)

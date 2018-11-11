@@ -322,11 +322,11 @@
     		var i = 1;
     		angular.forEach(list,function(worker){
     			worker.track_order = i++;
-    			worker.duration = Number($scope.copied_workers[i-2].duration);
+    			//worker.duration = Number($scope.copied_workers[i-2].duration);
     			// if($scope.currentRoute.track.id==$scope.track.track.id)
     				// worker.hour = new Date($scope.copied_workers[i-2].hour);
     			// else
-    				worker.hour = $scope.copied_workers[i-2].hour;
+    				//worker.hour = $scope.copied_workers[i-2].hour;
     			worker = worker;
     		});
     		// $scope.track.workers=list;

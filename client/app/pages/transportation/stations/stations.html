@@ -149,7 +149,7 @@
 </div>        
 	<div id="serach" class="text_not_print" >
 		<div class="line" >
-			<h1 style="display: inline;margin-right: 10px;" >סה"כ נקלטו  {{workers.length}} נוסעים, {{tracks.length}} מסלולים</h1>
+			<h1 style="display: inline;margin-right: 10px;" >סה"כ נקלטו  {{workers.length}} נוסעים, {{(selectedTracks | filter: trackfilter).length}} מסלולים</h1>
 			<!-- <h2>{{date | date:'dd-MM-yyyy'}}</h2> -->
 			<!-- <button class="btn-small" data-toggle="modal" data-target="#dayInWeek" >קרא xls</button> -->
 			<label class="btn-small xls" data-toggle="modal" data-target="#dayInWeek">
@@ -357,9 +357,9 @@
 							<li ng-repeat="worker in track.workers"
 							dnd-draggable="worker"
 							dnd-effect-allowed="move"
-							dnd-moved="track.workers.splice($index, 1)"
+							
 							dnd-dragstart="setDraggedWorker(worker,track)"
-							ng-hide="!exists&&track.track.id==old_track.track.id&&worker.id==draggedWorker.id"
+							
 							style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;">
 								 <div class="col-md-12 li_line" data-update="{{worker.updated}}" style="padding-right: 0px; padding-left: 1px; height: 42px; margin-bottom: 6px; padding-top: 1px; padding-bottom: 1px;" ng-class="{'register-error' :oneError(worker.id),'double-error':doubleError(worker.id),'double-in-track-error':doubleInTrackError(worker.id),'different-addresses':differentAddresses(worker),'updated-worker':worker.updated==1}">
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.hour|date:"HH:mm"}}</p>
