@@ -40,7 +40,20 @@
     		document.getElementById('loader').style.display = 'block';
 			$http.post($rootScope.baseUrl + $scope.controller + '/gettracksbydate',{date:$filter('date')($rootScope.date,'yyyy-MM-dd')}).success(
 			function(data) {
-				$scope.tracks = data;
+				if(data.tracks){
+					$scope.tracks = data.tracks;
+					$scope.problematic = data.problematic;
+				}
+				if($scope.problematic.length){
+					message = 'בעיה בשליפת:';
+					angular.forEach($scope.problematic,function(value){
+						message  = message+' '+value.name;
+					});
+					$rootScope.message = message;
+   	  				angular.element('#saved-toggle').trigger('click');
+				}	
+				
+				
 				var selectedTracks = $rootScope.selectedTracks;
 				$rootScope.selectedTracks = [];
 				angular.forEach($scope.tracks,function(track){

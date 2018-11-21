@@ -186,7 +186,7 @@
 				מסלול חדש
 			</button>
 			<button class="btn btn-small xls" data-toggle="modal" data-target="#confirm">
-				בטל שורות שעודכנו
+				בטל סימון שורות שעודכנו
 			</button>
 			<button class="btn btn-small xls" ng-click="print_tracks()" > 
 				הדפס מסלולים
@@ -287,7 +287,7 @@
 						<th>טלפון</th>
 					</tr>
 				</thead>
-				<tr ng-repeat="difference in differences" ng-class="{'added-worker':difference.status,'removed-worker':!difference.status}">
+				<tr ng-repeat="difference in differences | filter :{details:{shift:trackfilter.track.shift}}" ng-class="{'added-worker':difference.status,'removed-worker':!difference.status}">
 					<td>{{difference.details.combined_line}}</td>
 					<td>{{difference.details.shift}}</td>
 					<td>{{difference.details.region}}</td>

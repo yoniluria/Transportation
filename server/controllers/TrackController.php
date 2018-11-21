@@ -1450,22 +1450,7 @@ class TrackController extends Controller
 		}
         public function find_worker_to_track($row,$track,$i)
         {
-        	//test
-        	//$worker11 = Worker::findOne($row->SSN);
-            //שליפת העובד הנוכחי
-            $worker = Worker::findOne($row->SSN);
-            if(!$worker){
-                $worker = new Worker();
-                $worker->id = $row->SSN;
-                $worker->combined_line = $track->line_number;
-            }
-            $worker->department = isset($row->Telephone)?$row->Telephone:null;
-            if(isset($row->CompanyName))
-                $name = explode(',',$row->CompanyName);
-            $worker->name = ltrim($name[0]).$name[1];
-            $worker->phone = isset($row->Watts)?$row->Watts:null;
-            $worker->save(false);
-            
+        	
             //טיפול בכתובת
             // אם השדה כתובת מאותחלת מאתחל את הכובת והעיר
             if(isset($row->Address1)){
@@ -1483,6 +1468,23 @@ class TrackController extends Controller
             $address_string = str_replace('(ללא מלווה)', '', $address_string);
             //test
             //$hospital_track11 = HospitalTrack::find()->where(['worker_id'=>$worker->id,'combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->one();
+            //test
+            //$worker11 = Worker::findOne($row->SSN);
+            //שליפת העובד הנוכחי
+            $worker = Worker::findOne($row->SSN);
+            if(!$worker){
+                $worker = new Worker();
+                $worker->id = $row->SSN;
+                $worker->combined_line = $track->line_number;
+            }
+            $worker->department = isset($row->Telephone)?$row->Telephone:null;
+            if(isset($row->CompanyName))
+                $name = explode(',',$row->CompanyName);
+            $worker->name = ltrim($name[0]).$name[1];
+            $worker->phone = isset($row->Watts)?$row->Watts:null;
+            $worker->save(false);
+            
+            
             
             $added_worker = false;
             $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->one();
@@ -1597,6 +1599,7 @@ class TrackController extends Controller
                     //set hour according to shift
                     date_default_timezone_set("Asia/Jerusalem");
                     $track_for_worker->hour =  Shift::findOne(['id'=>$track ->shift_id])->hour;
+                    $track_for_worker->updated = 1;
                 }
                 $track_for_worker->address = $address_string; 
                 $track_for_worker->save(false);
