@@ -287,7 +287,7 @@
 						<th>טלפון</th>
 					</tr>
 				</thead>
-				<tr ng-repeat="difference in differences | filter :{details:{shift:trackfilter.track.shift}}" ng-class="{'added-worker':difference.status,'removed-worker':!difference.status}">
+				<tr ng-repeat="difference in differences | filter :{details:{shift:trackfilter.track.shift}}|orderBy:'details.worker_name'" ng-class="{'added-worker':difference.status,'removed-worker':!difference.status}">
 					<td>{{difference.details.combined_line}}</td>
 					<td>{{difference.details.shift}}</td>
 					<td>{{difference.details.region}}</td>

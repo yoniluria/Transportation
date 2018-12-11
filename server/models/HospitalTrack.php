@@ -41,7 +41,7 @@ class HospitalTrack extends \yii\db\ActiveRecord
         return [
             [['combined_line', 'shift_id', 'worker_id'], 'integer'],
             [['date'], 'safe'],
-            [['isSent'], 'boolean'],
+            [['is_sent','is_confirm'], 'boolean'],
             [['region', 'shift', 'phone'], 'string', 'max' => 50],
             [['description', 'address', 'worker_name'], 'string', 'max' => 256],
             [['department'], 'string', 'max' => 100],

@@ -66,10 +66,11 @@
 		<div class="checkbox-div" style="display: inline;" >
 			
 			
-			<label style="display: inline">			
+			<label style="display: inline;position: relative;">			
 				<i class="fa fa-paperclip" style="display: inline" aria-hidden="true"></i>צרף מפה
-				<input type="file" style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index)" accept="image/*"/>
-				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.map_file}}" />
+				<input type="file"  style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index,)" accept="image/*"/>
+				<i class="fa fa-trash"  ng-if="address.map_file" aria-hidden="true"  ng-click="address.map_file = ''" style="left: 0;position: absolute;cursor: pointer;font-size: 20px;"></i>
+				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.id+'/'+address.map_file}}" />
 			</label>
 		</div>
 		<!-- <div class="checkbox-div" style="display: inline;" >
@@ -102,10 +103,11 @@
 		" style="margin-bottom: 0;" placeholder="שבץ להצגה בתת קו:" > -->
 		
 		<div class="checkbox-div" style="display: inline;" >
-			<label style="display: inline">			
+			<label style="display: inline;position: relative;">			
 				<i class="fa fa-paperclip" style="display: inline" aria-hidden="true"></i>צרף מפה
 				<input type="file" style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index)" accept="image/*"/>
-				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.map_file}}" />
+				<i class="fa fa-trash"  ng-if="address.map_file" aria-hidden="true"  ng-click="address.map_file = ''" style="left: 0;position: absolute;cursor: pointer;font-size: 20px;"></i>
+				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.id+'/'+address.map_file}}" />
 			</label>
 		</div>
 		<!-- <div class="checkbox-div" style="display: inline;" >

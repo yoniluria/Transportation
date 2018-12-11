@@ -85,7 +85,16 @@ class TrackController extends Controller
 	$trackModel = Track::findOne($track_id);
 	$collecting = (strpos($trackModel->shift, 'איסוף') !== false)?1:0; 
 	//$orderby = $collecting==1?'hour':'track_order';
-	$orderby = 'track_order';   	
+	$orderby = 'track_order';
+    //בדיקה האם השעות תקינות-מופיעות לפי הסדר-בסדר עולה - כל שעה גדולה מהשעה שלפניה
+    $prev_hour = null;
+    foreach ($workers as $key=>$worker) {
+        $hour = strtotime($worker->hour);
+        if($prev_hour && $prev_hour > $hour){
+            print_r(json_encode(['status'=>"error","msg"=>"שעות לא תקינות!!!!"]));die();
+        }
+        $prev_hour = $hour;
+    }   	
 	foreach ($workers as $key=>$worker) {
 	    $hospital_track = HospitalTrack::find()->where(['combined_line'=>$track->line_number,'shift_id'=>$track->shift_id,'worker_id'=>$worker->id,'date'=>$track->track_date])->one();
         if($hospital_track){
@@ -150,7 +159,8 @@ class TrackController extends Controller
 		}
 		$prev_track = $connection;
 		/*----------------------------*/
-	}  	
+	}
+    print_r(json_encode(['status'=>"ok","msg"=>""]));die();  	
   }
   
   public function actionGet_one_route()
@@ -1448,176 +1458,206 @@ class TrackController extends Controller
            //return (object)['track'=>$track,'$track11'=>$track11?$track11->attributes:null];
            return $track;
 		}
-        public function find_worker_to_track($row,$track,$i)
+        public function find_worker_to_track($row,$track,$i,$index)
         {
-        	
-            //טיפול בכתובת
-            // אם השדה כתובת מאותחלת מאתחל את הכובת והעיר
-            if(isset($row->Address1)){
-                $address_string = ltrim($row->Address1).', '.ltrim($row->City);
-           }
-           //אחרת מאתחל את העיר
-           else{
-                $address_string = ltrim($row->City);
-           }       
-            $escort = FALSE;
-            if(isset($row->Address1)&&strstr($row->Address1, 'ללא ליווי')===FALSE){
-                $escort = true;
-            }
-            $address_string = str_replace('(ללא ליווי)', '', $address_string);
-            $address_string = str_replace('(ללא מלווה)', '', $address_string);
-            //test
-            //$hospital_track11 = HospitalTrack::find()->where(['worker_id'=>$worker->id,'combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->one();
-            //test
-            //$worker11 = Worker::findOne($row->SSN);
-            //שליפת העובד הנוכחי
-            $worker = Worker::findOne($row->SSN);
-            if(!$worker){
-                $worker = new Worker();
-                $worker->id = $row->SSN;
-                $worker->combined_line = $track->line_number;
-            }
-            $worker->department = isset($row->Telephone)?$row->Telephone:null;
-            if(isset($row->CompanyName))
-                $name = explode(',',$row->CompanyName);
-            $worker->name = ltrim($name[0]).$name[1];
-            $worker->phone = isset($row->Watts)?$row->Watts:null;
-            $worker->save(false);
-            
-            
-            
-            $added_worker = false;
-            $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->one();
-            if(!$hospital_track)
-            {
-                $added_worker = true;
-                $hospital_track = new HospitalTrack();
-                $hospital_track->combined_line = $track->line_number;
-                $hospital_track->region = $track->region;
-                $hospital_track->description = $track->description;
-                $hospital_track->shift = $track->shift;
-                $hospital_track->shift_id = $track->shift_id;
-                $hospital_track->date = $track->track_date;
-            }
-            //save hospital details
-            $hospital_track->worker_id = $worker->id;
-            $hospital_track->address = $address_string;
-            $hospital_track->department = $worker->department;  
-            $hospital_track->worker_name = $worker->name;
-            $hospital_track->phone = $worker->phone;
-            $hospital_track->save(false);
-
-            $last_address=Address::find()->where(['worker_id'=>$worker->id])->one();
-            $addresses = Address::find()->where(['worker_id'=>$worker->id])->all();
-            foreach ($addresses as $address) {
-                if(strstr($address->original_address, $address_string)){
-                    $address->is_current = 1;
+            try{
+                $hospital_track_deleted = [];
+            	$worker_id =$row->SSN;
+                $added_worker = false;
+                $sub_track =null;
+                //טיפול בכתובת
+                // אם השדה כתובת מאותחלת מאתחל את הכובת והעיר
+                if(isset($row->Address1)){
+                    $address_string = ltrim($row->Address1).', '.ltrim($row->City);
+               }
+               //אחרת מאתחל את העיר
+               else{
+                    $address_string = ltrim($row->City);
+               }       
+                $escort = FALSE;
+                if(isset($row->Address1)&&strstr($row->Address1, 'ללא ליווי')===FALSE){
+                    $escort = true;
                 }
-                else{
-                    $address->is_current = null;
-                }
-                $address->save(false);
-            }
-            $track_address = Address::findOne(['worker_id'=>$worker->id,'original_address'=>$address_string]);
-            if(!$last_address || !$track_address){
-               $address = new Address();
-                if(!Address::findOne(['worker_id'=>$worker->id,'primary_address'=>1])){
-                    $address->primary_address = 1;
-                    $address->is_current = 1;
-                }
-                $address->original_address = $address_string;
-                if(strchr($address_string, ",")){
-                    $address->city = explode(",", $address_string)[1];
-                }
-                $address->escort = $escort;
-                $address->worker_id = $worker->id;
-                $address->save(false);
-            }
-            if($track_address&&!$track_address->combined_line){
-                $track_address->combined_line = $track->combined_line;
-                $track_address->save(false);
-            }
-            
-            $sub_track =null;
-            //test
-            //$track_for_worker11 = null;
-            if($track_address&&(($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)||($track_address->sub_line&&$track_address->sub_line!=""))){
-                $search_line = ($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)?$worker->sub_line:$track_address->sub_line;
-                $sub_line = Staticlines::findOne(['line_number'=>$search_line]); 
-                $sub_track = Track::findOne(['track_date'=>$track ->track_date,'shift_id'=>$track ->shift_id,'combined_line'=>$search_line]);
-                if(!$sub_track){
-                    $sub_track = new Track();
-                    $sub_track->meesenger = $sub_line->driver_id;
-                    $sub_track->line_number = $track->line_number;
-                    $sub_track->combined_line = $search_line;
-                    if(!$track_address->combined_line){
-                        $track_address->combined_line = $track->line_number;
+                $address_string = str_replace('(ללא ליווי)', '', $address_string);
+                $address_string = str_replace('(ללא מלווה)', '', $address_string);
+                //test
+                //$hospital_track11 = HospitalTrack::find()->where(['worker_id'=>$worker->id,'combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->one();
+                 
+                $track_for_worker = Track_for_worker::find()->where(['worker_id' =>$worker_id,'address' =>$address_string])->andWhere('track_id in (select id from track where shift="'.$track->shift.'" and track_date="'.$track->track_date.'")')->one();
+                 //$hospital_track = HospitalTrack::find()->where(['address'=>$address_string,'worker_id'=>$worker_id,'combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->one();
+                
+                if(!$track_for_worker)
+                {
+                    
+                    //???למחוק את כל נתוני המשמרת הזו
+                    $hospital_track_deleted = HospitalTrack::find()->where(['worker_id'=>$worker_id,'shift'=>$track->shift,'date'=>$track->track_date])->asArray()->all();
+                    HospitalTrack::deleteAll(['worker_id'=>$worker_id,'shift'=>$track->shift,'date'=>$track->track_date]);
+                    
+                    Track_for_worker::deleteAll('worker_id ='.$worker_id.' and track_id in (select id from track where shift="'.$track->shift.'" and track_date="'.$track->track_date.'")');
+                    
+                    
+                    //test
+                    //$worker11 = Worker::findOne($row->SSN);
+                    //שליפת העובד הנוכחי
+                    $worker = Worker::findOne($row->SSN);
+                    if(!$worker){
+                        $worker = new Worker();
+                        $worker->id = $row->SSN;
+                        $worker->combined_line = $track->line_number;
+                    }
+                    $worker->department = isset($row->Telephone)?$row->Telephone:null;
+                    if(isset($row->CompanyName))
+                        $name = explode(',',$row->CompanyName);
+                    $worker->name = ltrim($name[0]).$name[1];
+                    $worker->phone = isset($row->Watts)?$row->Watts:null;
+                    $worker->save(false);
+                    
+                    $added_worker = true;
+                    //save hospital details
+                    $hospital_track = new HospitalTrack();
+                    $hospital_track->combined_line = $track->line_number;
+                    $hospital_track->region = $track->region;
+                    $hospital_track->description = $track->description;
+                    $hospital_track->shift = $track->shift;
+                    $hospital_track->shift_id = $track->shift_id;
+                    $hospital_track->date = $track->track_date;
+                    $hospital_track->worker_id = $worker->id;
+                    $hospital_track->address = $address_string;
+                    $hospital_track->department = $worker->department;  
+                    $hospital_track->worker_name = $worker->name;
+                    $hospital_track->phone = $worker->phone;
+                    $hospital_track->save(false);
+                    
+                    
+                    
+                   
+        
+                    $last_address=Address::find()->where(['worker_id'=>$worker->id])->one();
+                    $addresses = Address::find()->where(['worker_id'=>$worker->id])->all();
+                    foreach ($addresses as $address) {
+                        if(strstr($address->original_address, $address_string)){
+                            $address->is_current = 1;
+                        }
+                        else{
+                            $address->is_current = null;
+                        }
+                        $address->save(false);
+                    }
+                    $track_address = Address::findOne(['worker_id'=>$worker->id,'original_address'=>$address_string]);
+                    if(!$last_address || !$track_address){
+                       $address = new Address();
+                        if(!Address::findOne(['worker_id'=>$worker->id,'primary_address'=>1])){
+                            $address->primary_address = 1;
+                            $address->is_current = 1;
+                        }
+                        $address->original_address = $address_string;
+                        if(strchr($address_string, ",")){
+                            $address->city = explode(",", $address_string)[1];
+                        }
+                        $address->escort = $escort;
+                        $address->worker_id = $worker->id;
+                        $address->save(false);
+                    }
+                    if($track_address&&!$track_address->combined_line){
+                        $track_address->combined_line = $track->combined_line;
                         $track_address->save(false);
                     }
-                    $sub_track->description = $sub_line->description;
-                    $sub_track->shift = $track ->shift;
-                    $sub_track->shift_id = $track ->shift_id;
-                    $sub_track->track_date = $track ->track_date;
-                    $sub_track->save(FALSE);
-                }
-                //test
-                //$track_for_worker11 = Track_for_worker::find()->where(['track_id'=>$sub_track->id,'worker_id'=>$worker->id])->one();
-                
-                $track_for_worker = Track_for_worker::find()->where(['track_id'=>$sub_track->id,'worker_id'=>$worker->id])->one();
-                if(!$track_for_worker){
-                    $track_for_worker = new Track_for_worker();
-                    $track_for_worker->track_id = $sub_track->id;
-                    $track_for_worker->worker_id = $worker->id;
                     
-                    $all_connections = Track_for_worker::find()->where(['track_id'=>$sub_track->id])->all();
-                    if($all_connections){
-                        $last_track_order = count($all_connections);
+                                    
+    
+                    //test
+                    //$track_for_worker11 = null;
+                    if($track_address&&(($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)||($track_address->sub_line&&$track_address->sub_line!=""))){
+                        $search_line = ($track_address->primary_address==1&&$worker->sub_line&&$worker->sub_line>=0)?$worker->sub_line:$track_address->sub_line;
+                        $sub_line = Staticlines::findOne(['line_number'=>$search_line]); 
+                        $sub_track = Track::findOne(['track_date'=>$track ->track_date,'shift_id'=>$track ->shift_id,'combined_line'=>$search_line]);
+                        if(!$sub_track){
+                            $sub_track = new Track();
+                            $sub_track->meesenger = $sub_line->driver_id;
+                            $sub_track->line_number = $track->line_number;
+                            $sub_track->combined_line = $search_line;
+                            if(!$track_address->combined_line){
+                                $track_address->combined_line = $track->line_number;
+                                $track_address->save(false);
+                            }
+                            $sub_track->description = $sub_line->description;
+                            $sub_track->shift = $track ->shift;
+                            $sub_track->shift_id = $track ->shift_id;
+                            $sub_track->track_date = $track ->track_date;
+                            $sub_track->save(FALSE);
+                        }
+                        //test
+                        //$track_for_worker11 = Track_for_worker::find()->where(['track_id'=>$sub_track->id,'worker_id'=>$worker->id])->one();
+                        
+                        //$track_for_worker = Track_for_worker::find()->where(['track_id'=>$sub_track->id,'worker_id'=>$worker->id])->one();
+                        //if(!$track_for_worker){
+                        $track_for_worker = new Track_for_worker();
+                        $track_for_worker->track_id = $sub_track->id;
+                        $track_for_worker->worker_id = $worker->id;
+                        
+                        $all_connections = Track_for_worker::find()->where(['track_id'=>$sub_track->id])->all();
+                        if($all_connections){
+                            $last_track_order = count($all_connections);
+                        }
+                        else{
+                            $last_track_order = 0;
+                        }
+                        $track_for_worker->track_order = $last_track_order + 1;
+                        $track_for_worker->hour = Shift::findOne(['id'=>$track ->shift_id])->hour;
+                        $track_for_worker->duration = 0;
+                        $track_for_worker->updated = 1;
+                        //}
+                        $track_for_worker->address = $address_string;
+                        $track_for_worker->save(FALSE);
                     }
                     else{
-                        $last_track_order = 0;
+                        //test
+                        //$track_for_worker11 = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
+                        
+                        //$track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
+                        //if(!$track_for_worker){
+                        //save track for worker
+                        $track_for_worker = new Track_for_worker();
+                        $track_for_worker->track_id = $track->id;
+                        $track_for_worker->worker_id = $worker->id;
+                        $track_for_worker->duration = 0;
+                        $track_for_worker->track_order = $i;
+                        //set hour according to shift
+                        date_default_timezone_set("Asia/Jerusalem");
+                        $track_for_worker->hour =  Shift::findOne(['id'=>$track ->shift_id])->hour;
+                        $track_for_worker->updated = 1;
+                        //}
+                        $track_for_worker->address = $address_string; 
+                        $track_for_worker->save(false);
+                              
                     }
-                    $track_for_worker->track_order = $last_track_order + 1;
-                    $track_for_worker->hour = Shift::findOne(['id'=>$track ->shift_id])->hour;
-                    $track_for_worker->duration = 0;
+                    
+                    //$t = Track_for_worker::find()->where('track_id in (select id from track where line_number='.$track->line_number.' and region ="'.$track->region.'" and description="'.$track->description.'" and shift="'.$track->shift.'" and track_date="'.$track->track_date.'")')
+                    //->andWhere(['worker_id'=>$worker->id])->all();
                     
                 }
-                $track_for_worker->address = $address_string;
-                $track_for_worker->save(FALSE);
-            }
-            else{
-                //test
-                //$track_for_worker11 = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
-                
-                $track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
-                if(!$track_for_worker){
-                    //save track for worker
-                    $track_for_worker = new Track_for_worker();
-                    $track_for_worker->track_id = $track->id;
-                    $track_for_worker->worker_id = $worker->id;
-                    $track_for_worker->duration = 0;
-                    $track_for_worker->track_order = $i;
-                    //set hour according to shift
-                    date_default_timezone_set("Asia/Jerusalem");
-                    $track_for_worker->hour =  Shift::findOne(['id'=>$track ->shift_id])->hour;
-                    $track_for_worker->updated = 1;
-                }
-                $track_for_worker->address = $address_string; 
-                $track_for_worker->save(false);
-                      
+            }   
+            catch (ErrorException $e){
+                $index = $index+2;
+                print_r(json_encode(["line".$index]));
+                die();
             }
             return (object)[
                  //'$sub_track'=>$sub_track?$sub_track->attributes:null,
                  //'track'=>(array)$track->attributes,
                  //'$worker'=>(array)$worker->attributes,
                  //'hospital_track'=>(array)$hospital_track->attributes,
-                 //'$track_for_worker'=>(array)$track_for_worker->attributes,
-                 'hospital_track_id'=>$hospital_track->id,
-                 'track_for_worker_id'=>$track_for_worker->id,
-                 'sub_track_id'=>$sub_track?$sub_track->id:null,
+                 '$track_for_worker'=>isset($track_for_worker)?$track_for_worker->attributes:null,
+                 
                  //'hospital_track11'=>$hospital_track11?(array)$hospital_track11->attributes:null,
                  //'$worker11'=>$worker11?(array)$worker11->attributes:null,
-                 'added_worker'=>$added_worker?(object)['status'=>1,'details'=> $hospital_track -> attributes]:null,
+                 
                  //'$track_for_worker11'=>$track_for_worker11?(array)$track_for_worker11->attributes:null
+                 'added_worker'=>$added_worker?(object)['status'=>1,'details'=> $hospital_track -> attributes]:null,
+                 //'hospital_track_id'=>$hospital_track->id,
+                 'track_for_worker_track_id'=>$track_for_worker?$track_for_worker->track_id:null,
+                 'sub_track_id'=>$sub_track?$sub_track->id:null,
+                 'hospital_track_deleted'=>array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_track_deleted)
              ];
             //return $hospital_track->id;
                     
@@ -1633,56 +1673,69 @@ class TrackController extends Controller
             $date = strtotime($sheet[0]->ShiftDate);
             $curr_date = date('Y-m-d',$date);
             $track_ids = [];
+            $track_workers_ids = [];
             $workers_ids = [];
             $hospital_track_ids = [];
             $track_for_worker_ids = [];
             $test = [];
             $result = [];
+            $index = 0;
+            $track = null;
             foreach ($sheet as $row) {
                 if(!isset($row->SSN)){
+                    if($track){
+                        $tracks_for_worker = Track_for_worker::find()->where('track_id ='.$track->id.' and worker_id not in ('.implode(',', $track_workers_ids).')')->all();
+                        foreach ($tracks_for_worker as $key => $track_for_worker) {
+                            //$tracks_for_worker = Track_for_worker::deleteAll(['track_id'=>$track -> id]);
+                            $curr_track = Track::find()->where(['id'=>$track_for_worker->track_id])->one();
+                            if($curr_track){
+                                $hospital_tracks_deleted = HospitalTrack::find()->where(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id])->asArray()->all();
+                                $hospital_tracks = HospitalTrack::deleteAll(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id]);
+                                $hospital_tracks_deleted = array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_tracks_deleted);
+                                $result = array_merge($result,$hospital_tracks_deleted);
+                            }
+                            $track_for_worker->delete();
+                        }
+                    }  
+                   $track_workers_ids = [];
                    $i =0;
                    $track = $this -> find_track_details($row,$curr_date);
-                    //if($track){
+                    if($track){
                        array_push($track_ids,$track ->id); 
-                    //}
+                    }
                 }
                 else{
                    $workers_ids[] = $row->SSN;
+                   $track_workers_ids[] = $row->SSN;
                     if($radio_day=="shabat"||($radio_day=="all_week"&&in_array($track -> line_number, $active_lines))){
-                       $res = $this -> find_worker_to_track($row,$track,$i);
+                       $res = $this -> find_worker_to_track($row,$track,$i,$index);
                        array_push($test,$res);
-                       $hospital_track_ids[] = $res ->hospital_track_id;
-                       $track_for_worker_ids[] = $res ->track_for_worker_id;
-                       if($res ->sub_track_id)
-                          array_push($track_ids,$res ->sub_track_id);
+                       $result = array_merge($result,$res -> hospital_track_deleted);
                        if($res ->added_worker)
-                          array_push($result,$res ->added_worker);  
+                         array_push($result,$res ->added_worker);
+                       if($res ->sub_track_id)
+                         array_push($track_ids,$res ->sub_track_id);
+                       if($res ->track_for_worker_track_id)
+                         array_push($track_ids,$res ->track_for_worker_track_id);                       
                        $i++;
                     }
                 }
+                $index++;
                
             }
 
-            $hospital_tracks1 = HospitalTrack::find()->where('`id` not in ('.implode(',', $hospital_track_ids).') and `date` ="'.$curr_date.'"')->asArray()->all();
-            $hospital_tracks = HospitalTrack::deleteAll('`id` not in ('.implode(',', $hospital_track_ids).') and `date` ="'.$curr_date.'"');
-            
-            $tracks_for_worker = Track_for_worker::deleteAll('`id` not in ('.implode(',', $track_for_worker_ids).')  and `track_id` in (select `id` from `track` where `track_date` ="'.$track->track_date.'")');
-            
-            $hospital_tracks2 =[];
-            
-            $track_ids = implode(',', $track_ids);
-            $tracks = Track::find()->where('`id` not in ('.$track_ids.') and `track_date` = "'.$curr_date.'"')->all();
-            foreach ($tracks as $key => $track) {
-                $tracks_for_worker = Track_for_worker::deleteAll(['track_id'=>$track -> id]);
-                $hospital_tracks2 = HospitalTrack::find()->where(['combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date])->asArray()->all();
-                $hospital_tracks = HospitalTrack::deleteAll(['combined_line'=>$track->line_number,'region'=>$track->region,'description'=>$track->description,'shift'=>$track->shift,'date'=>$track->track_date]);
-                $track -> delete();
+            $tracks_for_worker = Track_for_worker::find()->where('(track_id not in('.implode(',', $track_ids).') or worker_id not in ('.implode(',', $workers_ids).')) and track_id  in (select id from track where track_date="'.$curr_date.'")')->all();
+            foreach ($tracks_for_worker as $key => $track_for_worker) {
+                //$tracks_for_worker = Track_for_worker::deleteAll(['track_id'=>$track -> id]);
+                $track = Track::find()->where(['id'=>$track_for_worker->track_id])->one();
+                if($track){
+                    $hospital_tracks_deleted = HospitalTrack::find()->where(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id])->asArray()->all();
+                    $hospital_tracks = HospitalTrack::deleteAll(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id]);
+                    $hospital_tracks_deleted = array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_tracks_deleted);
+                    $result = array_merge($result,$hospital_tracks_deleted);
+                }
+                $track_for_worker->delete();
             }
-            $hospital_tracks1 = array_merge($hospital_tracks1,$hospital_tracks2);
-            foreach ($hospital_tracks1 as $key => $value) {
-                array_push($result,['status'=>0,'details'=>$value]);
-            }
-            //print_r(json_encode(['$hospital_tracks1'=>$hospital_tracks1,'$hospital_tracks2'=>$hospital_tracks2,'$workers_ids'=>implode(',', $workers_ids),'$hospital_track_ids'=>implode(',', $hospital_track_ids)]));die();   
             print_r(json_encode($result));die();
         }
         
@@ -2081,6 +2134,7 @@ class TrackController extends Controller
 			foreach ($tracks_in_date as $value) {
 			    $orderby = 'track_order';
 			    $workers = Track_for_worker::find()->where(['track_id'=>$value['id']])->orderBy($orderby)->all();
+                //$track[$i]['workers_array'] = (array)$workers;
                 if($workers){
     				$track[$i]['track'] = $value;
     				$static_line = Staticlines::findOne(['line_number'=>$value['line_number']]); 
@@ -2372,7 +2426,10 @@ class TrackController extends Controller
 			// die($updated_worker->hour);
 			// $updated_worker->save(false);
 		// }
-	for($index = 0;$index<$length;$index++){
+		
+		
+        
+    	for($index = 0;$index<$length;$index++){
 			$updated_worker = Track_for_worker::findOne(['worker_id'=>$workers[$index]->id,'track_id'=>$track_id]);
 			$unixTimeStamp = strtotime($workers[$index]->hour);
 			$updated_worker->hour = date('H:i:s', $unixTimeStamp );
@@ -2386,6 +2443,7 @@ class TrackController extends Controller
 		$orderby = 'track_order';
 		
 		$all_workers = Track_for_worker::find()->where(['track_id'=>$track_id])->orderBy($orderby)->all();	
+        
 		foreach ($all_workers as $key => $updated_worker) {
 			/*----------------------------*/
 			if(($collecting==1&&$key==(count($all_workers)-1))||(!$collecting==0&&$key==0)){
@@ -2420,7 +2478,7 @@ class TrackController extends Controller
 			/*----------------------------*/
 		}
 	
-		print_r(json_encode(["changed"]));
+		print_r(json_encode(['status'=>"ok","msg"=>"changed"]));
 	}
 	
 	public function actionUpdateworkerorder()
