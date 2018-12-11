@@ -908,11 +908,16 @@ var xlf = document.getElementById('xlf');
     			if(!$scope.workers_details){
     				return false;
     			}
-    			for(var shift in $scope.workers_details[id]){
-    				if($scope.workers_details[id][shift].length>1){
-    					return true;
-    				}
-    			}
+    			
+			  	if(0+($scope.workers_details[id][1]?$scope.workers_details[id][1].length:0)+
+			  		($scope.workers_details[id][3]?$scope.workers_details[id][3].length:0)
+			  		+($scope.workers_details[id][5]?$scope.workers_details[id][5].length:0)>1)
+			  		return true;
+				if(0+($scope.workers_details[id][2]?$scope.workers_details[id][2].length:0)+
+			  		($scope.workers_details[id][4]?$scope.workers_details[id][4].length:0)
+			  		+($scope.workers_details[id][6]?$scope.workers_details[id][6].length:0)>1)
+				  	return true;
+    			
     			return false;
     		}  
     		

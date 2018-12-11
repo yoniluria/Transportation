@@ -14,11 +14,13 @@
 <div class="container" >
 	<div class="line add_worker" >
 		<h3 class="cot-div" >{{text}} עובד</h3>
-		
-		<input class="col-margin" ng-model="newWorker.id" placeholder="מ.ז:" required  ng-class="{'error' :(submitted&&!newWorker.id)}">
-		<input class="col-margin" ng-model="newWorker.name" placeholder="שם:" required  ng-class="{'error' :(submitted&&!newWorker.name)}" >
-		<input class="col-margin" ng-model="newWorker.phone" placeholder="טלפון:" required>
-		<input class="col-margin" ng-model="newWorker.department" placeholder="מחלקה:" required>
+		<form name="workerForm" ng-submit="submitted=true;(workerForm.$invalid||save())" novalidate>
+		<input class="col-margin" name="id" ng-model="newWorker.id" placeholder="מ.ז:"  ng-pattern="/^[0-9]{1,9}$/"  required  ng-class="{'error' :(submitted&&(!newWorker.id||workerForm.id.$error.pattern))}">
+		<span ng-show="submitted&&(!newWorker.id||workerForm.id.$error.pattern)" class="help-block">עליך למלא את השדה ב-9 ספרות בלבד.</span>
+		<input class="col-margin" name="name" ng-model="newWorker.name" placeholder="שם:" required  ng-class="{'error' :(submitted&&!newWorker.name)}" >
+		<span ng-show="submitted&&!newWorker.name" class="help-block" style="margin-right: 12.5%;">זהו שדה חובה.</span>
+		<input class="col-margin" ng-model="newWorker.phone" placeholder="טלפון:">
+		<input class="col-margin" ng-model="newWorker.department" placeholder="מחלקה:">
 		<!-- <input class="col-margin" ng-model="newWorker.regular_instructions" placeholder="הנחיות קבועות:"> -->
 		<div style="display: inline-block;">
 			<label style="display: inline;">קו מבית חולים: </label>
@@ -53,7 +55,8 @@
 				value="{{address.original_address}}"
 				class="col-margin_address" style="margin-bottom: 0;"
 				required  ng-class="{'error' :(submitted&&!address.original_address)}"/> -->
-				<input class="col-margin" style="width: 270px;" type="text" required ng-model="address.original_address" placeholder="כתובת ראשית" />
+				<input class="col-margin" name="address" style="width: 270px;" type="text" required ng-model="address.original_address" placeholder="כתובת ראשית" />
+				<span ng-show="submitted&&!address.original_address" class="help-block">זהו שדה חובה.</span>
 				 <!-- ng-blur="getDistance($index)" -->
 				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
 				<!--here <span ng-show="submitted&&(!address.lat||!address.lng||!address.original_address)" class="help-block" style="position:absolute 	;display:block;">כתובת לא תקינה</span> -->
@@ -65,8 +68,8 @@
 			
 			<label style="display: inline">			
 				<i class="fa fa-paperclip" style="display: inline" aria-hidden="true"></i>צרף מפה
-				<input type="file" style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index)" accept="image/*"/>
-				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.map_file}}" />
+				<input type="file"  style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index,)" accept="image/*"/>
+				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.id+'/'+address.map_file}}" />
 			</label>
 		</div>
 		<!-- <div class="checkbox-div" style="display: inline;" >
@@ -91,18 +94,18 @@
 				value="{{address.original_address}}"
 				class="col-margin_address" style="margin-bottom: 0;"
 				required  ng-class="{'error' :(submitted&&(!address.original_address||!address.lat||!address.lng||!address.country||!address.city||!address.street||!address.street_number))}"/> -->
-				<input class="col-margin" style="width: 270px;" type="text" required ng-model="address.original_address" placeholder="כתובת משנית" />
+				<input class="col-margin" style="width: 270px;" type="text" ng-model="address.original_address" placeholder="כתובת משנית" />
 				<!-- <span ng-show="orderForm.address.$invalid && !orderForm.address.$pristine" class="help-block" style="position:relative;display:inline-block">כתובת לא תקינה</span> -->
 				<!--here <span ng-show="submitted&&(!address.lat||!address.lng||!address.country||!address.city||!address.street||!address.street_number)" class="help-block" style="position:absolute 	;display:block">כתובת לא תקינה</span> -->
 		<!-- <input class="col-margin" ng-model="address.line_number" style="margin-bottom: 0;" placeholder="מספר קו:" >
 		<input class="col-margin" ng-model="address.sub_line
 		" style="margin-bottom: 0;" placeholder="שבץ להצגה בתת קו:" > -->
 		
-		<div class="checkbox-div" style="display: inline;" >
+	<div class="checkbox-div" style="display: inline;" >
 			<label style="display: inline">			
 				<i class="fa fa-paperclip" style="display: inline" aria-hidden="true"></i>צרף מפה
 				<input type="file" style="display: none" onchange="angular.element(this).scope().uploadImage(event,angular.element(this).scope().$index)" accept="image/*"/>
-				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.map_file}}" />
+				<img style="width: 50px" ng-if="address.map_file" ng-src="{{imgUrl+address.id+'/'+address.map_file}}" />
 			</label>
 		</div>
 		<!-- <div class="checkbox-div" style="display: inline;" >
@@ -125,12 +128,12 @@
 				<option value=""></option>    
       		</select> -->
 		</div>
-		<span ng-show="submitted&&(!newWorker.id||!newWorker.name)" class="help-block" style="position:absolute 	;display:inline-block">מלא שדות נדרשים</span>
   </div>
   
 		<!--<input  class="col-margin" style="margin-bottom: 0;" placeholder="׳”׳ ׳—׳™׳•׳× ׳§׳‘׳•׳¢׳•׳×:" value="">-->
-		<button class="float-btn btn" style="margin: 0; padding: 0 16px;margin-top: 10px;" ng-disabled="!newWorker.id || !newWorker.name" ng-click="submitted=true;save()">שמור עובד</button>
-		<button style="width: calc(19% - 23px);float: left;margin-left: 28%;margin-top: 10px;" ng-click="addAddress()">הוסף כתובת משנית נוספת</button>
+		<button type="submit" class="float-btn btn" style="margin: 0; padding: 0 16px;margin-top: 10px;">שמור עובד</button>
+		<button type="button" style="width: calc(19% - 23px);float: left;margin-left: 28%;margin-top: 10px;" ng-click="addAddress()">הוסף כתובת משנית נוספת</button>
+		</form>
 	</div>
 		<!-- <button class="float-btn" style="margin: 0; padding: 0 16px;" ng-click="submitted=true;(!newWorker.name||!newWorker.phone||!newWorker.id||!newWorker.department||save())">שמור עובד</button> -->
 	<!-- <button class="float-btn" >הנחיות קבועות</button> -->

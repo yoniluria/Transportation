@@ -7,7 +7,7 @@
   /** @ngInject */
   function OnerouteCtrl($scope,$rootScope,$http,$location,$state,$timeout,connectGETService,connectPOSTService,connectDELETEService,$filter) {
     	$rootScope.module=        'oneroute';
-    	$rootScope.imgUrl="http://185.70.251.252/transportation/server/web/img/maps/";
+    	//$rootScope.imgUrl="http://185.70.251.252/transportation/server/web/img/maps/";
     	$scope.controller=   	   'track';
     	$scope.radio_day = 'all_week';
     	$rootScope.headline='נהול מסלול ' + $rootScope.convertToHebrew($rootScope.date) + ' ' + $filter('date')($rootScope.date, "dd/MM/yyyy") + ' ' + ($scope.track?$scope.track.track.shift:'');

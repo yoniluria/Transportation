@@ -88,7 +88,7 @@ class WorkerController extends Controller
 		echo $distance;
 	}
 	
-	 public function actionUploadimage()
+/*	 public function actionUploadimage()
  {
  	$upload_base_dir="img/maps/";
     //$upload_time_dir=date('Y')."/".date('m')."/".date('d')."/"; // setup directory name
@@ -112,8 +112,78 @@ class WorkerController extends Controller
     echo json_encode([$image]);die();
     }return;
     //die($image);
- }
+ }*/
  
+     public function actionUploadimage($id = null)
+ {
+     $value = $_POST;
+    $address = isset($value->id)?Address::find()->where(['id'=>$value->id])->one():new Address();
+     if(!$address){
+          $address=new Address();
+     }              
+     if(isset($value->lng)){
+        $address->lng=$value->lng;
+     }
+     if(isset($value->lat)){
+        $address->lat=$value->lat;
+     }          
+     //$address->worker_id = $id;
+               
+       if(isset($value->original_address))
+        $address->original_address = trim($value->original_address);              
+       if(isset($value->street))
+           $address->street=$value->street;
+       if(isset($value->street_number))
+        $address->street_number=$value->street_number;
+       if(isset($value->city))
+        $address->city=$value->city;
+        if(isset($value->country))
+        $address->country=$value->country;
+        if(isset($value->regular_instructions))
+            $address->regular_instructions=$value->regular_instructions;
+        if(isset($value->escort))
+            $address->escort=$value->escort;
+        if(isset($value->travel_time))  
+            $address->travel_time=$value->travel_time;
+        
+        if(isset($value->combined_line))    
+            $address->combined_line=$value->combined_line;
+        
+        if(isset($value->sub_line)) 
+            $address->sub_line=$value->sub_line;
+        
+        
+        if($address->save(false)){
+            }
+        $address_id = $address->id;
+    $upload_base_dir="img/maps/$address_id/";
+    //$upload_time_dir=date('Y')."/".date('m')."/".date('d')."/"; // setup directory name
+    // $upload_dir = $upload_base_dir.$upload_time_dir;
+    $upload_dir = $upload_base_dir;
+    if (!file_exists($upload_dir)) {
+        mkdir($upload_dir, 0777, true);  //create directory if not exist
+    }
+    $fileinform=$_FILES;
+    if(isset($_FILES["file"]))
+    {
+    //echo $_FILES["file"]['name'].' - '.basename($_FILES['file']['name']);die();
+    $image_name=basename($_FILES['file']['name']);
+    $image=time().'_'.$image_name;
+    // if(!file_exists($upload_dir.$_FILES['file']['tmp_name']))
+    // move_uploaded_file($_FILES['file']['tmp_name'],$upload_dir.$image); // upload file
+    // $image=$image_name;
+    // if(!file_exists($upload_dir.$_FILES['file']['name']))
+    // move_uploaded_file($_FILES['file']['tmp_name'],$upload_dir.$image); // upload file
+    move_uploaded_file($_FILES['file']['tmp_name'],$upload_dir.$image); // upload file
+
+    $address->map_file=$image;
+    if($address->save(false)){
+    }
+    
+    echo json_encode(['id'=>$address_id,'img'=>$image]);die();
+    }return ;
+    //die($image);
+ }
  
 	
 	public function actionDeleteworker(){
@@ -220,113 +290,126 @@ class WorkerController extends Controller
     {
             $data = json_decode(file_get_contents("php://input"));  
              // $worker = Worker::find()->where(['id'=>$data->id])->one();
-			 // if($worker){
-			 	// echo __LINE__;
-				 // echo $worker->id;
-			 		// print_r("ת.ז. קימת במערכת");
-			 	// die();
-			 // }
-			 // $model = Worker::find()->where(['id'=>$data->id])->one();
-			 $model = Worker::findOne($data->id);
-			 // $new = 0;
-			 if(!$model){
-			 	$model= new Worker();
-				 $model->id=$data->id;
-				 // $new = 1;
-			 }
-			 else{              
-			 	Address::deleteAll(['worker_id'=>$model->id]);
-			 }
-			 
+             // if($worker){
+                // echo __LINE__;
+                 // echo $worker->id;
+                    // print_r("ת.ז. קימת במערכת");
+                // die();
+             // }
+             // $model = Worker::find()->where(['id'=>$data->id])->one();
+             $model = Worker::findOne($data->id);
+             // $new = 0;
+             if(!$model){
+                $model= new Worker();
+                 $model->id=$data->id;
+                 // $new = 1;
+             }
+             /*
+             else{              
+                              Address::deleteAll(['worker_id'=>$model->id]);
+                          }*/
+             
+             
              // $model= new Worker();
              // $model->id=$data->id;
              if(isset($data->name)){
-             	$model->name = $data->name;
+                $model->name = $data->name;
              }
-			 if(isset($data->phone)){
-			 	$model->phone = $data->phone;
-			 }
-			 if(isset($data->department)){
-			 	$model->department = $data->department;
-			 }
-			 if(isset($data->regular_instructions)){
-			 	$model->regular_instructions = $data->regular_instructions;	
-			 }
-			 if(isset($data->sub_line)){
-			 	$model->sub_line = $data->sub_line;	
-			 }
-			
+             if(isset($data->phone)){
+                $model->phone = $data->phone;
+             }
+             if(isset($data->department)){
+                $model->department = $data->department;
+             }
+             if(isset($data->regular_instructions)){
+                $model->regular_instructions = $data->regular_instructions; 
+             }
+             if(isset($data->sub_line)){
+                $model->sub_line = $data->sub_line; 
+             }
+            
         if($model->save(false)){
         }
-		
+        
         else {echo "error";die();}
               // $arr = [];
-			  // array_push($arr,$data->addresses);
-			  // &&isset($data->addresses[0]->lng)!=""
-			  if($data->addresses){
+              // array_push($arr,$data->addresses);
+              // &&isset($data->addresses[0]->lng)!=""
+              if($data->addresses){
              foreach ($data->addresses as $value) {
-             	$address=new Address();
-				 if(isset($value->lng)){
-				 	$address->lng=$value->lng;
-				 }
-               	 if(isset($value->lat)){
-				 	$address->lat=$value->lat;
-				 }	
                
-               $address->worker_id=$model->id;
-               if ($value === reset($data->addresses)){
-               		$address->primary_address = 1;//$data->adresses->primary_address;
-               		$address->is_current = 1;
-               		// $model->combined_line=$value->line_number.$value->sub_line;
-					// $model->save(false);
-					
-               }
-			   // else{
-			   	// $address->is_current=$value->is_current;
-			   // }
-			   
-			   if(isset($value->original_address))
-               $address->original_address = trim($value->original_address);
-               //$address->address=$value->address;
-               
-               if(isset($value->street))
-            	   $address->street=$value->street;
-			   
-			   if(isset($value->street_number))
-                $address->street_number=$value->street_number;
-			   if(isset($value->city))
-                $address->city=$value->city;
-                // $address->line_number=$value->line_number;
-                
-                if(isset($value->country))
-                $address->country=$value->country;
-				
-				
-				// $address->sub_line=$value->sub_line;
-				if(isset($value->regular_instructions))
-					$address->regular_instructions=$value->regular_instructions;
-				
-				if(isset($value->escort))
-					$address->escort=$value->escort;
-					
-				if(isset($value->travel_time))	
-				$address->travel_time=$value->travel_time;
-				// $address->is_current=$value->is_current;
-				
-				if(isset($value->combined_line))	
-				$address->combined_line=$value->combined_line;
-				
-				if(isset($value->sub_line))	
-				$address->sub_line=$value->sub_line;
-				
-				if(isset($value->map_file))
-					$address->map_file=$value->map_file[0];
-                if($address->save(false)){
- 					}
-                  else {
-                  	return json_encode(["error"]);}
+                    $address = isset($value->id)?Address::find()->where(['id'=>$value->id])->one():null;
+                    if(isset($value->original_address)&&$value->original_address!=''){
+                        if(!$address){
+                          $address=new Address();
+                     }               
+                     if(isset($value->lng)){
+                        $address->lng=$value->lng;
+                     }
+                     if(isset($value->lat)){
+                        $address->lat=$value->lat;
+                     }  
+                   
+                   $address->worker_id=$model->id;
+                   if ($value === reset($data->addresses)){
+                        $address->primary_address = 1;//$data->adresses->primary_address;
+                        $address->is_current = 1;
+                        // $model->combined_line=$value->line_number.$value->sub_line;
+                        // $model->save(false);
+                        
+                   }
+                   // else{
+                    // $address->is_current=$value->is_current;
+                   // }
+                   
+                   if(isset($value->original_address))
+                   $address->original_address = trim($value->original_address);
+                   //$address->address=$value->address;
+                   
+                   if(isset($value->street))
+                       $address->street=$value->street;
+                   
+                   if(isset($value->street_number))
+                    $address->street_number=$value->street_number;
+                   if(isset($value->city))
+                    $address->city=$value->city;
+                    // $address->line_number=$value->line_number;
+                    
+                    if(isset($value->country))
+                    $address->country=$value->country;
+                    
+                    
+                    // $address->sub_line=$value->sub_line;
+                    if(isset($value->regular_instructions))
+                        $address->regular_instructions=$value->regular_instructions;
+                    
+                    if(isset($value->escort))
+                        $address->escort=$value->escort;
+                        
+                    if(isset($value->travel_time))  
+                    $address->travel_time=$value->travel_time;
+                    // $address->is_current=$value->is_current;
+                    
+                    if(isset($value->combined_line))    
+                    $address->combined_line=$value->combined_line;
+                    
+                    if(isset($value->sub_line)) 
+                    $address->sub_line=$value->sub_line;
+                    
+                    if(isset($value->map_file))
+                        $address->map_file=$value->map_file;
+                    if($address->save(false)){
+                        }
+                      else {
+                        return json_encode(["error"]);
+                      }
+                    }
+                   else if($address){
+                       $address->delete();
+                   }
+                     
                 }
-                }
+            }
          // print_r($model);
          Address::deleteAll(['original_address'=>null]);
          return json_encode(["ok"]);

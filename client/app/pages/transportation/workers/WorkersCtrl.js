@@ -29,9 +29,10 @@
 	        formData.append("file",event.target.files[0]);
 	  		uploadImageService.fn($scope.controller+'/uploadimage',formData).then(function(data) {
 	  					document.getElementById('loader').style.display='none';
-	  			       $scope.map_file=data.data;
-	  			       $scope.addresses[index].map_file=data.data;
-	  			       $rootScope.image_file= data.data;
+	  			       $scope.map_file=data.data.img;
+	  			       $scope.addresses[index].id=data.data.id;
+	  			       $scope.addresses[index].map_file=data.data.img;
+	  			       $rootScope.image_file= data.data.img	;
 	  			       //$state.reload();
 							
 			 },function(e){
