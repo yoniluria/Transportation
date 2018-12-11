@@ -22,21 +22,27 @@
 
 //upload map image
 	 $scope.uploadImage=function(event,index){
+	 	
 	 	document.getElementById('loader').style.display='block';
-	  	 	if(!event.target.files||event.target.files.length==0)
+	  	   if(!event.target.files||event.target.files.length==0)
 			   return;
-	        var formData=new FormData();
+  	 		var formData=new FormData();
 	        formData.append("file",event.target.files[0]);
+	        formData.append("address",JSON.stringify($scope.addresses[index]));
 	  		uploadImageService.fn($scope.controller+'/uploadimage',formData).then(function(data) {
 	  					document.getElementById('loader').style.display='none';
-	  			       $scope.map_file=data.data;
-	  			       $scope.addresses[index].map_file=data.data;
-	  			       $rootScope.image_file= data.data;
+	  			       $scope.map_file=data.data.img;
+	  			       $scope.addresses[index].id=data.data.id;
+	  			       $scope.addresses[index].map_file=data.data.img;
+	  			       $rootScope.image_file= data.data.img	;
 	  			       //$state.reload();
 							
 			 },function(e){
 			 	console.log(e);
 		     });
+  	 	
+		   
+	        
 	  	 };
 
 

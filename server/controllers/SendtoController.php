@@ -10,6 +10,7 @@ use app\models\Messengers;
 use app\models\HospitalTrack;
 use app\models\Track;
 use app\models\Track_for_worker;
+use app\models\Sms;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +28,68 @@ class SendtoController extends Controller {
 		return parent::beforeAction($action);
 	}
 
+
+    
+    public function actionSend_sms_to_workers()
+    {
+        $data = json_decode(file_get_contents("php://input"));
+        $workers = $data->data;
+        $failed_sms = [];
+        foreach ($workers as $key => $worker) {
+            $shift_arr = explode("-", $worker->shift);
+            $shift = $shift_arr[0];
+            $shift_type = $shift_arr[1];
+            $msg = $worker->worker_name . " שלום,\r\n"
+            .$shift_type." למשמרת "
+            .$shift." ב-".date("d.m.Y", strtotime($worker->date))
+            ." נקבע לשעה ". date('H:i',strtotime($worker->hour))
+            . ".\r\n לאישור השיב/י 11.";
+            $result = Sms::sendSms($msg,$worker->phone);
+            if($result->status != 'ok'){
+                array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
+            }else{
+                $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
+                if($hospital_track){
+                    $hospital_track -> is_sent = 1;
+                    $hospital_track ->save(FALSE);
+                }
+            }
+            
+        }
+        print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms]));die();
+    }
+    
+    
+    public function actionSms_confirm($code)
+    {
+        file_put_contents('sms_cnfirm.txt', json_encode(['phone'=>$_GET['phone'],'code'=>$_GET['code']]));
+        // אם הנוסע השיב 11 יש לסמן אישור הגעה לנוסע הנ"ל(ע"פ מספר טלפון)"
+        if($_GET['code']==11){
+            $phone = $_GET['phone'];
+            $worker = Worker::find()->where(['phone'=>$phone])->one();
+            if($worker){
+                $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sent'=>1])->orderBy('id desc')->one();
+                $hospital_track -> is_confirm = 1;
+                if($hospital_track ->save(FALSE)){
+                    $shift_arr = explode("-", $hospital_track->shift);
+                    $shift = $shift_arr[0];
+                    $shift_type = $shift_arr[1];
+                    $msg = $hospital_track->worker_name . " שלום,\r\n"."אישורך ל"
+                    .$shift_type." משמרת "
+                    .$shift." ב-".date("d.m.Y", strtotime($hospital_track->date))
+                    ." התקבל בהצלחה.";
+                    //$result = Sms::sendSms($msg,$phone);
+                        //מה שמדפיסים חוזר כתשובה ל-SMS
+                        print_r($msg);die();
+                }
+                
+            }
+        }else{
+            
+        }
+    }
+    
+    
 	public function actionGet_hospital_email()
 	{
 		$data = json_decode(file_get_contents("php://input"));
@@ -462,5 +525,6 @@ class SendtoController extends Controller {
 				$mail_sent=$mail->send();
 	      
 	}	
+    
 
 }

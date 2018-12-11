@@ -342,6 +342,7 @@
 					   else{
 					   	$http.post($rootScope.baseUrl+$scope.controller+'/updateordersfromxls',{data:tmp,filter:$scope.update_xls_filter_lines.map(l=>l.line_number),radio_day:$scope.radio_day_update_xls})
 						.success(function(data) {
+
 									if(data[0]!=undefined&&data[0]['details']==undefined&&data[0].startsWith("line")){
 					       	  			data = data[0].replace("line","");
 					       	  			$rootScope.message = "הקובץ לא עלה בהצלחה, נמצאה שגיאה באקסל בשורה "+data;
@@ -908,11 +909,16 @@ var xlf = document.getElementById('xlf');
     			if(!$scope.workers_details){
     				return false;
     			}
-    			for(var shift in $scope.workers_details[id]){
-    				if($scope.workers_details[id][shift].length>1){
-    					return true;
-    				}
-    			}
+    			
+			  	if(0+($scope.workers_details[id][1]?$scope.workers_details[id][1].length:0)+
+			  		($scope.workers_details[id][3]?$scope.workers_details[id][3].length:0)
+			  		+($scope.workers_details[id][5]?$scope.workers_details[id][5].length:0)>1)
+			  		return true;
+				if(0+($scope.workers_details[id][2]?$scope.workers_details[id][2].length:0)+
+			  		($scope.workers_details[id][4]?$scope.workers_details[id][4].length:0)
+			  		+($scope.workers_details[id][6]?$scope.workers_details[id][6].length:0)>1)
+				  	return true;
+    			
     			return false;
     		}  
     		
