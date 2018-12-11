@@ -38,84 +38,58 @@ class WorkerController extends Controller
       if ($action->id =='saveworker' || $action->id =='getallworkers'|| $action->id =='deleteworker'|| $action->id =='updateworker'||$action->id=='uploadimage'||$action->id=='getworkers'||$action->id=='get_distance') {
             $this->enableCsrfValidation = false;
         }
-	  	header("Access-Control-Allow-Methods: DELETE, POST, GET");
-		header("Access-Control-Allow-Origin: *");
-		header('Access-Control-Allow-Headers: X-CSRF-Token, Origin, Content-Type, X-Auth-Token, Accept');
+        header("Access-Control-Allow-Methods: DELETE, POST, GET");
+        header("Access-Control-Allow-Origin: *");
+        header('Access-Control-Allow-Headers: X-CSRF-Token, Origin, Content-Type, X-Auth-Token, Accept');
         
         return parent::beforeAction($action);
     }
-	
-	protected function getDistance($addressFrom, $addressTo, $unit)
-	{
-	    //Change address format
-	    $formattedAddrFrom = str_replace(' ','+',$addressFrom);
-	    $formattedAddrTo = str_replace(' ','+',$addressTo);
-		
-	    //Send request and receive json data
-	    $geocodeFrom = file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$formattedAddrFrom.'&sensor=false&key=AIzaSyDQpBq1mbjdOdsuUeTPFLX9Z3llJ4Iuuqs');
-	    $outputFrom = json_decode($geocodeFrom);
-	    $geocodeTo = file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$formattedAddrTo.'&sensor=false&key=AIzaSyDQpBq1mbjdOdsuUeTPFLX9Z3llJ4Iuuqs');
-	    $outputTo = json_decode($geocodeTo);
-	    
-	    //Get latitude and longitude from geo data
-	    $latitudeFrom = $outputFrom->results[0]->geometry->location->lat;
-	    $longitudeFrom = $outputFrom->results[0]->geometry->location->lng;
-	    $latitudeTo = $outputTo->results[0]->geometry->location->lat;
-	    $longitudeTo = $outputTo->results[0]->geometry->location->lng;
-	    
-	    //Calculate distance from latitude and longitude
-	    $theta = $longitudeFrom - $longitudeTo;
-	    $dist = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
-	    $dist = acos($dist);
-	    $dist = rad2deg($dist);
-	    $miles = $dist * 60 * 1.1515;
-	    $unit = strtoupper($unit);
-	    if ($unit == "K") {
-	        return ($miles * 1.609344).' km';
-	    } else if ($unit == "N") {
-	        return ($miles * 0.8684).' nm';
-	    } else {
-	        return $miles.' mi';
-	    }
-	}	
-	public function actionGet_distance()
-	{
-		$data = json_decode(file_get_contents("php://input"));
-		$address = $data->address;
-		$addressFrom = $address;
-		$addressTo = 'בית חולים מעייני הישועה בני ברק';
-		$distance = $this->getDistance($addressFrom, $addressTo, "K");
-		echo $distance;
-	}
-	
-/*	 public function actionUploadimage()
- {
- 	$upload_base_dir="img/maps/";
-    //$upload_time_dir=date('Y')."/".date('m')."/".date('d')."/"; // setup directory name
-    // $upload_dir = $upload_base_dir.$upload_time_dir;
-    $upload_dir = $upload_base_dir;
-    if (!file_exists($upload_dir)) {
-		mkdir($upload_dir, 0777, true);  //create directory if not exist
-    }
-    $fileinform=$_FILES;
-    if(isset($_FILES["file"]))
+    
+    protected function getDistance($addressFrom, $addressTo, $unit)
     {
-	//echo $_FILES["file"]['name'].' - '.basename($_FILES['file']['name']);die();
-    $image_name=basename($_FILES['file']['name']);
-    $image=time().'_'.$image_name;
-	// if(!file_exists($upload_dir.$_FILES['file']['tmp_name']))
-    // move_uploaded_file($_FILES['file']['tmp_name'],$upload_dir.$image); // upload file
-    // $image=$image_name;
-    // if(!file_exists($upload_dir.$_FILES['file']['name']))
-    // move_uploaded_file($_FILES['file']['tmp_name'],$upload_dir.$image); // upload file
-    move_uploaded_file($_FILES['file']['tmp_name'],$upload_dir.$image); // upload file
-    echo json_encode([$image]);die();
-    }return;
-    //die($image);
- }*/
- 
+        //Change address format
+        $formattedAddrFrom = str_replace(' ','+',$addressFrom);
+        $formattedAddrTo = str_replace(' ','+',$addressTo);
+        
+        //Send request and receive json data
+        $geocodeFrom = file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$formattedAddrFrom.'&sensor=false&key=AIzaSyDQpBq1mbjdOdsuUeTPFLX9Z3llJ4Iuuqs');
+        $outputFrom = json_decode($geocodeFrom);
+        $geocodeTo = file_get_contents('http://maps.google.com/maps/api/geocode/json?address='.$formattedAddrTo.'&sensor=false&key=AIzaSyDQpBq1mbjdOdsuUeTPFLX9Z3llJ4Iuuqs');
+        $outputTo = json_decode($geocodeTo);
+        
+        //Get latitude and longitude from geo data
+        $latitudeFrom = $outputFrom->results[0]->geometry->location->lat;
+        $longitudeFrom = $outputFrom->results[0]->geometry->location->lng;
+        $latitudeTo = $outputTo->results[0]->geometry->location->lat;
+        $longitudeTo = $outputTo->results[0]->geometry->location->lng;
+        
+        //Calculate distance from latitude and longitude
+        $theta = $longitudeFrom - $longitudeTo;
+        $dist = sin(deg2rad($latitudeFrom)) * sin(deg2rad($latitudeTo)) +  cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+        if ($unit == "K") {
+            return ($miles * 1.609344).' km';
+        } else if ($unit == "N") {
+            return ($miles * 0.8684).' nm';
+        } else {
+            return $miles.' mi';
+        }
+    }   
+    public function actionGet_distance()
+    {
+        $data = json_decode(file_get_contents("php://input"));
+        $address = $data->address;
+        $addressFrom = $address;
+        $addressTo = 'בית חולים מעייני הישועה בני ברק';
+        $distance = $this->getDistance($addressFrom, $addressTo, "K");
+        echo $distance;
+    }
+    
      public function actionUploadimage($id = null)
- {
+ {//print_r($_REQUEST);print_r($_POST);die();
      $value = $_POST;
     $address = isset($value->id)?Address::find()->where(['id'=>$value->id])->one():new Address();
      if(!$address){
@@ -184,106 +158,109 @@ class WorkerController extends Controller
     }return ;
     //die($image);
  }
- 
-	
-	public function actionDeleteworker(){
-		$id = $_REQUEST['id'];
-		Address::deleteAll(['worker_id'=>$id]);
-		Track_for_worker::deleteAll(['worker_id'=>$id]);
-		Worker::deleteAll(['id'=>$id]);
-		die('ok');
-	}
-	
+
+
+
+
+    
+    public function actionDeleteworker(){
+        $id = $_REQUEST['id'];
+        Address::deleteAll(['worker_id'=>$id]);
+        Track_for_worker::deleteAll(['worker_id'=>$id]);
+        Worker::deleteAll(['id'=>$id]);
+        die('ok');
+    }
+    
    public function actionGetallworkers()
    {
-   		$data = json_decode(file_get_contents("php://input"));
-		$workers = Worker::find()->asArray()->all();
+        $data = json_decode(file_get_contents("php://input"));
+        $workers = Worker::find()->asArray()->all();
         $arr=[];
-		if($data){
-			foreach ($workers as $worker) {
-	        	$address = Address::findOne(['worker_id'=>$worker['id'],'is_current'=>1]);
-				if($address){
-					$worker['address'] = $address->original_address;
-				}
-	           $worker['addresses'] = Address::find()->where(['worker_id'=>$worker['id']])->orderBy('id')->asArray()->all();
-				$track_id = $data->track;
-				$track_for_worker = Track_for_worker::find()->where(['worker_id'=>$worker['id'],'track_id'=>$track_id])->one();
-				$worker['instructions'] = $track_for_worker?$track_for_worker->instructions:'';			
-			   $arr[] = $worker;
-	        }
-		}
-		else{
-			foreach ($workers as $worker) {
-	        	$address = Address::findOne(['worker_id'=>$worker['id'],'is_current'=>1]);
-				if($address){
-					$worker['address'] = $address->original_address;
-				}
-	           $worker['addresses'] = Address::find()->where(['worker_id'=>$worker['id']])->orderBy('id')->asArray()->all();			
-			   $arr[] = $worker;
-	        }
-		}       
-		$static_lines = Staticlines::find()->all();
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		return array('workers'=>$arr,'static_lines'=>$static_lines);
+        if($data){
+            foreach ($workers as $worker) {
+                $address = Address::findOne(['worker_id'=>$worker['id'],'is_current'=>1]);
+                if($address){
+                    $worker['address'] = $address->original_address;
+                }
+               $worker['addresses'] = Address::find()->where(['worker_id'=>$worker['id']])->orderBy('id')->asArray()->all();
+                $track_id = $data->track;
+                $track_for_worker = Track_for_worker::find()->where(['worker_id'=>$worker['id'],'track_id'=>$track_id])->one();
+                $worker['instructions'] = $track_for_worker?$track_for_worker->instructions:'';         
+               $arr[] = $worker;
+            }
+        }
+        else{
+            foreach ($workers as $worker) {
+                $address = Address::findOne(['worker_id'=>$worker['id'],'is_current'=>1]);
+                if($address){
+                    $worker['address'] = $address->original_address;
+                }
+               $worker['addresses'] = Address::find()->where(['worker_id'=>$worker['id']])->orderBy('id')->asArray()->all();            
+               $arr[] = $worker;
+            }
+        }       
+        $static_lines = Staticlines::find()->all();
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return array('workers'=>$arr,'static_lines'=>$static_lines);
    }
    public function actionUpdateworker(){
-     $data = json_decode(file_get_contents("php://input")); 	
-	 	$old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->all();
-		// $old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->one();
-		// print_r($old_worker);die();
-	$xxx=Worker::findOne($data->id);
-	// print_r($xxx);die();
-	// die($old_worker[0]->regular_instructions);		
-	 $worker=new Worker();
-	 $worker->id=$data->id;
-	 $worker->name=$data->name;
-	 $worker->phone=$data->phone;
-	 $worker->department=$data->department;
-	 $worker->regular_instructions=$xxx->regular_instructions;
-	 
-	 			if($old_worker!=null){
-				foreach ($old_worker as $yy){
-					$yy = Worker::findOne($data->id);
-					$yy->delete();
-				}
-			}
-	 $worker->save();
-	 ini_set('error_reporting', E_STRICT);
-	 
-	 $old_addresses=Address::find()->where(['worker_id'=>$data->id,'primary_address'=>1])->asArray()->all();
-			// print_r($old_address);die();//""
-			// print_r(json_encode($old_address[0]->city));die();//null
-	$yyy=Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
-	$address=new Address();
-	// print_r($data->addresses[$data->index]);die;
-	//updated details
-	$address->original_address = $data->addresses[$data->index]->original_address;
-	$address->lat = $data->addresses[$data->index]->lat;
-	$address->lng = $data->addresses[$data->index]->lng;
-	$address->country = $data->addresses[$data->index]->country;
-	$address->city = $data->addresses[$data->index]->city;
-	$address->street = $data->addresses[$data->index]->street;
-	$address->street_number = $data->addresses[$data->index]->street_number;
-	// $address->line_number = $data->addresses[$data->index]->line_number;
-	// $address->sub_line = $data->addresses[$data->index]->sub_line;
-	
-	//old details
-	$address->worker_id = $data->id;
-	$address->primary_address = $yyy->primary_address;
-	$address->is_current = $yyy->is_current;
-	$address->escort = $yyy->escort;
-	$address->regular_instructions = $yyy->regular_instructions;
-	$address->travel_time = $yyy->travel_time;
-	$address->map_file = $yyy->map_file;
-				if($old_addresses!=null){
-				foreach ($old_addresses as $yy){
-					$yy = Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
-					$yy->delete();
-				}
-			}
-	$address->save(false);
-	Address::deleteAll(['original_address'=>null]);
-	die('updated');
+     $data = json_decode(file_get_contents("php://input"));     
+        $old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->all();
+        // $old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->one();
+        // print_r($old_worker);die();
+    $xxx=Worker::findOne($data->id);
+    // print_r($xxx);die();
+    // die($old_worker[0]->regular_instructions);       
+     $worker=new Worker();
+     $worker->id=$data->id;
+     $worker->name=$data->name;
+     $worker->phone=$data->phone;
+     $worker->department=$data->department;
+     $worker->regular_instructions=$xxx->regular_instructions;
+     
+                if($old_worker!=null){
+                foreach ($old_worker as $yy){
+                    $yy = Worker::findOne($data->id);
+                    $yy->delete();
+                }
+            }
+     $worker->save();
+     ini_set('error_reporting', E_STRICT);
+     
+     $old_addresses=Address::find()->where(['worker_id'=>$data->id,'primary_address'=>1])->asArray()->all();
+            // print_r($old_address);die();//""
+            // print_r(json_encode($old_address[0]->city));die();//null
+    $yyy=Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
+    $address=new Address();
+    // print_r($data->addresses[$data->index]);die;
+    //updated details
+    $address->original_address = $data->addresses[$data->index]->original_address;
+    $address->lat = $data->addresses[$data->index]->lat;
+    $address->lng = $data->addresses[$data->index]->lng;
+    $address->country = $data->addresses[$data->index]->country;
+    $address->city = $data->addresses[$data->index]->city;
+    $address->street = $data->addresses[$data->index]->street;
+    $address->street_number = $data->addresses[$data->index]->street_number;
+    // $address->line_number = $data->addresses[$data->index]->line_number;
+    // $address->sub_line = $data->addresses[$data->index]->sub_line;
+    
+    //old details
+    $address->worker_id = $data->id;
+    $address->primary_address = $yyy->primary_address;
+    $address->is_current = $yyy->is_current;
+    $address->escort = $yyy->escort;
+    $address->regular_instructions = $yyy->regular_instructions;
+    $address->travel_time = $yyy->travel_time;
+    $address->map_file = $yyy->map_file;
+                if($old_addresses!=null){
+                foreach ($old_addresses as $yy){
+                    $yy = Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
+                    $yy->delete();
+                }
+            }
+    $address->save(false);
+    Address::deleteAll(['original_address'=>null]);
+    die('updated');
 }
 
     public function actionSaveworker()
@@ -414,5 +391,5 @@ class WorkerController extends Controller
          Address::deleteAll(['original_address'=>null]);
          return json_encode(["ok"]);
          }
-	
+    
        }

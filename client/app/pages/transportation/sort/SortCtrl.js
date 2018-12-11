@@ -5,7 +5,7 @@
   angular.module('RouteSpeed.pages.sort')
       .controller('SortCtrl', SortCtrl);
   /** @ngInject */
-  function SortCtrl($scope,$rootScope,$http,$location,$state,$filter,$timeout) {
+  function SortCtrl($scope,$rootScope,$http,$location,$state,$filter,$timeout,connectPOSTService) {
     	$rootScope.module=        'sort';
     	$scope.controller=   	   'sort';
     	$rootScope.headline = 'מיין משלוח';
@@ -52,7 +52,6 @@
 	   	  				angular.element('#saved-toggle').trigger('click');
 					}
 				}
-				
 				var selectedTracks = $rootScope.selectedTracks;
 				$rootScope.selectedTracks = [];
 				angular.forEach($scope.tracks,function(track){
@@ -121,6 +120,41 @@
 		function(){
 			getTracksByDate();
 		});    	
+
+		$scope.sendSmsToWorkers = function  () {
+			var workers = []; 
+			angular.forEach($rootScope.selectedTracks,function(track){
+				if(track.isHospital==1){
+					angular.forEach(track.workers,function(worker){
+						worker.date = track.track.date;
+						worker.shift = track.track.shift;
+					});
+					workers = workers.concat(track.workers);
+				}
+			});
+			if(!workers.length){
+				$rootScope.message = "לא נמצאו מסלולי בית חולים.";
+				angular.element('#saved-toggle').trigger('click');
+				return;
+			}
+			connectPOSTService.fn('sendto/send_sms_to_workers', {data:workers}).then(function(data) {
+				if(data.data.status=='ok'){
+					$rootScope.message = "ההודעות נשלחו בהצלחה.";
+					angular.element('#saved-toggle').trigger('click');
+					/*
+					if($data.data.failed_sms.length){
+											
+										}*/
+				}
+				
+			}, function(e) {
+				//document.getElementById('loader').style.display='none';
+				$rootScope.message = "בעיה בשליחת SMS, נסה שוב מאוחר יותר";
+				angular.element('#saved-toggle').trigger('click');
+			});
+		  
+		}
+
     	
     	//first function for initialize the page
     	function init(){

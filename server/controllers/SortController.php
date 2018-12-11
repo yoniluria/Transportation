@@ -27,8 +27,8 @@ class SortController extends Controller
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
     }
-	
-	//get tracks by date
+    
+    //get tracks by date
     public function actionGettracksbydate()
     {
         
@@ -55,6 +55,7 @@ class SortController extends Controller
                         $worker->regular_instructions = $curr_worker->regular_instructions;
                         $worker->hour = $connection->hour;
                         $worker->name = $curr_worker->name;
+                        $worker->phone = $curr_worker->phone;
                         $worker->worker_name = $curr_worker->name;
                         $worker->department = $curr_worker->department;
                         $worker->track_instructions = $connection->instructions;
@@ -100,6 +101,7 @@ class SortController extends Controller
                 foreach ($workers as $worker) {
                      try{
                         $curr_worker = new \stdClass();
+                        $curr_worker->hospital_track_id = $worker->id;
                         // $tracks_of_line_number = Track::find()->where(['line_number'=>$worker->combined_line,'shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
                         // for adding track after load xlsx
                         $tracks_of_line_number = Track::find()->where(['shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
@@ -129,6 +131,7 @@ class SortController extends Controller
                         }
                         $curr_worker->phone = $worker->phone;
                         $curr_worker->department = $worker->department;
+                        $curr_worker->is_confirm = $worker->is_confirm;
                         $tracks[$index]['workers'][] = $curr_worker;
                     }   
                     catch (ErrorException $e){
@@ -144,5 +147,5 @@ class SortController extends Controller
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return (object)['tracks'=>$tracks,'problematic'=>$problematic];     
     }
-	
+    
 }

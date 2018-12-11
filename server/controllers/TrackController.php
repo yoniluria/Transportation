@@ -85,7 +85,16 @@ class TrackController extends Controller
 	$trackModel = Track::findOne($track_id);
 	$collecting = (strpos($trackModel->shift, 'איסוף') !== false)?1:0; 
 	//$orderby = $collecting==1?'hour':'track_order';
-	$orderby = 'track_order';   	
+	$orderby = 'track_order';
+    //בדיקה האם השעות תקינות-מופיעות לפי הסדר-בסדר עולה - כל שעה גדולה מהשעה שלפניה
+    $prev_hour = null;
+    foreach ($workers as $key=>$worker) {
+        $hour = strtotime($worker->hour);
+        if($prev_hour && $prev_hour > $hour){
+            print_r(json_encode(['status'=>"error","msg"=>"שעות לא תקינות!!!!"]));die();
+        }
+        $prev_hour = $hour;
+    }   	
 	foreach ($workers as $key=>$worker) {
 	    $hospital_track = HospitalTrack::find()->where(['combined_line'=>$track->line_number,'shift_id'=>$track->shift_id,'worker_id'=>$worker->id,'date'=>$track->track_date])->one();
         if($hospital_track){
@@ -150,7 +159,8 @@ class TrackController extends Controller
 		}
 		$prev_track = $connection;
 		/*----------------------------*/
-	}  	
+	}
+    print_r(json_encode(['status'=>"ok","msg"=>""]));die();  	
   }
   
   public function actionGet_one_route()
@@ -1446,9 +1456,10 @@ class TrackController extends Controller
                $track -> save();               
            }
            //return (object)['track'=>$track,'$track11'=>$track11?$track11->attributes:null];
+
            return $track;
-        }
-        public function find_worker_to_track($row,$track,$i,$index)
+		}
+public function find_worker_to_track($row,$track,$i,$index)
         {
             try{
                 $hospital_track_deleted = [];
@@ -1576,6 +1587,11 @@ class TrackController extends Controller
                             $sub_track->track_date = $track ->track_date;
                             $sub_track->save(FALSE);
                         }
+                        //test
+                        //$track_for_worker11 = Track_for_worker::find()->where(['track_id'=>$sub_track->id,'worker_id'=>$worker->id])->one();
+                        
+                        //$track_for_worker = Track_for_worker::find()->where(['track_id'=>$sub_track->id,'worker_id'=>$worker->id])->one();
+                        //if(!$track_for_worker){
                         $track_for_worker = new Track_for_worker();
                         $track_for_worker->track_id = $sub_track->id;
                         $track_for_worker->worker_id = $worker->id;
@@ -1596,7 +1612,12 @@ class TrackController extends Controller
                         $track_for_worker->save(FALSE);
                     }
                     else{
- 
+                        //test
+                        //$track_for_worker11 = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
+                        
+                        //$track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
+                        //if(!$track_for_worker){
+                        //save track for worker
                         $track_for_worker = new Track_for_worker();
                         $track_for_worker->track_id = $track->id;
                         $track_for_worker->worker_id = $worker->id;
@@ -1611,7 +1632,10 @@ class TrackController extends Controller
                         $track_for_worker->save(false);
                               
                     }
-
+                    
+                    //$t = Track_for_worker::find()->where('track_id in (select id from track where line_number='.$track->line_number.' and region ="'.$track->region.'" and description="'.$track->description.'" and shift="'.$track->shift.'" and track_date="'.$track->track_date.'")')
+                    //->andWhere(['worker_id'=>$worker->id])->all();
+                    
                 }
             }   
             catch (ErrorException $e){
@@ -1636,6 +1660,7 @@ class TrackController extends Controller
                  'sub_track_id'=>$sub_track?$sub_track->id:null,
                  'hospital_track_deleted'=>array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_track_deleted)
              ];
+            //return $hospital_track->id;
                     
         }
         public function actionUpdateordersfromxls()
@@ -2110,6 +2135,7 @@ class TrackController extends Controller
 			foreach ($tracks_in_date as $value) {
 			    $orderby = 'track_order';
 			    $workers = Track_for_worker::find()->where(['track_id'=>$value['id']])->orderBy($orderby)->all();
+                //$track[$i]['workers_array'] = (array)$workers;
                 if($workers){
     				$track[$i]['track'] = $value;
     				$static_line = Staticlines::findOne(['line_number'=>$value['line_number']]); 
@@ -2401,7 +2427,10 @@ class TrackController extends Controller
 			// die($updated_worker->hour);
 			// $updated_worker->save(false);
 		// }
-	for($index = 0;$index<$length;$index++){
+		
+		
+        
+    	for($index = 0;$index<$length;$index++){
 			$updated_worker = Track_for_worker::findOne(['worker_id'=>$workers[$index]->id,'track_id'=>$track_id]);
 			$unixTimeStamp = strtotime($workers[$index]->hour);
 			$updated_worker->hour = date('H:i:s', $unixTimeStamp );
@@ -2415,6 +2444,7 @@ class TrackController extends Controller
 		$orderby = 'track_order';
 		
 		$all_workers = Track_for_worker::find()->where(['track_id'=>$track_id])->orderBy($orderby)->all();	
+        
 		foreach ($all_workers as $key => $updated_worker) {
 			/*----------------------------*/
 			if(($collecting==1&&$key==(count($all_workers)-1))||(!$collecting==0&&$key==0)){
@@ -2449,7 +2479,7 @@ class TrackController extends Controller
 			/*----------------------------*/
 		}
 	
-		print_r(json_encode(["changed"]));
+		print_r(json_encode(['status'=>"ok","msg"=>"changed"]));
 	}
 	
 	public function actionUpdateworkerorder()

@@ -23,16 +23,22 @@
     		$http.post($rootScope.baseUrl + $scope.controller + '/save_workers',{data:$scope.currTrackForEdit})
     		.success(function(data){
     			document.getElementById('loader').style.display = 'none';
-    			//if($scope.currTrackForEdit.track.shift.indexOf('איסוף')!=-1){
+    			if(data.status != "ok"){
+    				$scope.invalidHoursMessage = data.msg;
+	    			angular.element('#invalidHoursBtn').trigger('click');
+    			}else{
+    				
+    				//if($scope.currTrackForEdit.track.shift.indexOf('איסוף')!=-1){
     				//$scope.currTrackForEdit.workers = $filter('orderBy')($scope.currTrackForEdit.workers, 'hour');
-    			//}
-    			//else{
-    				$scope.currTrackForEdit.workers = $filter('orderBy')($scope.currTrackForEdit.workers, 'track_order');
-    			//}
-    			changeDuration($scope.currTrackForEdit);
-    			$rootScope.message = 'נתוני העובדים נשמרו בהצלחה';
-    			angular.element('#saved-toggle').trigger('click');
-    			getOneRoute($rootScope.track.track.id);
+	    			//}
+	    			//else{
+	    				$scope.currTrackForEdit.workers = $filter('orderBy')($scope.currTrackForEdit.workers, 'track_order');
+	    			//}
+	    			changeDuration($scope.currTrackForEdit);
+	    			$rootScope.message = 'נתוני העובדים נשמרו בהצלחה';
+	    			angular.element('#saved-toggle').trigger('click');
+	    			getOneRoute($rootScope.track.track.id);
+    			}
     		})
     		.error(function(){
     			document.getElementById('loader').style.display = 'none';
@@ -296,8 +302,8 @@
     		$http.post($rootScope.baseUrl + $scope.controller + '/changehours',{workers:track.workers,track_id:track.track.id}).success(
 				function(data) {
 					document.getElementById('loader').style.display = 'none';
-					if(data!='changed')
-						$rootScope.message='ארעה שגיאה בשמירת השעות';
+					if(data.status !="ok")
+						$rootScope.message=data.msg;//'ארעה שגיאה בשמירת השעות';
 					else
 						$rootScope.message='השעות נשמרו לפי הסדר הנוכחי';
 					// angular.element('#saved-toggle').trigger('click');

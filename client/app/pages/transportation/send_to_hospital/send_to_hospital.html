@@ -91,7 +91,7 @@
 				                  </tr>
 				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
 				                  <tr ng-repeat-start="worker in track.workers track by $index" class="worker_line" data-id="{{worker.track_id}}" data-track="{{track.track.id}}"  >
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><div class="white_div" style="display: block;" ></div><input style="display: none;" type="checkbox" /></td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><input disabled="disabled" style="display: block;height:18px;" type="checkbox" ng-model="worker.is_confirm"/></td>
 				                  		  <td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{worker.hour|date:'HH:mm'}}</td>
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <td ng-if="!shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{$index+1}}</td>    
