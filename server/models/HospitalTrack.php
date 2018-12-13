@@ -19,7 +19,7 @@ use Yii;
  * @property string $address
  * @property integer $worker_id
  * @property string $worker_name
- * @property boolean $isSent
+ * @property boolean $is_sent
  *
  * @property Shift $shift0
  */
@@ -41,7 +41,7 @@ class HospitalTrack extends \yii\db\ActiveRecord
         return [
             [['combined_line', 'shift_id', 'worker_id'], 'integer'],
             [['date'], 'safe'],
-            [['is_sent','is_confirm'], 'boolean'],
+            [['is_sent','is_sms_sent','is_confirm'], 'boolean'],
             [['region', 'shift', 'phone'], 'string', 'max' => 50],
             [['description', 'address', 'worker_name'], 'string', 'max' => 256],
             [['department'], 'string', 'max' => 100],
@@ -67,7 +67,7 @@ class HospitalTrack extends \yii\db\ActiveRecord
             'address' => 'Address',
             'worker_id' => 'Worker ID',
             'worker_name' => 'Worker Name',
-            'isSent' => 'Is Sent',
+            'is_sent' => 'Is Sent',
         ];
     }
 

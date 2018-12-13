@@ -1,3 +1,35 @@
+<style>
+	.cb {
+  display: none;
+}
+.checkbox_label {
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  font-size: 16px;
+  line-height: 20px;
+  margin: 5px;
+}
+.checkbox_label:before {
+  line-height: 20px;
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0;
+  background-color: #ffffff;
+  border: 1px solid #666666;
+  margin-top: -8px;
+}
+.cb:checked + .checkbox_label:before,
+.checkbox_label:hover:before {
+  content: "\2713";
+  color: #666666;
+  text-align: center;
+  line-height: 16px;
+}
+</style>
 <div class="divsortby" style="margin-top: 25px">
 <button ng-click="sendEmail()" style="display: inline; width: 250px; float: left; margin-left: 50px;">שלח מסלול ל{{sendToNames[forward]}} במייל</button>
 <button ng-click="show_print('content')" style="display: inline; width: 250px; float: left; margin-left: 50px;">הדפס משלוח</button>
@@ -91,7 +123,11 @@
 				                  </tr>
 				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
 				                  <tr ng-repeat-start="worker in track.workers track by $index" class="worker_line" data-id="{{worker.track_id}}" data-track="{{track.track.id}}"  >
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;"><input disabled="disabled" style="display: block;height:18px;" type="checkbox" ng-model="worker.is_confirm"/></td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;">
+				                  		  	<input  disabled="disabled" type="checkbox" class="cb" id="check{{$index}}" ng-model="worker.is_confirm">
+											<label class="checkbox_label" for="check{{$index}}"></label>
+				                  		  	<!--<input disabled="disabled" style="display: block;height:18px;" type="checkbox" ng-model="worker.is_confirm"/>-->
+			                  		  	  </td>
 				                  		  <td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{worker.hour|date:'HH:mm'}}</td>
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <td ng-if="!shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{$index+1}}</td>    

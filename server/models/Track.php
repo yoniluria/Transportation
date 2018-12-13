@@ -16,7 +16,7 @@ use Yii;
  * @property string $description
  * @property string $shift
  * @property integer $shift_id
- * @property boolean $isSent
+ * @property boolean $is_sent
  *
  * @property Shift $shift0
  * @property TrackForWorker[] $trackForWorkers
@@ -39,7 +39,7 @@ class Track extends \yii\db\ActiveRecord
         return [
             [['track_date'], 'safe'],
             [['meesenger', 'line_number', 'shift_id'], 'integer'],
-            [['isSent'], 'boolean'],
+            [['is_sent'], 'boolean'],
             [['region', 'description', 'shift'], 'string', 'max' => 256],
             [['combined_line'], 'string', 'max' => 5],
             [['shift_id'], 'exist', 'skipOnError' => true, 'targetClass' => Shift::className(), 'targetAttribute' => ['shift_id' => 'id']],
@@ -61,7 +61,7 @@ class Track extends \yii\db\ActiveRecord
             'description' => 'Description',
             'shift' => 'Shift',
             'shift_id' => 'Shift ID',
-            'isSent' => 'Is Sent',
+            'is_sent' => 'Is Sent',
         ];
     }
 

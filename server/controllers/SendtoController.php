@@ -50,7 +50,7 @@ class SendtoController extends Controller {
             }else{
                 $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
                 if($hospital_track){
-                    $hospital_track -> is_sent = 1;
+                    $hospital_track -> is_sms_sent = 1;
                     $hospital_track ->save(FALSE);
                 }
             }
@@ -68,7 +68,7 @@ class SendtoController extends Controller {
             $phone = $_GET['phone'];
             $worker = Worker::find()->where(['phone'=>$phone])->one();
             if($worker){
-                $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sent'=>1])->orderBy('id desc')->one();
+                $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('id desc')->one();
                 $hospital_track -> is_confirm = 1;
                 if($hospital_track ->save(FALSE)){
                     $shift_arr = explode("-", $hospital_track->shift);
@@ -299,7 +299,7 @@ class SendtoController extends Controller {
 			foreach ($tracks_ids as $track_id) {
 				$hospital_track = HospitalTrack::findOne($track_id);
 				if($hospital_track){
-					$hospital_track->isSent = TRUE;
+					$hospital_track->is_sent = TRUE;
 					$hospital_track->save(false);
 				}
 			}
@@ -472,7 +472,7 @@ class SendtoController extends Controller {
 			foreach ($tracks_ids as $track_id) {
 				$track = Track::findOne($track_id);
 				if($track){
-					$track->isSent = TRUE;
+					$track->is_sent = TRUE;
 					$track->save(false);
 				}
 			}			
