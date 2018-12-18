@@ -30,33 +30,81 @@ class SendtoController extends Controller {
 
 
     
-    public function actionSend_sms_to_workers()
+    public function actionSend_message_to_workers()
     {
         $data = json_decode(file_get_contents("php://input"));
         $workers = $data->data;
         $failed_sms = [];
+        $phone_numbers = [];
+        $ids = [];
         foreach ($workers as $key => $worker) {
-            $shift_arr = explode("-", $worker->shift);
-            $shift = $shift_arr[0];
-            $shift_type = $shift_arr[1];
-            $msg = $worker->worker_name . " שלום,\r\n"
-            .$shift_type." למשמרת "
-            .$shift." ב-".date("d.m.Y", strtotime($worker->date))
-            ." נקבע לשעה ". date('H:i',strtotime($worker->hour))
-            . ".\r\n לאישור השיב/י 11.";
-            $result = Sms::sendSms($msg,$worker->phone);
-            if($result->status != 'ok'){
-                array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
-            }else{
-                $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
-                if($hospital_track){
-                    $hospital_track -> is_sms_sent = 1;
-                    $hospital_track ->save(FALSE);
-                }
-            }
-            
+            if(!$worker -> is_sent_message){
+                if($worker->message_type == 1||$worker->message_type == "1"){
+                    array_push($phone_numbers,$worker -> phone);
+                    array_push($ids,$worker->hospital_track_id);
+                }else if($worker->message_type == 2||$worker->message_type == "2"){
+                    $result = $this -> send_sms_message($worker);
+                    if($result->status != 'ok'){
+                        array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
+                    }
+                } 
+            }             
         }
-        print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms]));die();
+        if(count($phone_numbers)){
+            $voice_messages_result = $this -> send_voice_messages($phone_numbers);
+            //  print_r(json_encode($voice_messages_result));die();
+            if($voice_messages_result -> status != "ok"){
+                print_r(json_encode($voice_messages_result));die();
+            }else{
+               foreach ($ids as $key => $id) {
+                   $this -> track_sent_update($id);  
+               }
+            }
+        }
+        
+        print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms,'failed_messages'=>'']));die();
+    }
+    public function send_voice_messages($phone_numbers)
+    {
+        
+        $phones_string = implode(':', $phone_numbers);//print_r($phones_string);die();
+        $data = (object)['phones'=>$phones_string];
+        $url = "http://dev.sayyes.co.il/transportation_test/server/api.php?ApiModule=runCampaign";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        //curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response  = curl_exec($ch);
+        curl_close($ch);
+        //$data = file_get_contents("http://dev.sayyes.co.il/transportation_test/server/api.php?ApiModule=runCampaign&phones=".$phones_string);
+        //print_r($response);die();
+        return json_decode($response);
+    }
+    public function send_sms_message($worker)
+    {
+        $shift_arr = explode("-", $worker->shift);
+        $shift = $shift_arr[0];
+        $shift_type = $shift_arr[1];
+        $msg = $worker->worker_name . " שלום,\r\n"
+        .$shift_type." למשמרת "
+        .$shift." ב-".date("d.m.Y", strtotime($worker->date))
+        ." נקבע לשעה ". date('H:i',strtotime($worker->hour))
+        . ".\r\n לאישור השיב/י 11.";
+        $result = Sms::sendSms($msg,$worker->phone);
+        if($result->status == 'ok'){
+            $this -> track_sent_update($worker->hospital_track_id); 
+        }
+        return $result;
+    }
+    public function track_sent_update($id)
+    {
+        $hospital_track = HospitalTrack::find()->where(['id'=>$id])->one();
+        if($hospital_track){
+            $hospital_track -> is_sms_sent = 1;
+            $hospital_track ->save(FALSE);
+        }
     }
     
     
@@ -88,6 +136,104 @@ class SendtoController extends Controller {
             
         }
     }
+
+    public function actionPhone_message()
+    {
+        $phone = $_GET['phone'];
+        $worker = Worker::find()->where(['phone'=>$phone])->one();
+        if(!$worker){
+            print_r("read=t-שגיאה");die();
+        }
+        $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('id desc')->one();//print_r($hospital_track);die();
+        if(!$hospital_track){
+            print_r("read=t-hospital_trackשגיאה");die();
+        }
+        $tracks = Track::find()->where(['shift_id'=>$hospital_track->shift_id,'track_date'=>$hospital_track->date/*,'line_number'=>$hospital_track->combined_line*/])->all();
+        foreach ($tracks as $track) {
+            $track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
+            if($track_for_worker){
+                $hour = $track_for_worker->hour;
+                break;
+            }
+        }
+        if(!$hour){
+           print_r("read=t-שגיאהhour");die(); 
+        }
+        $days = [
+            'ראשון',
+            'שני',
+            'שלישי',
+            'רביעי',
+            'חמישי',
+            'שישי',
+            'שבת',
+        ];
+        $days_in_month = [
+            'ראשון',
+            'שני',
+            'שלישי',
+            'רביעי',
+            'חמישי',
+            'שישי',
+            'שביעי',
+            'שמיני',
+            'תשיעי',
+            'עשירי',
+        ];
+        $months =['יָנוּאָר',
+        'פֶבְּרוּאָר',
+        'מַרְץ',
+        'אַפְּרִיל',
+        'מַאי',
+        'יוּנִי',
+        'יוּלִי',
+        'אוֹגוּסְט',
+        'סֶפְּטֶמְבֶּר',
+        'אוֹקְטוֹבֶּר',
+        'נוֹבֶמְבֶּר',
+        'דֵּצֶמְבֶּר'];
+        $day_in_week = $days[date('w', strtotime($hospital_track->date))];
+        $day_date = date('d', strtotime($hospital_track->date));
+        $day = $day_date>10?".n-".$day_date:".t-".$days_in_month[$day_date-1];
+        $month = $months[date('n', strtotime($hospital_track->date))-1];
+        $year = date('Y', strtotime($hospital_track->date));
+        $hour = date('H', strtotime($track_for_worker->hour));
+        $minutes = date('i', strtotime($track_for_worker->hour));
+        $shift_arr = explode("-", $hospital_track->shift);
+        $shift = $shift_arr[0];
+        $shift_type = $shift_arr[1];
+        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes];
+        return json_encode($data);         
+    }
+
+
+    public function actionPhone_confirm()
+    {
+        file_put_contents('phone_cnfirm.txt', json_encode(['phone'=>$_GET['phone']]));
+        $phone = $_GET['phone'];
+        $worker = Worker::find()->where(['phone'=>$phone])->one();
+        if(!$worker){
+           print_r("שגיאה. לא נמצאו נתונים מתאימים למספר הטלפון!");die();
+        }
+        $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('id desc')->one();
+        if(!$hospital_track){
+           print_r("שגיאה. לא נמצאו נתונים מתאימים למספר הטלפון!");die();
+        }
+        $hospital_track -> is_confirm = 1;
+        if($hospital_track ->save(FALSE)){
+            $shift_arr = explode("-", $hospital_track->shift);
+            $shift = $shift_arr[0];
+            $shift_type = $shift_arr[1];
+            $msg = "אישורך ל"
+            .$shift_type." משמרת "
+            .$shift//." ב-".date("d.m.Y", strtotime($hospital_track->date))
+            ." התקבל בהצלחה";
+            print_r($msg);die();
+        }else{
+           print_r("שגיאה. האישור נכשל,נסה שוב.");die();
+        }
+    }
+
     
     
 	public function actionGet_hospital_email()

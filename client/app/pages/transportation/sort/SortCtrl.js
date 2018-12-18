@@ -122,7 +122,7 @@
 			getTracksByDate();
 		});    	
 
-		$scope.sendSmsToWorkers = function  () {
+		$scope.sendMessageToWorkers = function  () {
 			var workers = []; 
 			angular.forEach($rootScope.selectedTracks,function(track){
 				if(track.isHospital==1){
@@ -138,7 +138,7 @@
 				angular.element('#saved-toggle').trigger('click');
 				return;
 			}
-			connectPOSTService.fn('sendto/send_sms_to_workers', {data:workers}).then(function(data) {
+			connectPOSTService.fn('sendto/send_message_to_workers', {data:workers}).then(function(data) {
 				if(data.data.status=='ok'){
 					$rootScope.message = "ההודעות נשלחו בהצלחה.";
 					angular.element('#saved-toggle').trigger('click');
@@ -146,6 +146,9 @@
 					if($data.data.failed_sms.length){
 											
 										}*/
+				}else{
+					$rootScope.message = data.data.msg;
+					angular.element('#saved-toggle').trigger('click');
 				}
 				
 			}, function(e) {

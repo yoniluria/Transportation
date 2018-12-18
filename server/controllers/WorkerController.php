@@ -216,6 +216,7 @@ class WorkerController extends Controller
 	 $worker->name=$data->name;
 	 $worker->phone=$data->phone;
 	 $worker->department=$data->department;
+     $worker->message_type=isset($data->message_type)?$data->message_type:1;
 	 $worker->regular_instructions=$xxx->regular_instructions;
 	 
 	 			if($old_worker!=null){
@@ -304,6 +305,7 @@ class WorkerController extends Controller
 			 if(isset($data->sub_line)){
 			 	$model->sub_line = $data->sub_line;	
 			 }
+             $model->message_type=isset($data->message_type)?$data->message_type:1;
 			
         if($model->save(false)){
         }

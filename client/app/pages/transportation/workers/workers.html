@@ -33,6 +33,16 @@
 				<option ng-repeat="line in static_lines | orderBy:'line_order'" value="{{line.line_number}}">{{'קו '+ line.line_number + ' ' + line.description}}</option>
 			</select> 
 		</div>
+		 
+	    <input style="width: unset;" type="radio" ng-model="newWorker.message_type" value="1">
+	    <label style="display: inline-block;">
+	   הודעה קולית
+	  </label>
+	    
+	    <input  style="width: unset;"  type="radio" ng-model="newWorker.message_type" value="2">
+	    <label style="display: inline-block;">
+	    	SMS
+	  </label>
 		<!-- <input class="col-margin" list="subLinesList" ng-model="newWorker.sub_line" placeholder="שבץ לתת קו:">
 		<datalist id="subLinesList">
 			<select>
