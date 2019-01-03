@@ -61,6 +61,7 @@ function CallAPI($method, $url, $data = false)
     $phones = $_REQUEST['phones'];
     //$phones="0556790966:0527114280";
     //print_r($phones);die();
+    //print_r(json_encode((object)['status'=>'ok','msg'=>$phones]));die(); 
     $templateId="1";
 
     $token=login();   
@@ -149,4 +150,10 @@ function approve($phone){
     echo 'id_list_message=t-האִישׁור התקבל בהצלחה&go_to_folder=hangup';//.$data; 
     return; 
 }
+
+
+
+
+
+
 ?>

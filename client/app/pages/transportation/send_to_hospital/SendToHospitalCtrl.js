@@ -114,7 +114,7 @@
 		});
 		
 		function init(){
-			if(!$rootScope.forward){
+			if(!$rootScope.selectedTracks){
 				$location.path('/sort');
 			}
 			$scope.shift_id = $rootScope.shift_id;

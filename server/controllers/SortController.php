@@ -100,6 +100,7 @@ class SortController extends Controller
     			$workers = HospitalTrack::find()->where(['combined_line'=>$hospital_track['combined_line'],'shift_id'=>$hospital_track['shift_id'],'date'=>$hospital_track['date']])->all();
     			foreach ($workers as $worker) {
     				 try{
+    				    $w = Worker::findOne($worker -> worker_id);
     				    $curr_worker = new \stdClass();
                         $curr_worker->hospital_track_id = $worker->id;
         				// $tracks_of_line_number = Track::find()->where(['line_number'=>$worker->combined_line,'shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
@@ -129,10 +130,10 @@ class SortController extends Controller
         					$curr_worker->address = $exploded_address[0];
         					$curr_worker->city = $exploded_address[1];
         				}
-        				$curr_worker->phone = $worker->phone;
+        				$curr_worker->phone = $w->phone;
         				$curr_worker->department = $worker->department;
                         $curr_worker->is_confirm = $worker->is_confirm;
-                        $w = Worker::findOne($worker -> worker_id);
+                        //$w = Worker::findOne($worker -> worker_id);
                         $curr_worker->message_type = isset($w->message_type)?$w->message_type:1;
                         $curr_worker->is_sent_message = $worker->is_sms_sent;
         				$tracks[$index]['workers'][] = $curr_worker;

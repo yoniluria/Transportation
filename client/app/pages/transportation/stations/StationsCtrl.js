@@ -313,17 +313,15 @@
 						$http.post($rootScope.baseUrl+$scope.controller+'/saveordersfromxls',{data:tmp,filter:$scope.xls_filter_lines.map(l=>l.line_number),radio_day:$scope.radio_day}).success(
 						function(data) {
 					       	  		document.getElementById('loader').style.display='none';
-					       	  		if(data[0]!=undefined&&data[0].startsWith("line")){
-					       	  			data = data[0].replace("line","");
-					       	  			$rootScope.message = "הקובץ לא עלה בהצלחה, נמצאה שגיאה באקסל בשורה "+data;
-					       	  			angular.element('#saved-toggle').trigger('click');
-					       	  		}
-					       	  		else if(data=='file exists'){
-					       	  			$rootScope.message = 'הקובץ כבר קים במערכת, טען קובץ אחר';
+					       	  		if(data.status != "ok"){
+					       	  			$rootScope.message = data.data;
 					       	  			angular.element('#saved-toggle').trigger('click');
 					       	  		}
 					       	  		else{
 					       	  			$rootScope.message = 'הקובץ נטען בהצלחה';
+					       	  			if(data.warnings!=''){
+					       	  				$rootScope.message = data.warnings;
+					       	  			}
 					       	  			angular.element('#saved-toggle').trigger('click');
 					       	  			return data.data;
 					       	  		}
@@ -342,8 +340,19 @@
 					   else{
 					   	$http.post($rootScope.baseUrl+$scope.controller+'/updateordersfromxls',{data:tmp,filter:$scope.update_xls_filter_lines.map(l=>l.line_number),radio_day:$scope.radio_day_update_xls})
 						.success(function(data) {
-
-									if(data[0]!=undefined&&data[0]['details']==undefined&&data[0].startsWith("line")){
+									document.getElementById('loader').style.display='none';
+					       	  		if(data.status != "ok"){
+					       	  			$rootScope.message = data.data;
+					       	  			angular.element('#saved-toggle').trigger('click');
+					       	  		}
+					       	  		else{
+					       	  			$rootScope.message = 'הקובץ עודכן בהצלחה';
+					       	  			angular.element('#saved-toggle').trigger('click');
+					       	  			$scope.differences = data.data;
+					       	  			$scope.show_differences = true;
+						       	  		$scope.getTracksByDate();
+					       	  		}
+									/*if(data[0]!=undefined&&data[0]['details']==undefined&&data[0].startsWith("line")){
 					       	  			data = data[0].replace("line","");
 					       	  			$rootScope.message = "הקובץ לא עלה בהצלחה, נמצאה שגיאה באקסל בשורה "+data;
 					       	  			angular.element('#saved-toggle').trigger('click');
@@ -351,37 +360,9 @@
 					       	  		else{
 					       	  			document.getElementById('loader').style.display='none';
 						       	  		$rootScope.differences = data;
-						       	  		// var differences = data;
-						       	  		// $rootScope.differences = [];
-						       	  		// angular.forEach(differences,function(difference){
-						       	  			// var details_string = difference.details;
-						       	  			// var status = difference.status;
-	// 					       	  			
-						       	  			// var difference_details = {};
-	// 					       	  			
-						       	  			// // track details
-						       	  			// var track_details = track.split('|');
-						       	  			// var track_description = track_details[0].split(':');
-						       	  			// difference_details.line_number = Number(track_description[0].replace ( /[^\d.]/g, '' ));
-						       	  			// difference_details.region = track_description[0].replace(/[0-9]/g, '');
-						       	  			// difference_details.description = track_description[1];
-						       	  			// difference_details.shift = track_details[1];
-	// 					       	  			
-						       	  			// // worker details
-						       	  			// var worker_details = worker.split('|');
-						       	  			// difference_details.phone = worker_details[0];
-						       	  			// difference_details.department = worker_details[1];
-						       	  			// difference_details.address = worker_details[3] + ' , ' + worker_details[2];
-						       	  			// difference_details.id = worker_details[4];
-						       	  			// difference_details.worker_name = worker_details[5];
-	// 					       	  			
-						       	  			// difference_details.status = status;
-	// 					       	  			
-						       	  			// $rootScope.differences.push(difference_details);
-						       	  		// });
 						       	  		$rootScope.show_differences = true;
 						       	  		$scope.getTracksByDate();
-					       	  		}					  
+					       	  		}*/					  
 					       	  		})
 					       	  		.error(function(){
 					       	  			$rootScope.message='ארעה שגיאה בחישוב השינויים';
@@ -932,7 +913,7 @@ var xlf = document.getElementById('xlf');
     		}     		  		
     		
     		$scope.file = function(){
-    			$rootScope.show_differences = false;
+    			$scope.show_differences = false;
     			angular.element('#xlsx_load').trigger('click');
     		}
     		

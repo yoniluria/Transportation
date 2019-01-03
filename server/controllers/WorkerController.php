@@ -215,6 +215,8 @@ class WorkerController extends Controller
 	 $worker->id=$data->id;
 	 $worker->name=$data->name;
 	 $worker->phone=$data->phone;
+     if($worker->phone)
+        $data_blacklist = $this -> addPhonesToBlacklist([$worker->phone]);
 	 $worker->department=$data->department;
      $worker->message_type=isset($data->message_type)?$data->message_type:1;
 	 $worker->regular_instructions=$xxx->regular_instructions;
@@ -263,7 +265,22 @@ class WorkerController extends Controller
 	Address::deleteAll(['original_address'=>null]);
 	die('updated');
 }
-
+    public function addPhonesToBlacklist($phone_numbers)
+    {
+        
+        $phones_string = implode(':', $phone_numbers);//print_r($phones_string);die();
+        $data = (object)['ApiModule'=>'addPhoneToBlacklist','ApiDID'=>'0772220126','file_name'=>'blacklist.ini','phones'=>$phones_string];
+        $url = "http://register.meser.biz/api-blacklist.php";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response  = curl_exec($ch);
+        curl_close($ch);
+        //print_r($response);die();
+        return json_decode($response);
+    }
     public function actionSaveworker()
     {
             $data = json_decode(file_get_contents("php://input"));  
@@ -295,6 +312,7 @@ class WorkerController extends Controller
              }
 			 if(isset($data->phone)){
 			 	$model->phone = $data->phone;
+                $data_blacklist = $this -> addPhonesToBlacklist([$model->phone]);
 			 }
 			 if(isset($data->department)){
 			 	$model->department = $data->department;

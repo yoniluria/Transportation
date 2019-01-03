@@ -37,22 +37,28 @@ class SendtoController extends Controller {
         $failed_sms = [];
         $phone_numbers = [];
         $ids = [];
+        $warnings = '';
         foreach ($workers as $key => $worker) {
-            if(!$worker -> is_sent_message){
-                if($worker->message_type == 1||$worker->message_type == "1"){
-                    array_push($phone_numbers,$worker -> phone);
-                    array_push($ids,$worker->hospital_track_id);
-                }else if($worker->message_type == 2||$worker->message_type == "2"){
-                    $result = $this -> send_sms_message($worker);
-                    if($result->status != 'ok'){
-                        array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
-                    }
-                } 
-            }             
+            if(!preg_match("/^0\d([\d]{0,1})([-]{0,1})\d{7}$/", $worker->phone)) {
+                $warnings .= " מספר טלפון לא חוקי לעובד ".$worker->worker_name." ".$worker->phone;
+            }else{
+                $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
+                if(!$hospital_track -> is_confirm){
+                    if($worker->message_type == 1||$worker->message_type == "1"){
+                        array_push($phone_numbers,$worker -> phone);
+                        array_push($ids,$worker->hospital_track_id);
+                    }else if($worker->message_type == 2||$worker->message_type == "2"){
+                        $result = $this -> send_sms_message($worker);
+                        if($result->status != 'ok'){
+                            array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
+                        }
+                    } 
+                }
+            }               
         }
         if(count($phone_numbers)){
             $voice_messages_result = $this -> send_voice_messages($phone_numbers);
-            //  print_r(json_encode($voice_messages_result));die();
+             //print_r(json_encode($voice_messages_result));die();
             if($voice_messages_result -> status != "ok"){
                 print_r(json_encode($voice_messages_result));die();
             }else{
@@ -62,7 +68,7 @@ class SendtoController extends Controller {
             }
         }
         
-        print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms,'failed_messages'=>'']));die();
+        print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms,'failed_messages'=>'','warnings'=>$warnings]));die();
     }
     public function send_voice_messages($phone_numbers)
     {
