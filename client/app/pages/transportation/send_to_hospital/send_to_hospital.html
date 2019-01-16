@@ -123,6 +123,7 @@
 				                  </tr>
 				                  <!-- ng-class="{'border_thick':$last}"  ng-class="{'bottom_border':$last&&countOf(worker.track_instructions)<3}" -->
 				                  <tr ng-repeat-start="worker in track.workers track by $index" class="worker_line" data-id="{{worker.track_id}}" data-track="{{track.track.id}}"  >
+				                  		  
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 30px;">
 				                  		  	<input  disabled="disabled" type="checkbox" class="cb" id="check{{$index}}" ng-model="worker.is_confirm">
 											<label class="checkbox_label" for="check{{$index}}"></label>
@@ -131,7 +132,7 @@
 				                  		  <td ng-if="shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{worker.hour|date:'HH:mm'}}</td>
 				                  		  <!-- {{worker.track_order}} -->
 				                  		  <td ng-if="!shift.isCollecting" style="/*padding-top:7px; padding-bottom: 7px;*/width: 60px;">{{$index+1}}</td>    
-				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;">{{worker.worker_name}}  </td>
+				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;"  data-toggle="modal" data-target="#sendMessagesModal" ng-click="selectWorker(track,worker)">{{worker.worker_name}}  </td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 110px;">{{worker.phone}}</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 152px;padding-left: 10px !important;">{{worker.address}}</td>
 				                  		  <td style="/*padding-top:7px; padding-bottom: 7px;*/width: 85px;">{{worker.city}}</td>
@@ -214,6 +215,29 @@
 	</div>
 </div>
 <a target="_blank" href="#/print_page" class="printPage" ></a>
+<div id="sendMessagesModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">שלח הודעה לעובד {{selectedWorker.worker_name}}:</h4>
+      </div>
+      <div class="modal-body">
+			<p>{{messageText}}</p>
+			
+      </div>
+      <div class="modal-footer">
+					
+					<button type="button" style="width: 45%;float: right;margin: 0;padding: 0 5%;" class="btn" data-dismiss="modal" ng-click="sendTestMessage(selectedWorker)">
+						שלח הודעת טסט
+					</button>
+					<button type="button" style="width: 45%;float:left;margin: 0;padding: 0 5%;" class="btn"  data-dismiss="modal" ng-click="sendMessageToWorker(selectedWorker)">
+						שלח הודעה לעובד
+					</button>
+				</div>
+    </div>
+  </div>
+</div>
 <style>
 table#t01{
 	 width:100%;

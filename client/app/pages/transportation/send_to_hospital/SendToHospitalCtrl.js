@@ -90,7 +90,95 @@
 				document.getElementById('loader').style.display = 'none';
 			});*/
 		}
-		
+		$scope.selectWorker = function  (track , worker) {
+			$scope.selectedWorker = worker;
+			var days = [
+	            'ראשון',
+	            'שני',
+	            'שלישי',
+	            'רביעי',
+	            'חמישי',
+	            'שישי',
+	            'שבת',
+	        ];
+	        var days_in_month = [
+	            'ראשון',
+	            'שני',
+	            'שלישי',
+	            'רביעי',
+	            'חמישי',
+	            'שישי',
+	            'שביעי',
+	            'שמיני',
+	            'תשיעי',
+	            'עשירי',
+	        ];
+	        var months = [
+	            'יָנוּאָר',
+	            'פֶבְּרוּאָר',
+	            'מַרְץ',
+	            'אַפְּרִיל',
+	            'מַאי',
+	            'יוּנִי',
+	            'יוּלִי',
+	            'אוֹגוּסְט',
+	            'סֶפְּטֶמְבֶּר',
+	            'אוֹקְטוֹבֶּר',
+	            'נוֹבֶמְבֶּר',
+	            'דֵּצֶמְבֶּר'
+	        ];
+	        var date = new Date(track.track.date);
+	        var day_in_week = days[date.getDay()];
+	        var day_date = date.getDate();
+	        var day = day_date>10?day_date:days_in_month[day_date-1];
+	        var month = months[date.getMonth()];
+	        var year = date.getFullYear();
+	        var hour = worker.hour.getHours();
+	        var minutes = worker.hour.getMinutes();
+	        var shift_arr = track.track.shift.split('-');//explode("-", $hospital_track->shift);
+	        var shift = shift_arr[0];// 'tt';//$shift_arr[0];
+	        var shift_type = shift_arr[1];// 'tt';//$shift_arr[1];
+	        if(shift.includes('לילה') && day_in_week == 'שבת')
+	            var day_in_week = 'מוצאי שבת';
+			$scope.messageText = worker.worker_name+'שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק , '+
+	        shift_type+" למשמרת "+shift+" ביום "+day_in_week+' '
+	        +day+" ל"+month+' '+year+' נקבע לשעה '+hour+(+minutes!='00'?(' וְ'+minutes+' דקות '):'')+'  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3';
+       
+		}
+		$scope.sendTestMessage = function  (worker) {
+			$http.post($rootScope.baseUrl + $scope.controller + '/test_message_to_worker',{phone:worker.phone,hospital_track_id:worker.hospital_track_id})
+    		.success(function(data){
+    			if(data.status == 'ok'){
+    				$rootScope.message = data.data;
+    			}else{
+    				$rootScope.message = 'ארעה שגיאה בשליחת ההודעה!';
+    			}
+    			
+				angular.element('#saved-toggle').trigger('click');
+    		})
+    		.error(function(){
+    			$rootScope.message = 'ארעה שגיאה בשליחת ההודעה!';
+				angular.element('#saved-toggle').trigger('click');
+    		});	
+		  
+		}
+		$scope.sendMessageToWorker = function  (worker) {
+			$http.get($rootScope.baseUrl + $scope.controller + '/send_message_to_worker&phone='+worker.phone)
+    		.success(function(data){
+    			if(data.status == 'ok'){
+    				$rootScope.message = data.msg;
+    			}else{
+    				$rootScope.message = data.msg;
+    			}
+    			
+				angular.element('#saved-toggle').trigger('click');
+    		})
+    		.error(function(){
+    			$rootScope.message = 'ארעה שגיאה בשליחת ההודעה!';
+				angular.element('#saved-toggle').trigger('click');
+    		});	
+		  
+		}
 		function getHospitalEmail(){
 			document.getElementById('loader').style.display = 'block';
 			$http.post($rootScope.baseUrl + $scope.controller + '/get_hospital_email',{name:'hospital_email'})

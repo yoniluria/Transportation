@@ -81,7 +81,8 @@ class TrackController extends Controller
 	$track = $data->data->track;
 	$track_id = $data->data->track->id;
 	$workers = $data->data->workers;
-	
+	$shift = Shift::find()->where(['id'=>$track->shift_id])->one();
+    $warning = null;
 	$trackModel = Track::findOne($track_id);
 	$collecting = (strpos($trackModel->shift, 'איסוף') !== false)?1:0; 
 	//$orderby = $collecting==1?'hour':'track_order';
@@ -106,6 +107,9 @@ class TrackController extends Controller
 		$connection->address = $worker->selectedAddress->original_address;
 		$connection->instructions = $worker->instructions;
 		if(isset($worker->hour)){
+		    if(strtotime(date('H:i:s',strtotime($worker->hour)))<strtotime($shift->hour)){
+		        $warning = 'שעה מוקדמת משעת האיסוף הרגילה של המשמרת';//.strtotime(date('H:i:s',strtotime($worker->hour))).' '.strtotime($shift->hour);
+		    }
 			$connection->hour = date('H:i:s',strtotime($worker->hour));
 			if($key==0){
 				$time = strtotime($connection->hour);
@@ -160,7 +164,7 @@ class TrackController extends Controller
 		$prev_track = $connection;
 		/*----------------------------*/
 	}
-    print_r(json_encode(['status'=>"ok","msg"=>""]));die();  	
+    print_r(json_encode(['status'=>"ok","msg"=>$warning]));die();  	
   }
   
   public function actionGet_one_route()
@@ -1425,9 +1429,9 @@ class TrackController extends Controller
 			
 			
 			//$track = Track::findOne(['track_date'=>$curr_date,'shift_id'=>Shift::findOne(['name'=>$shift_name])->id,'combined_line'=>$combined_line,'description'=>$description,'region'=>$region]);
-			if($worker_id == '305493025'||$worker_id == 305493025){
-                print_r(json_encode(['$hospital_track'=>(array)$hospital_track,'$worker'=>(array)$worker,'$track'=>(array)$track,'$combined_line'=>$combined_line,'$shift_name'=>$shift_name,'$curr_date'=>$curr_date]));die();
-            }
+			//if($worker_id == '305493025'||$worker_id == 305493025){
+             //   print_r(json_encode(['$hospital_track'=>(array)$hospital_track,'$worker'=>(array)$worker,'$track'=>(array)$track,'$combined_line'=>$combined_line,'$shift_name'=>$shift_name,'$curr_date'=>$curr_date]));die();
+            //}
 			$track = Track::findOne(['track_date'=>$curr_date,'shift_id'=>Shift::findOne(['name'=>$shift_name])->id,'combined_line'=>$worker->sub_line?$worker->sub_line:$combined_line]);
 			if($track){
 			    
@@ -1685,6 +1689,11 @@ class TrackController extends Controller
                 print_r(json_encode((object)["status"=>"error","data"=>"ארעה שגיאה בקריאת האקסל בשורה ".$index,'e'=>$e]));die();
                 //print_r(json_encode(["line".$index]));die();
             }
+            foreach ($hospital_track_deleted as $key => $value) {
+                $hospital_track_deleted[$key]['$track_for_worker']=isset($track_for_worker)?$track_for_worker->attributes:null;
+                $hospital_track_deleted[$key]['track']=isset($track)?$track:null;
+                $hospital_track_deleted[$key]['row']=$row;
+            }
             return (object)[
                 'phone' => $phone,
                  //'$sub_track'=>$sub_track?$sub_track->attributes:null,
@@ -1700,6 +1709,7 @@ class TrackController extends Controller
                  'added_worker'=>$added_worker?(object)['status'=>1,'details'=> $hospital_track -> attributes]:null,
                  //'hospital_track_id'=>$hospital_track->id,
                  'track_for_worker_track_id'=>$track_for_worker?$track_for_worker->track_id:null,
+                 'track_for_worker_id'=>$track_for_worker?$track_for_worker->id:null,
                  'sub_track_id'=>$sub_track?$sub_track->id:null,
                  'hospital_track_deleted'=>array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_track_deleted)
              ];
@@ -1727,6 +1737,7 @@ class TrackController extends Controller
             $track = null;
             $errors = '';
             $new_phones = [];
+            $track_for_worker_ids = [];
             //check update blacklist 01/01/2019 ---for delete
             /*$workers = Worker::find()->all();
             foreach ($workers as $row) {
@@ -1748,18 +1759,23 @@ class TrackController extends Controller
             foreach ($sheet as $row) {
                 if(!isset($row->SSN)){
                     if($track){
-                        $tracks_for_worker = Track_for_worker::find()->where('track_id ='.$track->id.' and worker_id not in ('.implode(',', $track_workers_ids).')')->all();
+                        /*$tracks_for_worker = Track_for_worker::find()->where('track_id ='.$track->id.' and worker_id not in ('.implode(',', $track_workers_ids).')')->all();
                         foreach ($tracks_for_worker as $key => $track_for_worker) {
                             //$tracks_for_worker = Track_for_worker::deleteAll(['track_id'=>$track -> id]);
                             $curr_track = Track::find()->where(['id'=>$track_for_worker->track_id])->one();
                             if($curr_track){
                                 $hospital_tracks_deleted = HospitalTrack::find()->where(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id])->asArray()->all();
                                 $hospital_tracks = HospitalTrack::deleteAll(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id]);
+                                foreach ($hospital_tracks_deleted as $key => $value) {
+                                    $hospital_tracks_deleted[$key]['$track_for_worker']=isset($track_for_worker)?$track_for_worker->attributes:null;
+                                    $hospital_tracks_deleted[$key]['track']=isset($track)?$track->attributes:null;
+                                    $hospital_tracks_deleted[$key]['row']=$row;
+                                }
                                 $hospital_tracks_deleted = array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_tracks_deleted);
                                 $result = array_merge($result,$hospital_tracks_deleted);
                             }
                             $track_for_worker->delete();
-                        }
+                        }*/
                     }  
                    $track_workers_ids = [];
                    $i =0;
@@ -1784,6 +1800,8 @@ class TrackController extends Controller
                          array_push($track_ids,$res ->sub_track_id);
                        if($res ->track_for_worker_track_id)
                          array_push($track_ids,$res ->track_for_worker_track_id); 
+                       if($res ->track_for_worker_id)
+                         array_push($track_for_worker_ids,$res ->track_for_worker_id); 
                        if($res ->phone)  
                          $new_phones[] = $res ->phone;                      
                        $i++;
@@ -1793,19 +1811,41 @@ class TrackController extends Controller
                 $index++;
                
             }
-
-            $tracks_for_worker = Track_for_worker::find()->where('(track_id not in('.implode(',', $track_ids).') or worker_id not in ('.implode(',', $workers_ids).')) and track_id  in (select id from track where track_date="'.$curr_date.'")')->all();
+            $tracks_for_worker = Track_for_worker::find()->where('id not in('.implode(',', $track_for_worker_ids).') and track_id  in (select id from track where track_date="'.$curr_date.'")')->all();
             foreach ($tracks_for_worker as $key => $track_for_worker) {
                 //$tracks_for_worker = Track_for_worker::deleteAll(['track_id'=>$track -> id]);
                 $track = Track::find()->where(['id'=>$track_for_worker->track_id])->one();
                 if($track){
                     $hospital_tracks_deleted = HospitalTrack::find()->where(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id])->asArray()->all();
                     $hospital_tracks = HospitalTrack::deleteAll(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id]);
+                    foreach ($hospital_tracks_deleted as $key => $value) {
+                        $hospital_tracks_deleted[$key]['$track_for_worker']=isset($track_for_worker)?$track_for_worker->attributes:null;
+                        $hospital_tracks_deleted[$key]['track']=isset($track)?$track->attributes:null;
+                        //$hospital_tracks_deleted[$key]['row']=$row;
+                    }
                     $hospital_tracks_deleted = array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_tracks_deleted);
                     $result = array_merge($result,$hospital_tracks_deleted);
                 }
                 $track_for_worker->delete();
             }
+
+            /*$tracks_for_worker = Track_for_worker::find()->where('(track_id not in('.implode(',', $track_ids).') or worker_id not in ('.implode(',', $workers_ids).')) and track_id  in (select id from track where track_date="'.$curr_date.'")')->all();
+            foreach ($tracks_for_worker as $key => $track_for_worker) {
+                //$tracks_for_worker = Track_for_worker::deleteAll(['track_id'=>$track -> id]);
+                $track = Track::find()->where(['id'=>$track_for_worker->track_id])->one();
+                if($track){
+                    $hospital_tracks_deleted = HospitalTrack::find()->where(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id])->asArray()->all();
+                    $hospital_tracks = HospitalTrack::deleteAll(['shift'=>$track->shift,'date'=>$track->track_date,'worker_id'=>$track_for_worker->worker_id]);
+                    foreach ($hospital_tracks_deleted as $key => $value) {
+                        $hospital_tracks_deleted[$key]['$track_for_worker']=isset($track_for_worker)?$track_for_worker->attributes:null;
+                        $hospital_tracks_deleted[$key]['track']=isset($track)?$track->attributes:null;
+                        //$hospital_tracks_deleted[$key]['row']=$row;
+                    }
+                    $hospital_tracks_deleted = array_map(function($val){return (object)['status'=>0,'details'=> $val];}, $hospital_tracks_deleted);
+                    $result = array_merge($result,$hospital_tracks_deleted);
+                }
+                $track_for_worker->delete();
+            }*/
             $data = $this -> addPhonesToBlacklist($new_phones);
             print_r(json_encode((object)["status"=>"ok","data"=>$result,'warnings'=>$errors]));die();
             //print_r(json_encode($result));die();
