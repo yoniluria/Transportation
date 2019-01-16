@@ -33,7 +33,7 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sub_line'], 'integer'],
+            [['sub_line','message_type'], 'integer'],
             [['name', 'phone', 'department'], 'string', 'max' => 255],
             [['regular_instructions'], 'string', 'max' => 256],
             [['combined_line'], 'string', 'max' => 5],

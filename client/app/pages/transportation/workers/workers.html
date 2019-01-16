@@ -16,10 +16,11 @@
 		<h3 class="cot-div" >{{text}} עובד</h3>
 		<form name="workerForm" ng-submit="submitted=true;(workerForm.$invalid||save())" novalidate>
 		<input class="col-margin" name="id" ng-model="newWorker.id" placeholder="מ.ז:"  ng-pattern="/^[0-9]{1,9}$/"  required  ng-class="{'error' :(submitted&&(!newWorker.id||workerForm.id.$error.pattern))}">
-		<span ng-show="submitted&&(!newWorker.id||workerForm.id.$error.pattern)" class="help-block">עליך למלא את השדה ב-9 ספרות בלבד.</span>
+		<span  style="width: 12.5%;" ng-show="submitted&&(!newWorker.id||workerForm.id.$error.pattern)" class="help-block">עליך למלא את השדה ב-9 ספרות בלבד.</span>
 		<input class="col-margin" name="name" ng-model="newWorker.name" placeholder="שם:" required  ng-class="{'error' :(submitted&&!newWorker.name)}" >
 		<span ng-show="submitted&&!newWorker.name" class="help-block" style="margin-right: 12.5%;">זהו שדה חובה.</span>
-		<input class="col-margin" ng-model="newWorker.phone" placeholder="טלפון:">
+		<input class="col-margin" ng-model="newWorker.phone"  name="phone" ng-pattern="/^\(?(\d{2,3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/"  placeholder="טלפון:"  ng-class="{'error' :(submitted&&(workerForm.phone.$error.pattern))}">
+		<span style="width: 12.5%;margin-right: 25%;" ng-show="submitted&&(submitted&&(workerForm.phone.$error.pattern))" class="help-block">מספר טלפון לא חוקי.</span>
 		<input class="col-margin" ng-model="newWorker.department" placeholder="מחלקה:">
 		<!-- <input class="col-margin" ng-model="newWorker.regular_instructions" placeholder="הנחיות קבועות:"> -->
 		<div style="display: inline-block;">
@@ -33,6 +34,16 @@
 				<option ng-repeat="line in static_lines | orderBy:'line_order'" value="{{line.line_number}}">{{'קו '+ line.line_number + ' ' + line.description}}</option>
 			</select> 
 		</div>
+		 
+	    <input style="width: unset;" type="radio" ng-model="newWorker.message_type" value="1">
+	    <label style="display: inline-block;">
+	   הודעה קולית
+	  </label>
+	    
+	    <input  style="width: unset;"  type="radio" ng-model="newWorker.message_type" value="2">
+	    <label style="display: inline-block;">
+	    	SMS
+	  </label>
 		<!-- <input class="col-margin" list="subLinesList" ng-model="newWorker.sub_line" placeholder="שבץ לתת קו:">
 		<datalist id="subLinesList">
 			<select>
@@ -181,15 +192,24 @@
     			</datalist>
 			</td>
 			<td>
-				<input list="citiesList" type="" ng-model="selectedCity" ng-change="getdatalist()" placeholder="עיר.:"/>
+				<input style="width: unset;" type="radio" ng-model="workersFilter.message_type" value="1">
+	    <label style="display: inline-block;">
+	   הודעה קולית
+	  </label>
+	    
+	    <input  style="width: unset;"  type="radio" ng-model="workersFilter.message_type" value="2">
+	    <label style="display: inline-block;">
+	    	SMS
+	  </label>
+				<!--<input list="citiesList" type="" ng-model="selectedCity" ng-change="getdatalist()" placeholder="עיר.:"/>
     			<datalist id="citiesList">
     				<!-- <select ng-repeat="x1 in workers">
         			<option  ng-repeat="x2 in x1.addresses | unique: 'city'" value="{{x2.city}}">
-        			</select> -->
+        			</select> 
         			<select>
         			<option  ng-repeat="x in addressesList | unique: 'city'" value="{{x.city}}">
         			</select>
-    			</datalist>
+    			</datalist>-->
 			</td>
 			<td>
 				<input list="linesList" ng-model="workersFilter.combined_line" placeholder="קו בית חולים.:" />

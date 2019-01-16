@@ -204,65 +204,85 @@ class WorkerController extends Controller
         return array('workers'=>$arr,'static_lines'=>$static_lines);
    }
    public function actionUpdateworker(){
-     $data = json_decode(file_get_contents("php://input"));     
-        $old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->all();
-        // $old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->one();
-        // print_r($old_worker);die();
-    $xxx=Worker::findOne($data->id);
-    // print_r($xxx);die();
-    // die($old_worker[0]->regular_instructions);       
-     $worker=new Worker();
-     $worker->id=$data->id;
-     $worker->name=$data->name;
-     $worker->phone=$data->phone;
-     $worker->department=$data->department;
-     $worker->regular_instructions=$xxx->regular_instructions;
-     
-                if($old_worker!=null){
-                foreach ($old_worker as $yy){
-                    $yy = Worker::findOne($data->id);
-                    $yy->delete();
-                }
-            }
-     $worker->save();
-     ini_set('error_reporting', E_STRICT);
-     
-     $old_addresses=Address::find()->where(['worker_id'=>$data->id,'primary_address'=>1])->asArray()->all();
-            // print_r($old_address);die();//""
-            // print_r(json_encode($old_address[0]->city));die();//null
-    $yyy=Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
-    $address=new Address();
-    // print_r($data->addresses[$data->index]);die;
-    //updated details
-    $address->original_address = $data->addresses[$data->index]->original_address;
-    $address->lat = $data->addresses[$data->index]->lat;
-    $address->lng = $data->addresses[$data->index]->lng;
-    $address->country = $data->addresses[$data->index]->country;
-    $address->city = $data->addresses[$data->index]->city;
-    $address->street = $data->addresses[$data->index]->street;
-    $address->street_number = $data->addresses[$data->index]->street_number;
-    // $address->line_number = $data->addresses[$data->index]->line_number;
-    // $address->sub_line = $data->addresses[$data->index]->sub_line;
-    
-    //old details
-    $address->worker_id = $data->id;
-    $address->primary_address = $yyy->primary_address;
-    $address->is_current = $yyy->is_current;
-    $address->escort = $yyy->escort;
-    $address->regular_instructions = $yyy->regular_instructions;
-    $address->travel_time = $yyy->travel_time;
-    $address->map_file = $yyy->map_file;
-                if($old_addresses!=null){
-                foreach ($old_addresses as $yy){
-                    $yy = Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
-                    $yy->delete();
-                }
-            }
-    $address->save(false);
-    Address::deleteAll(['original_address'=>null]);
-    die('updated');
+
+     $data = json_decode(file_get_contents("php://input")); 	
+	 	$old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->all();
+		// $old_worker=Worker::find()->where(['id'=>$data->id])->asArray()->one();
+		// print_r($old_worker);die();
+	$xxx=Worker::findOne($data->id);
+	// print_r($xxx);die();
+	// die($old_worker[0]->regular_instructions);		
+	 $worker=new Worker();
+	 $worker->id=$data->id;
+	 $worker->name=$data->name;
+	 $worker->phone=$data->phone;
+     if($worker->phone)
+        $data_blacklist = $this -> addPhonesToBlacklist([$worker->phone]);
+	 $worker->department=$data->department;
+     $worker->message_type=isset($data->message_type)?$data->message_type:1;
+	 $worker->regular_instructions=$xxx->regular_instructions;
+	 
+	 			if($old_worker!=null){
+				foreach ($old_worker as $yy){
+					$yy = Worker::findOne($data->id);
+					$yy->delete();
+				}
+			}
+	 $worker->save();
+	 ini_set('error_reporting', E_STRICT);
+	 
+	 $old_addresses=Address::find()->where(['worker_id'=>$data->id,'primary_address'=>1])->asArray()->all();
+			// print_r($old_address);die();//""
+			// print_r(json_encode($old_address[0]->city));die();//null
+	$yyy=Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
+	$address=new Address();
+	// print_r($data->addresses[$data->index]);die;
+	//updated details
+	$address->original_address = $data->addresses[$data->index]->original_address;
+	$address->lat = $data->addresses[$data->index]->lat;
+	$address->lng = $data->addresses[$data->index]->lng;
+	$address->country = $data->addresses[$data->index]->country;
+	$address->city = $data->addresses[$data->index]->city;
+	$address->street = $data->addresses[$data->index]->street;
+	$address->street_number = $data->addresses[$data->index]->street_number;
+	// $address->line_number = $data->addresses[$data->index]->line_number;
+	// $address->sub_line = $data->addresses[$data->index]->sub_line;
+	
+	//old details
+	$address->worker_id = $data->id;
+	$address->primary_address = $yyy->primary_address;
+	$address->is_current = $yyy->is_current;
+	$address->escort = $yyy->escort;
+	$address->regular_instructions = $yyy->regular_instructions;
+	$address->travel_time = $yyy->travel_time;
+	$address->map_file = $yyy->map_file;
+				if($old_addresses!=null){
+				foreach ($old_addresses as $yy){
+					$yy = Address::findOne(['worker_id'=>$data->id,'primary_address'=>1]);
+					$yy->delete();
+				}
+			}
+	$address->save(false);
+	Address::deleteAll(['original_address'=>null]);
+	die('updated');
 }
 
+    public function addPhonesToBlacklist($phone_numbers)
+    {
+        
+        $phones_string = implode(':', $phone_numbers);//print_r($phones_string);die();
+        $data = (object)['ApiModule'=>'addPhoneToBlacklist','ApiDID'=>'0772220126','file_name'=>'blacklist.ini','phones'=>$phones_string];
+        $url = "http://register.meser.biz/api-blacklist.php";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response  = curl_exec($ch);
+        curl_close($ch);
+        //print_r($response);die();
+        return json_decode($response);
+    }
     public function actionSaveworker()
     {
             $data = json_decode(file_get_contents("php://input"));  
@@ -292,19 +312,21 @@ class WorkerController extends Controller
              if(isset($data->name)){
                 $model->name = $data->name;
              }
-             if(isset($data->phone)){
-                $model->phone = $data->phone;
-             }
-             if(isset($data->department)){
-                $model->department = $data->department;
-             }
-             if(isset($data->regular_instructions)){
-                $model->regular_instructions = $data->regular_instructions; 
-             }
-             if(isset($data->sub_line)){
-                $model->sub_line = $data->sub_line; 
-             }
-            
+
+			 if(isset($data->phone)){
+			 	$model->phone = $data->phone;
+                $data_blacklist = $this -> addPhonesToBlacklist([$model->phone]);
+			 }
+			 if(isset($data->department)){
+			 	$model->department = $data->department;
+			 }
+			 if(isset($data->regular_instructions)){
+			 	$model->regular_instructions = $data->regular_instructions;	
+			 }
+			 if(isset($data->sub_line)){
+			 	$model->sub_line = $data->sub_line;	
+			 }
+             $model->message_type=isset($data->message_type)?$data->message_type:1;
         if($model->save(false)){
         }
         

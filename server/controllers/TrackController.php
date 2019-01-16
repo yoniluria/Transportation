@@ -807,8 +807,10 @@ class TrackController extends Controller
 			$index;
 			$i;
 			$j = 1;
+            $errors = '';
 			$date = strtotime($sheet[0]->ShiftDate);
 			$curr_date = date('Y-m-d',$date);
+            $new_phones = [];
             
             //מחיקת קווים ישנים אם קיימים
 			$old_tracks = Track::find()->where(['track_date'=>$curr_date])->all();
@@ -865,7 +867,7 @@ class TrackController extends Controller
     				}
     				//אם הגיע לסוף האקסל
     				if(!isset($sheet[$index]->SSN)){
-    					die('loaded1');
+    					print_r(json_encode((object)["status"=>"ok","data"=>""]));die();
     				}
                     
                     //אם הקו קיים במערך הקווים או שהאקסל של שבת
@@ -875,7 +877,9 @@ class TrackController extends Controller
     					if(!$worker){
     						$worker = new Worker();
     						$worker->id = $sheet[$index]->SSN;
+                            
     					}
+
                         // אם השדה כתובת מאותחלת מאתחל את הכובת והעיר
     					if(isset($sheet[$index]->Address1)){
     						$address_string = ltrim($sheet[$index]->Address1).', '.ltrim($sheet[$index]->City);
@@ -1003,9 +1007,19 @@ class TrackController extends Controller
     						$worker->name = ltrim($name[0]).$name[1];
     						$hospital_track->worker_name = $worker->name;
     					}
+                        
     					if(isset($sheet[$index]->Watts)){
-    						$worker->phone = $sheet[$index]->Watts;
+    					    $phone = trim($sheet[$index]->Watts);
+                            $phone = preg_replace("/[^0-9]/", "",$phone );
+                            if((strlen($phone)==9||strlen($phone)==8)&&$phone[0]!='0')
+                               $phone = '0'.$phone; 
+                            if(!preg_match("/^0\d([\d]{0,1})([-]{0,1})\d{7}$/", $phone)) {
+                                $errors .= " מספר טלפון לא חוקי לעובד ".$worker->name." ".$phone;
+                            }
+                            $new_phones[] = $phone;
+    						$worker->phone = $phone;
     						$hospital_track->phone = $worker->phone;
+                            
     					}
     					
     					
@@ -1015,10 +1029,9 @@ class TrackController extends Controller
     					$hospital_track->save(false);
     				}
     			}	
-    			catch (ErrorException $e){
+    			catch (ErrorException $e){print_r($phone);
     				$index = $index+2;
-    				print_r(json_encode(["line".$index]));
-    				die();
+                    print_r(json_encode((object)["status"=>"error","data"=>"ארעה שגיאה בקריאת האקסל בשורה ".$index,"e"=>$e]));die();
     			}
     			
     			}
@@ -1029,9 +1042,27 @@ class TrackController extends Controller
     					Track::deleteAll(['id'=>$track_in_date->id]);
     				}
     			}
-    			die('loaded');
+    			$data = $this -> addPhonesToBlacklist($new_phones);
+                //print_r($data);die();
+    			print_r(json_encode((object)["status"=>"ok","data"=>"","warnings"=>$errors]));die();
             
        }
+        public function addPhonesToBlacklist($phone_numbers)
+        {
+            
+            $phones_string = implode(':', $phone_numbers);//print_r($phones_string);die();
+            $data = (object)['ApiModule'=>'addPhoneToBlacklist','ApiDID'=>'0772220126','file_name'=>'blacklist.ini','phones'=>$phones_string];
+            $url = "http://register.meser.biz/api-blacklist.php";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response  = curl_exec($ch);
+            curl_close($ch);
+            //print_r($response);die();
+            return json_decode($response);
+        }
 
 		 public function actionUpdateordersfromxls1(){
 		 	ini_set('max_execution_time', 0); 
@@ -1429,6 +1460,7 @@ class TrackController extends Controller
                 $region = preg_replace("/[0-9]+/", "", $track_details[0]);
            }
            $messenger = null;
+           
            $line = filter_var($track_details[0], FILTER_SANITIZE_NUMBER_INT);
            $static_line = Staticlines::findOne(['line_number'=>$line]);
             if($static_line){
@@ -1466,6 +1498,8 @@ public function find_worker_to_track($row,$track,$i,$index)
                 $worker_id =$row->SSN;
                 $added_worker = false;
                 $sub_track =null;
+                $error = null;
+                $phone = null;
                 //טיפול בכתובת
                 // אם השדה כתובת מאותחלת מאתחל את הכובת והעיר
                 if(isset($row->Address1)){
@@ -1510,7 +1544,16 @@ public function find_worker_to_track($row,$track,$i,$index)
                     if(isset($row->CompanyName))
                         $name = explode(',',$row->CompanyName);
                     $worker->name = ltrim($name[0]).$name[1];
-                    $worker->phone = isset($row->Watts)?$row->Watts:null;
+                    $phone = trim($row->Watts);
+                    $phone = preg_replace("/[^0-9]/", "",$phone );
+                    if(strlen($phone)==9&&$phone[0]!='0')
+                       $phone = '0'.$phone; 
+                    
+                    if(!preg_match("/^0\d([\d]{0,1})([-]{0,1})\d{7}$/", $phone)) {
+                        $error = "מספר טלפון לא חוקי לעובד ".$worker->name." ".$phone;
+                        //print_r(json_encode((object)["status"=>"error","data"=>("מספר טלפון לא חוקי לעובד ".$worker->name." ".$phone)]));die();
+                    }
+                    $worker->phone = $phone;
                     $worker->save(false);
                     
                     $added_worker = true;
@@ -1638,18 +1681,19 @@ public function find_worker_to_track($row,$track,$i,$index)
                     
                 }
             }   
-            catch (ErrorException $e){
+            catch (exception $e){
                 $index = $index+2;
-                print_r(json_encode(["line".$index]));
-                die();
+                print_r(json_encode((object)["status"=>"error","data"=>"ארעה שגיאה בקריאת האקסל בשורה ".$index,'e'=>$e]));die();
+                //print_r(json_encode(["line".$index]));die();
             }
             return (object)[
+                'phone' => $phone,
                  //'$sub_track'=>$sub_track?$sub_track->attributes:null,
                  //'track'=>(array)$track->attributes,
                  //'$worker'=>(array)$worker->attributes,
                  //'hospital_track'=>(array)$hospital_track->attributes,
                  '$track_for_worker'=>isset($track_for_worker)?$track_for_worker->attributes:null,
-                 
+                 'error' => $error,
                  //'hospital_track11'=>$hospital_track11?(array)$hospital_track11->attributes:null,
                  //'$worker11'=>$worker11?(array)$worker11->attributes:null,
                  
@@ -1682,6 +1726,26 @@ public function find_worker_to_track($row,$track,$i,$index)
             $result = [];
             $index = 0;
             $track = null;
+            $errors = '';
+            $new_phones = [];
+            //check update blacklist 01/01/2019 ---for delete
+            /*$workers = Worker::find()->all();
+            foreach ($workers as $row) {
+                if($row ->phone)
+                    $new_phones[] = $row ->phone;
+                
+                if(isset($row->Watts)){
+                                            $phone = trim($row->Watts);
+                                            $phone = preg_replace("/[^0-9]/", "",$phone );
+                                            if((strlen($phone)==9||strlen($phone)==8)&&$phone[0]!='0')
+                                               $phone = '0'.$phone; 
+                                            
+                                            $new_phones[] = $phone;
+                                        }
+                
+            }
+            $data = $this -> addPhonesToBlacklist($new_phones);
+            print_r($data);die();*/
             foreach ($sheet as $row) {
                 if(!isset($row->SSN)){
                     if($track){
@@ -1710,6 +1774,9 @@ public function find_worker_to_track($row,$track,$i,$index)
                    $track_workers_ids[] = $row->SSN;
                     if($radio_day=="shabat"||($radio_day=="all_week"&&in_array($track -> line_number, $active_lines))){
                        $res = $this -> find_worker_to_track($row,$track,$i,$index);
+                       if($res->error){
+                           $errors .= ' '.$res->error;
+                       }
                        array_push($test,$res);
                        $result = array_merge($result,$res -> hospital_track_deleted);
                        if($res ->added_worker)
@@ -1717,10 +1784,13 @@ public function find_worker_to_track($row,$track,$i,$index)
                        if($res ->sub_track_id)
                          array_push($track_ids,$res ->sub_track_id);
                        if($res ->track_for_worker_track_id)
-                         array_push($track_ids,$res ->track_for_worker_track_id);                       
+                         array_push($track_ids,$res ->track_for_worker_track_id); 
+                       if($res ->phone)  
+                         $new_phones[] = $res ->phone;                      
                        $i++;
                     }
                 }
+                
                 $index++;
                
             }
@@ -1737,7 +1807,9 @@ public function find_worker_to_track($row,$track,$i,$index)
                 }
                 $track_for_worker->delete();
             }
-            print_r(json_encode($result));die();
+            $data = $this -> addPhonesToBlacklist($new_phones);
+            print_r(json_encode((object)["status"=>"ok","data"=>$result,'warnings'=>$errors]));die();
+            //print_r(json_encode($result));die();
         }
         
         

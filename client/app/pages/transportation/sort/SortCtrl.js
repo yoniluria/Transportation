@@ -99,21 +99,52 @@
     	
     	//redirect page to 'send to'
     	$scope.send = function(){
-    		$rootScope.sortfilter = $scope.sortfilter;
-    		var path;
-    		$rootScope.forward = $scope.forward;
-    		$rootScope.shift_id = $scope.sortfilter.track.shift_id;
-    		if($scope.sortfilter.isHospital==1){
-    			$rootScope.ushers = $scope.ushers;
-    			path = '/send_to_hospital';
-    		}
-    		else{
-    			$rootScope.ushers = $scope.ushers;
-    			path = '/sendto';
-    		}
-    		$timeout(function(){
-    			$location.path(path);
-    		},500);
+    		document.getElementById('loader').style.display = 'block';
+			$http.post($rootScope.baseUrl + $scope.controller + '/gettracksbydate',{date:$filter('date')($rootScope.date,'yyyy-MM-dd')}).success(
+			function(data) {
+				if(data.tracks){
+					$scope.tracks = data.tracks;
+					$scope.problematic = data.problematic;
+					if($scope.problematic.length){
+						message = 'בעיה בשליפת:';
+						angular.forEach($scope.problematic,function(value){
+							message  = message+' '+value.name;
+						});
+						$rootScope.message = message;
+	   	  				angular.element('#saved-toggle').trigger('click');
+					}
+				}
+
+				var selectedTracks = $rootScope.selectedTracks;
+				$rootScope.selectedTracks = [];
+				angular.forEach($scope.tracks,function(track){
+					if(selectedTracks.filter(t=>t.track.id == track.track.id).length){
+						$scope.addToSelectedTracks(track);
+					}
+				});
+				$rootScope.sortfilter = $scope.sortfilter;
+	    		var path;
+	    		$rootScope.forward = $scope.forward;
+	    		$rootScope.shift_id = $scope.sortfilter.track.shift_id;
+	    		if($scope.sortfilter.isHospital==1){
+	    			$rootScope.ushers = $scope.ushers;
+	    			path = '/send_to_hospital';
+	    		}
+	    		else{
+	    			$rootScope.ushers = $scope.ushers;
+	    			path = '/sendto';
+	    		}
+	    		//$timeout(function(){
+	    			$location.path(path);
+	    		//},1000);
+				document.getElementById('loader').style.display = 'none';
+			})
+			.error(function(){
+				document.getElementById('loader').style.display = 'none';
+				$rootScope.message = 'ארעה שגיאה בשליפת נתוני המסלולים';
+				angular.element('#saved-toggle').trigger('click');
+			});
+    		
     	}
     	
     	$scope.$watch(function(scope){return $rootScope.date},
@@ -121,7 +152,7 @@
 			getTracksByDate();
 		});    	
 
-		$scope.sendSmsToWorkers = function  () {
+		$scope.sendMessageToWorkers = function  () {
 			var workers = []; 
 			angular.forEach($rootScope.selectedTracks,function(track){
 				if(track.isHospital==1){
@@ -137,14 +168,20 @@
 				angular.element('#saved-toggle').trigger('click');
 				return;
 			}
-			connectPOSTService.fn('sendto/send_sms_to_workers', {data:workers}).then(function(data) {
+			connectPOSTService.fn('sendto/send_message_to_workers', {data:workers}).then(function(data) {
 				if(data.data.status=='ok'){
 					$rootScope.message = "ההודעות נשלחו בהצלחה.";
+					if(data.data.warnings != ''){
+						$rootScope.message = data.data.warnings;
+					}
 					angular.element('#saved-toggle').trigger('click');
 					/*
 					if($data.data.failed_sms.length){
 											
 										}*/
+				}else{
+					$rootScope.message = data.data.msg;
+					angular.element('#saved-toggle').trigger('click');
 				}
 				
 			}, function(e) {
