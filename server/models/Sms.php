@@ -7,7 +7,7 @@ use Yii;
 class Sms extends \yii\db\ActiveRecord {
 
     static function sendSms($msg,$to) {
-        file_put_contents('sms_cnfirm.txt', $msg);//return;
+        //file_put_contents('sms_cnfirm.txt', $msg);//return;
         $uid = "3520";
         $un = "luria2";
         $charset = "utf-8";
