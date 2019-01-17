@@ -68,7 +68,7 @@
 <button data-toggle="modal" data-target="#sendTo" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">שלח</button>
 <button ng-click="print('showSelectedTracks')" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">הדפס משלוח</button>
 <button data-toggle="modal" data-target="#showSelectedTracks" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">הצג קוים למשלוח</button>
-<button ng-click="sendMessageToWorkers()" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">שלח הודעה לעובדים</button>
+<button  data-toggle="modal" data-target="#sendMessagesModal" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">שלח הודעה לעובדים</button>
 <button ng-click="send()" style="float: left; margin-top: 10px; width: 250px; margin-left: 25px;margin-bottom: 10px;">הצג אישור קבלת הודעות</button>
 <div id="showSelectedTracks" class="modal fade" role="dialog">
   <div class="modal-dialog modal-sm modal-small" style="width: 40%;">
@@ -142,6 +142,30 @@
   </div>
 </div>
 
+<div id="sendMessagesModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">שליחת הודעות לעובדים:</h4>
+      </div>
+      <div class="modal-body">
+			<p>האם אתה בטוח שברצונך לשלוח הודעות לעובדים שנבחרו?</p>
+			
+      </div>
+      <div class="modal-footer">
+					
+					<button type="button" style="width: 45%;float: right;margin: 0;padding: 0 5%;" class="btn" data-dismiss="modal" ng-click="sendMessageToWorkers()">
+						אישור
+						
+					</button>
+					<button type="button" style="width: 45%;float:left;margin: 0;padding: 0 5%;" class="btn"  data-dismiss="modal">
+						ביטול	
+					</button>
+				</div>
+    </div>
+  </div>
+</div>
 
 
 

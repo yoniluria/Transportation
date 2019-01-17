@@ -24,10 +24,19 @@
     		.success(function(data){
     			document.getElementById('loader').style.display = 'none';
     			if(data.status != "ok"){
+    				document.getElementById('#invalidHoursBG').style.background = '#e38996f7';
     				$scope.invalidHoursMessage = data.msg;
 	    			angular.element('#invalidHoursBtn').trigger('click');
+	    			
     			}else{
-    				
+    				if(data.msg){
+    					document.getElementById('invalidHoursBG').style.background = '#92cfff';
+    					$scope.invalidHoursMessage = data.msg;
+	    				angular.element('#invalidHoursBtn').trigger('click');    				
+    				}else{
+    					$rootScope.message = 'נתוני העובדים נשמרו בהצלחה';
+	    				angular.element('#saved-toggle').trigger('click');
+    				}
     				//if($scope.currTrackForEdit.track.shift.indexOf('איסוף')!=-1){
     				//$scope.currTrackForEdit.workers = $filter('orderBy')($scope.currTrackForEdit.workers, 'hour');
 	    			//}
@@ -35,8 +44,7 @@
 	    				$scope.currTrackForEdit.workers = $filter('orderBy')($scope.currTrackForEdit.workers, 'track_order');
 	    			//}
 	    			changeDuration($scope.currTrackForEdit);
-	    			$rootScope.message = 'נתוני העובדים נשמרו בהצלחה';
-	    			angular.element('#saved-toggle').trigger('click');
+	    			
 	    			getOneRoute($rootScope.track.track.id);
     			}
     		})
