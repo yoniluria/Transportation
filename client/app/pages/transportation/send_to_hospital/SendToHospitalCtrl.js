@@ -140,14 +140,18 @@
 	        var shift_type = shift_arr[1];// 'tt';//$shift_arr[1];
 	        if(shift.includes('לילה') && day_in_week == 'שבת')
 	            var day_in_week = 'מוצאי שבת';
-			$scope.messageText = worker.worker_name+'שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק , '+
-	        shift_type+" למשמרת "+shift+" ביום "+day_in_week+' '
-	        +day+" ל"+month+' '+year+' נקבע לשעה '+hour+(+minutes!='00'?(' וְ'+minutes+' דקות '):'')+'  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3';
-       		$scope.messageText = worker.worker_name + " שלום,\r\n"
-        +shift_type+" למשמרת "
-        +shift+" ב-"+day+"."+(date.getMonth()+1)+'.'+year
-        +" נקבע לשעה "+((""+hour).length == 1?"0" + hour:hour)+':'+((""+minutes).length == 1? "0" + minutes:minutes)
-        + ".\r\n לאישור השיב/י 11.";
+            if(worker.message_type == 1){
+            	$scope.messageText = worker.worker_name+'שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק , '+
+		        shift_type+" למשמרת "+shift+" ביום "+day_in_week+' '
+		        +day+" ל"+month+' '+year+' נקבע לשעה '+hour+(+minutes!='00'?(' וְ'+minutes+' דקות '):'')+'  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3';
+            }else{
+            	$scope.messageText = worker.worker_name + " שלום,\r\n"
+		        +shift_type+" למשמרת "
+		        +shift+" ב-"+date.getDate()+"."+(date.getMonth()+1)+'.'+year
+		        +" נקבע לשעה "+((""+hour).length == 1?"0" + hour:hour)+':'+((""+minutes).length == 1? "0" + minutes:minutes)
+		        + ".\r\n לאישור השיב/י 11.";
+            }
+			
 		}
 		$scope.sendTestMessage = function  (worker) {
 			$http.post($rootScope.baseUrl + $scope.controller + '/test_message_to_worker',{phone:worker.phone,hospital_track_id:worker.hospital_track_id})
