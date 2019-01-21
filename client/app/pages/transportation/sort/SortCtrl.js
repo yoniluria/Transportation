@@ -44,9 +44,9 @@
 					$scope.tracks = data.tracks;
 					$scope.problematic = data.problematic;
 					if($scope.problematic.length){
-						message = 'בעיה בשליפת:';
+						var message = 'בעיה בשליפת:';
 						angular.forEach($scope.problematic,function(value){
-							message  = message+' '+value.name;
+							message  = message+' '+value.worker_name;
 						});
 						$rootScope.message = message;
 	   	  				angular.element('#saved-toggle').trigger('click');

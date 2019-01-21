@@ -213,7 +213,7 @@ class SendtoController extends Controller {
             'רביעי',
             'חמישי',
             'שישי',
-            'שבת',
+            'שֵבָּת',
         ];
         $days_in_month = [
             'ראשון',

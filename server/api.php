@@ -25,7 +25,7 @@ function isLoginSessionExpired() {
 }
 
 function login(){
-     $login=CallAPI('GET',"https://www.call2all.co.il/ym/api/Login?username=0772220126&password=48gfsJHLIKJ54utgrjpw48243p");
+     $login=CallAPI('GET',"https://www.call2all.co.il/ym/api/Login?username=0772220126&password=8585");//48gfsJHLIKJ54utgrjpw48243p");
         if($login->responseStatus=='OK'){
             $_SESSION['loggedin_time'] = time();
            return $login->token;
@@ -106,31 +106,31 @@ function getMessage(){
            approve($number);
             break; 
         case 2:
-            print_r('read=t-'.$name.'.t-שלום רב, להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק, איסוף למשמרת בוקר ב'.$day.$month.'.n-'.$year.'.t-נקבע לשעה.n-'.$hour.'.n-'.$minutes.'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no');
+            print_r('read=t-'.$name.'.t-שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק, איסוף למשמרת בוקר ב '.$day.$month.'.n-'.$year.'.t-נקבע לשעה.n-'.$hour.'.n-'.$minutes.'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no');
          break;
         case 3:
             print_r('routing=035771149‏');die();
             break;
          default:
-            print_r('read=t-'.$name.'.t-שלום רב, להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק, איסוף למשמרת בוקר ב'.$day.$month.'.n-'.$year.'.t-נקבע לשעה.n-'.$hour.'.n-'.$minutes.'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no');
+            print_r('read=t-'.$name.'.t-שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק, איסוף למשמרת בוקר ב '.$day.$month.'.n-'.$year.'.t-נקבע לשעה.n-'.$hour.'.n-'.$minutes.'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no');
             die();   
          break;  
     }   
 }
-
 function getMessage2(){
-    $approve=isset($_REQUEST['approve'])?$_REQUEST['approve']:"";
-    $phone=$_REQUEST['ApiPhone'];
+    $approve = isset($_REQUEST['approve'])?$_REQUEST['approve']:"";
+    $phone = $_REQUEST['ApiPhone'];
 
-    $data = file_get_contents('http://dev.sayyes.co.il/transportation_test/server/web/index.php?r=sendto/phone_message&phone='.$phone);
+
+    $data = file_get_contents('http://dev.sayyes.co.il/transportation/server/web/index.php?r=sendto/phone_message&phone='.$phone);
     $data = json_decode($data);//print_r($data);die();
     if($data -> status != 'ok'){
         
         $msg ='id_list_message=t-'.$data -> data.'&go_to_folder=hangup';//echo $msg;die();
     }else{
        $data = $data -> data;
-       $msg ='read=t-'.$data->name.'.t-שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק , '
-        .$data->shift_type." למשמרת ".$data->shift." ביום ".$data->day_in_week
+       $msg ='read=t-'.$data->name.'.t-'.'שלום רב'.'.t-'.'  להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק'.'.t-'
+        .$data->shift_type." למשמרת ".$data->shift." ביום ".$data->day_in_week.' '
         .$data->day.".t- ל".$data->month.'.n-'.$data->year.'.t-נקבע לשעה.n-'.$data->hour.($data->minutes!='00'?('.t-וְ.n-'.$data->minutes.'.t- דקות '):'').'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no';
        
        /*$msg ='read=t-'.$data->name.'.t-שלום רב, להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק, '
@@ -138,7 +138,6 @@ function getMessage2(){
         .$data->day.".t- ל".$data->month.'.n-'.$data->year.'.t-נקבע לשעה.n-'.$data->hour.'.n-'.$data->minutes.'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no';
         */
     }
-    
     
     switch ($approve) {
         case 1:
@@ -156,16 +155,9 @@ function getMessage2(){
     }
     
 }
-
 function approve($phone){
-    $data = file_get_contents('http://dev.sayyes.co.il/transportation_test/server/web/index.php?r=sendto/phone_confirm&phone='.$phone);
+    $data = file_get_contents('http://dev.sayyes.co.il/transportation/server/web/index.php?r=sendto/phone_confirm&phone='.$phone);
     echo 'id_list_message=t-האִישׁור התקבל בהצלחה&go_to_folder=hangup';//.$data; 
     return; 
 }
-
-
-
-
-
-
 ?>
