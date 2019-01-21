@@ -134,7 +134,7 @@ class SortController extends Controller
                                 $curr_worker->address = $exploded_address[0];
                                 $curr_worker->city = $exploded_address[1];
                             }
-                            $curr_worker->phone = $w->phone;//$w?$w->phone:$worker -> phone;
+                            $curr_worker->phone = $w->phone;
                             $curr_worker->department = $worker->department;
                             $curr_worker->is_confirm = $worker->is_confirm;
                             //$w = Worker::findOne($worker -> worker_id);
@@ -142,8 +142,9 @@ class SortController extends Controller
                             $curr_worker->is_sent_message = $worker->is_sms_sent;
                             $tracks[$index]['workers'][] = $curr_worker;
                         }
-                    }catch (Exception $e){
-                        $problematic [] = $curr_worker;
+                    }   
+                    catch (ErrorException $e){
+                        $problematic [] = $worker;
                     }
                 }
                 $static_line = Staticlines::findOne(['line_number'=>$hospital_track['combined_line']]);

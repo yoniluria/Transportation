@@ -24,7 +24,7 @@
     		.success(function(data){
     			document.getElementById('loader').style.display = 'none';
     			if(data.status != "ok"){
-    				document.getElementById('#invalidHoursBG').style.background = '#e38996f7';
+    				document.getElementById('invalidHoursBG').style.background = '#e38996f7';
     				$scope.invalidHoursMessage = data.msg;
 	    			angular.element('#invalidHoursBtn').trigger('click');
 	    			
