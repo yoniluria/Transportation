@@ -101,44 +101,48 @@ class SortController extends Controller
                 foreach ($workers as $worker) {
                      try{
                         $w = Worker::findOne($worker -> worker_id);
-                        $curr_worker = new \stdClass();
-                        $curr_worker->hospital_track_id = $worker->id;
-                        // $tracks_of_line_number = Track::find()->where(['line_number'=>$worker->combined_line,'shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
-                        // for adding track after load xlsx
-                        $tracks_of_line_number = Track::find()->where(['shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
-                        foreach ($tracks_of_line_number as $track_of_line_number) {
-                            $curr_track = Track_for_worker::findOne(['track_id'=>$track_of_line_number->id,'worker_id'=>$worker->worker_id]);
-                            if($curr_track){
-                                $curr_worker->hour = $curr_track->hour;
-                                $curr_worker->track_order = $curr_track->track_order;
-                                $curr_worker->track_instructions = $curr_track->instructions;
-                                break;
-                            }
+                        if(!isset($w)){
+                           $problematic [] = $worker; 
                         }
-                        $curr_worker->worker_name = $worker->worker_name;
-                        $curr_worker->worker_id = $worker->worker_id;
-                        $curr_worker->address = $worker->address;
-                        if($curr_worker->address && strchr($curr_worker->address, ",")){
-                            $address = Address::findOne(['worker_id'=>$worker->worker_id,'original_address'=>$curr_worker->address]);
-                            if($address){
-                                $curr_worker->instructions = $address->regular_instructions;
+                        else{
+                            $curr_worker = new \stdClass();
+                            $curr_worker->hospital_track_id = $worker->id;
+                            // $tracks_of_line_number = Track::find()->where(['line_number'=>$worker->combined_line,'shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
+                            // for adding track after load xlsx
+                            $tracks_of_line_number = Track::find()->where(['shift_id'=>$worker->shift_id,'track_date'=>$worker->date])->all();
+                            foreach ($tracks_of_line_number as $track_of_line_number) {
+                                $curr_track = Track_for_worker::findOne(['track_id'=>$track_of_line_number->id,'worker_id'=>$worker->worker_id]);
+                                if($curr_track){
+                                    $curr_worker->hour = $curr_track->hour;
+                                    $curr_worker->track_order = $curr_track->track_order;
+                                    $curr_worker->track_instructions = $curr_track->instructions;
+                                    break;
+                                }
                             }
-                            else{
-                                $curr_worker->instructions = "";
+                            $curr_worker->worker_name = $worker->worker_name;
+                            $curr_worker->worker_id = $worker->worker_id;
+                            $curr_worker->address = $worker->address;
+                            if($curr_worker->address && strchr($curr_worker->address, ",")){
+                                $address = Address::findOne(['worker_id'=>$worker->worker_id,'original_address'=>$curr_worker->address]);
+                                if($address){
+                                    $curr_worker->instructions = $address->regular_instructions;
+                                }
+                                else{
+                                    $curr_worker->instructions = "";
+                                }
+                                $exploded_address = explode(",", $worker->address);
+                                $curr_worker->address = $exploded_address[0];
+                                $curr_worker->city = $exploded_address[1];
                             }
-                            $exploded_address = explode(",", $worker->address);
-                            $curr_worker->address = $exploded_address[0];
-                            $curr_worker->city = $exploded_address[1];
+                            $curr_worker->phone = $w->phone;//$w?$w->phone:$worker -> phone;
+                            $curr_worker->department = $worker->department;
+                            $curr_worker->is_confirm = $worker->is_confirm;
+                            //$w = Worker::findOne($worker -> worker_id);
+                            $curr_worker->message_type = isset($w->message_type)?$w->message_type:1;
+                            $curr_worker->is_sent_message = $worker->is_sms_sent;
+                            $tracks[$index]['workers'][] = $curr_worker;
                         }
-                        $curr_worker->phone = $w->phone;
-                        $curr_worker->department = $worker->department;
-                        $curr_worker->is_confirm = $worker->is_confirm;
-                        //$w = Worker::findOne($worker -> worker_id);
-                        $curr_worker->message_type = isset($w->message_type)?$w->message_type:1;
-                        $curr_worker->is_sent_message = $worker->is_sms_sent;
-                        $tracks[$index]['workers'][] = $curr_worker;
-                    }   
-                    catch (ErrorException $e){
+                    }catch (Exception $e){
                         $problematic [] = $curr_worker;
                     }
                 }

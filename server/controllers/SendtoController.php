@@ -136,8 +136,10 @@ class SendtoController extends Controller {
     }
     
     
-    public function actionSms_confirm($code)
+    public function actionSms_confirm()
     {
+        //print_r($_GET);die();
+        
         file_put_contents('sms_cnfirm.txt', json_encode(['phone'=>$_GET['phone'],'code'=>$_GET['code']]));
         // אם הנוסע השיב 11 יש לסמן אישור הגעה לנוסע הנ"ל(ע"פ מספר טלפון)"
         if($_GET['code']==11){
@@ -212,7 +214,7 @@ class SendtoController extends Controller {
             'רביעי',
             'חמישי',
             'שישי',
-            'שבת',
+            'שֵבָּת',
         ];
         $days_in_month = [
             'ראשון',
