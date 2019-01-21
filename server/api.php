@@ -138,7 +138,7 @@ function getMessage2(){
         .$data->day.".t- ל".$data->month.'.n-'.$data->year.'.t-נקבע לשעה.n-'.$data->hour.'.n-'.$data->minutes.'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no';
         */
     }
-    
+
     switch ($approve) {
         case 1:
            approve($phone);

@@ -1453,9 +1453,9 @@ class TrackController extends Controller
 				}
 			}
 		}
-		public function find_track_details($row,$curr_date)
-		{
-		   $shift_name = $row ->ShiftName;
+        public function find_track_details($row,$curr_date)
+        {
+           $shift_name = $row ->ShiftName;
            $track_details=explode(':', $row->ShemSidur);
            if(!isset($track_details[1])||$track_details[1]==""){
                 $region = "";
@@ -1492,13 +1492,14 @@ class TrackController extends Controller
                $track -> save();               
            }
            //return (object)['track'=>$track,'$track11'=>$track11?$track11->attributes:null];
+
            return $track;
 		}
-        public function find_worker_to_track($row,$track,$i,$index)
+public function find_worker_to_track($row,$track,$i,$index)
         {
             try{
                 $hospital_track_deleted = [];
-            	$worker_id =$row->SSN;
+                $worker_id =$row->SSN;
                 $added_worker = false;
                 $sub_track =null;
                 $error = null;

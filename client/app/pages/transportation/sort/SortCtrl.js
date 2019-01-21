@@ -52,7 +52,6 @@
 	   	  				angular.element('#saved-toggle').trigger('click');
 					}
 				}
-
 				var selectedTracks = $rootScope.selectedTracks;
 				$rootScope.selectedTracks = [];
 				angular.forEach($scope.tracks,function(track){
