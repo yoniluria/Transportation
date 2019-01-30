@@ -161,6 +161,7 @@
 					angular.forEach(track.workers,function(worker){
 						worker.date = track.track.date;
 						worker.shift = track.track.shift;
+						worker.line_number = track.track.combined_line;
 					});
 					workers = workers.concat(track.workers);
 				}

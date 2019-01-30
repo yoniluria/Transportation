@@ -99,7 +99,7 @@ class SendtoController extends Controller {
         
         $phones_string = implode(':', $phone_numbers);//print_r($phones_string);die();
         $data = (object)['phones'=>$phones_string];
-        $url = "http://dev.sayyes.co.il/transportation_test/server/api.php?ApiModule=runCampaign";
+        $url = "http://dev.sayyes.co.il/transportation/server/api.php?ApiModule=runCampaign";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         //curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -129,10 +129,10 @@ class SendtoController extends Controller {
         $day_in_week = $days[date('w', strtotime($worker->date))];
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
             $day_in_week = 'מוצאי שבת';
-        $msg = $worker->worker_name . "  שלום רב,\r\n"
-        .$shift_type." למשמרת "
-        .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($worker->date))
-        ." נקבע לשעה ". date('H:i',strtotime($worker->hour))
+        $msg = $worker->worker_name . " שלום רב,\r\n".
+        (($worker -> line_number ==90 || $worker -> line_number == "90")?("נא אשר/י הגעתך למשמרת "): ($shift_type." למשמרת "))
+        .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($worker->date)).
+        (($worker -> line_number ==90 || $worker -> line_number == "90")?'': (" נקבע לשעה ". date('H:i',strtotime($worker->hour))))
         . ".\r\n לאישור השיב/י 11 ,לנציג המרכז הרפואי 035771149‏.";
         
         $result = Sms::sendSms($msg,$worker->phone);
@@ -186,6 +186,7 @@ class SendtoController extends Controller {
     {
         $result = (object)['status'=>'','data'=>''];
         $hospital_track_id = null;
+        $is_katvanit = false;
         $phone = $_GET['phone'];
         //כשמתקשרים מהמספרי ניהול  שולפים את הטלפון של העובד (באם קיים - אם לא תושמע ההודעה של הטלפון הנ"ל) וכך ניתן לשמוע את  ההודעה שהעובד שומע 
         if($phone == '0527628585' || $phone == '0556790966'){
