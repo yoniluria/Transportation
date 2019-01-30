@@ -5,6 +5,7 @@ use Yii;
 use app\models\Order;
 use app\models\OrderDetails;
 use app\models\Track;
+use app\models\Hospitaltrack;
 use app\models\Track_for_worker;
 use app\models\Staticlines;
 use app\models\Worker;
@@ -167,6 +168,7 @@ class WorkerController extends Controller
         $id = $_REQUEST['id'];
         Address::deleteAll(['worker_id'=>$id]);
         Track_for_worker::deleteAll(['worker_id'=>$id]);
+        Hospitaltrack::deleteAll(['worker_id'=>$id]);
         Worker::deleteAll(['id'=>$id]);
         die('ok');
     }

@@ -1617,7 +1617,9 @@ table.search td{
 	margin-top: 131px;
 	margin-right: 52px;
 	max-height: 200px;
-	overflow: scroll;
+	/*overflow: scroll;*/
+	    overflow: overlay;
+    padding-left: 17px;
 }
 .hospital-track{
 	background-color: #e5fcf2;

@@ -115,11 +115,24 @@ class SendtoController extends Controller {
         $shift_arr = explode("-", $worker->shift);
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
-        $msg = $worker->worker_name . " שלום,\r\n"
+        $days = [
+            'ראשון',
+            'שני',
+            'שלישי',
+            'רביעי',
+            'חמישי',
+            'שישי',
+            'שבת',
+        ];
+        $day_in_week = $days[date('w', strtotime($worker->date))];
+        if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
+            $day_in_week = 'מוצאי שבת';
+        $msg = $worker->worker_name . "  שלום רב,\r\n"
         .$shift_type." למשמרת "
-        .$shift." ב-".date("d.m.Y", strtotime($worker->date))
+        .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($worker->date))
         ." נקבע לשעה ". date('H:i',strtotime($worker->hour))
-        . ".\r\n לאישור השיב/י 11.";
+        . ".\r\n לאישור השיב/י 11 ,לנציג המרכז הרפואי 035771149‏.";
+        
         $result = Sms::sendSms($msg,$worker->phone);
         if($result->status == 'ok'){
             $this -> track_sent_update($worker->hospital_track_id); 
@@ -203,7 +216,7 @@ class SendtoController extends Controller {
                 break;
             }
         }
-        if(!$hour){
+        if(!isset($hour)){
             return json_encode((object)['status'=>'error','data'=>'שגיאה , לא נמצא מסלול לטלפון זה.']);
            //print_r("read=t-שגיאהhour");die(); 
         }
