@@ -151,6 +151,13 @@
       </div>
       <div class="modal-body">
 			<p>האם אתה בטוח שברצונך לשלוח הודעות לעובדים שנבחרו?</p>
+			<div class="alert alert-danger"  ng-if="(selectedTracks | filter: {track:{combined_line:90}}).length">
+			  <strong>שים לב!</strong> המסלולים הנבחרים כוללים גם מסלול כתבניות.
+			</div>
+			<div class="alert alert-danger"  ng-if="(selectedTracks | filter: {track:{combined_line:93}}).length">
+			  <strong>שים לב!</strong> המסלולים הנבחרים כוללים גם מסלול רופאים.
+			</div>
+			
 			
       </div>
       <div class="modal-footer">

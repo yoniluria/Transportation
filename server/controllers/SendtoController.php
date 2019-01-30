@@ -50,7 +50,6 @@ class SendtoController extends Controller {
         }
         return json_encode($voice_messages_result);
     }
-
     public function actionSend_message_to_workers()
     {
         $data = json_decode(file_get_contents("php://input"));//print_r($data);die();
@@ -118,11 +117,24 @@ class SendtoController extends Controller {
         $shift_arr = explode("-", $worker->shift);
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
-        $msg = $worker->worker_name . " שלום,\r\n"
+        $days = [
+            'ראשון',
+            'שני',
+            'שלישי',
+            'רביעי',
+            'חמישי',
+            'שישי',
+            'שבת',
+        ];
+        $day_in_week = $days[date('w', strtotime($worker->date))];
+        if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
+            $day_in_week = 'מוצאי שבת';
+        $msg = $worker->worker_name . "  שלום רב,\r\n"
         .$shift_type." למשמרת "
-        .$shift." ב-".date("d.m.Y", strtotime($worker->date))
+        .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($worker->date))
         ." נקבע לשעה ". date('H:i',strtotime($worker->hour))
-        . ".\r\n לאישור השיב/י 11.";
+        . ".\r\n לאישור השיב/י 11 ,לנציג המרכז הרפואי 035771149‏.";
+        
         $result = Sms::sendSms($msg,$worker->phone);
         if($result->status == 'ok'){
             $this -> track_sent_update($worker->hospital_track_id); 
@@ -205,6 +217,7 @@ class SendtoController extends Controller {
             $track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
             if($track_for_worker){
                 $hour = $track_for_worker->hour;
+                $is_katvanit = $track->line_number == 90 || $track->line_number == "90"?true:false;
                 break;
             }
         }
@@ -259,7 +272,7 @@ class SendtoController extends Controller {
         $shift_type = $shift_arr[1];
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
             $day_in_week = 'מוצאי שבת';
-        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes];
+        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes,'is_katvanit'=>$is_katvanit];
         return json_encode((object)['status'=>'ok','data'=>$data]);
         //return json_encode($data);         
     }

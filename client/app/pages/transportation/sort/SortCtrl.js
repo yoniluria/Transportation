@@ -99,6 +99,7 @@
     	
     	//redirect page to 'send to'
     	$scope.send = function(){
+    		///var h = $filter('filter')($rootScope.selectedTracks, {track:{combined_line:90}});
     		document.getElementById('loader').style.display = 'block';
 			$http.post($rootScope.baseUrl + $scope.controller + '/gettracksbydate',{date:$filter('date')($rootScope.date,'yyyy-MM-dd')}).success(
 			function(data) {
