@@ -146,9 +146,10 @@
 		        +day+" ל"+month+' '+year+' נקבע לשעה '+hour+(+minutes!='00'?(' וְ'+minutes+' דקות '):'')+'  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3';
             }else{
             	$scope.messageText = worker.worker_name + " שלום רב,\r\n"
-		        +shift_type+" למשמרת "
+            	+((track.track.combined_line == 90 || track.track.combined_line == "90")?"נא אשר/י הגעתך למשמרת ":(shift_type+" למשמרת "))
+		        
 		        +shift+" ביום "+day_in_week+" "+" ב-"+date.getDate()+"."+(date.getMonth()+1)+'.'+year
-		        +" נקבע לשעה "+((""+hour).length == 1?"0" + hour:hour)+':'+((""+minutes).length == 1? "0" + minutes:minutes)
+		        +((track.track.combined_line == 90 || track.track.combined_line == "90")?"":" נקבע לשעה "+((""+hour).length == 1?"0" + hour:hour)+':'+((""+minutes).length == 1? "0" + minutes:minutes))
 		        + ".\r\n לאישור השיב/י 11,לנציג המרכז הרפואי 035771149";
             }
 			
