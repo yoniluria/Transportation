@@ -130,7 +130,8 @@ function getMessage2(){
     }else{
        $data = $data -> data;
        $msg ='read=t-'.$data->name.'.t-'.'שלום רב'.'.t-'.'  להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק'.'.t-'
-        .$data->shift_type." למשמרת ".$data->shift." ביום ".$data->day_in_week.' '
+        .$data->shift_type." למשמרת "
+        .$data->shift." ביום ".$data->day_in_week.' '
         .$data->day.".t- ל".$data->month.'.n-'.$data->year.
         ($data->is_katvanit?'':('.t-נקבע לשעה.n-'.$data->hour.($data->minutes!='00'?('.t-וְ.n-'.$data->minutes.'.t- דקות '):'')))
         .'.t-  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3=approve,,1,1,7,No,yes,no';
