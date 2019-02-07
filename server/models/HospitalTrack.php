@@ -39,7 +39,7 @@ class HospitalTrack extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['combined_line', 'shift_id', 'worker_id'], 'integer'],
+            [['combined_line', 'shift_id', 'worker_id','message_datetime'], 'integer'],
             [['date'], 'safe'],
             [['is_sent','is_sms_sent','is_confirm'], 'boolean'],
             [['region', 'shift', 'phone'], 'string', 'max' => 50],

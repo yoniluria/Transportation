@@ -3475,7 +3475,8 @@ public function find_worker_to_track($row,$track,$i,$index)
 		//check if worker exists in current line
 		$connection = Track_for_worker::findOne(['track_id'=>$track_id,'worker_id'=>$worker_id]);
 		if($connection)
-			die('exists in current track');
+            return json_encode((object)['status'=>'ok','data'=>'exists in current track']);
+			//die('exists in current track');
 		
 		//check if worker exists in current shift
 		$track = Track::findOne(['id'=>$track_id]);
@@ -3484,7 +3485,8 @@ public function find_worker_to_track($row,$track,$i,$index)
 			foreach ($more_tracks as $more_track) {
 				$connection = Track_for_worker::findOne(['track_id'=>$more_track->id,'worker_id'=>$worker_id]);
 				if($connection){
-					die('exists in current shift');
+				    return json_encode((object)['status'=>'ok','data'=>'exists in current shift']);
+					//die('exists in current shift');
 				}	
 			}
 		}
