@@ -215,6 +215,7 @@ class SendtoController extends Controller {
             $track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
             if($track_for_worker){
                 $hour = $track_for_worker->hour;
+                $is_katvanit = $track->line_number == 90 || $track->line_number == "90"?true:false;
                 break;
             }
         }
@@ -270,7 +271,7 @@ class SendtoController extends Controller {
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שַבַּת')
             $day_in_week = 'מוצאי שַבַּת';
         //print_r(strpos($shift,'לילה') !== false);die();
-        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes];
+        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes,'is_katvanit'=>$is_katvanit];
         return json_encode((object)['status'=>'ok','data'=>$data]);
         //return json_encode($data);         
     }
