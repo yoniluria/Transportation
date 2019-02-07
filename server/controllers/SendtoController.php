@@ -64,7 +64,7 @@ class SendtoController extends Controller {
             }else{
                 $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
                 if(!$hospital_track -> is_confirm){
-                    if($worker->message_type == 1||$worker->message_type == "1"){
+                    if(($worker->message_type == 1||$worker->message_type == "1")&&($worker -> line_number !=90 || $worker -> line_number != "90")){
                         //שליחה רגילה למספרי הניהול
                         if($worker -> phone == '0527628585' || $worker -> phone == '0556790966'){
                            file_put_contents('testVoiceMessage.txt', null); 
@@ -118,13 +118,13 @@ class SendtoController extends Controller {
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
         $days = [
-            'ראשון',
-            'שני',
-            'שלישי',
-            'רביעי',
-            'חמישי',
-            'שישי',
-            'שבת',
+            'רִאשוֹן',
+            'שֵנִי',
+            'שְלִישִי',
+            'רְבִיעִי',
+            'חַמִישִי',
+            'שִישִי',
+            'שַבַּת',
         ];
         $day_in_week = $days[date('w', strtotime($worker->date))];
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
@@ -146,6 +146,7 @@ class SendtoController extends Controller {
         $hospital_track = HospitalTrack::find()->where(['id'=>$id])->one();
         if($hospital_track){
             $hospital_track -> is_sms_sent = 1;
+            $hospital_track -> message_datetime = date("Y-m-d H:i:s", time());
             $hospital_track ->save(FALSE);
         }
     }
@@ -161,7 +162,7 @@ class SendtoController extends Controller {
             $phone = $_GET['phone'];
             $worker = Worker::find()->where(['phone'=>$phone])->one();
             if($worker){
-                $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('id desc')->one();
+                $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('message_datetime desc')->one();
                 $hospital_track -> is_confirm = 1;
                 if($hospital_track ->save(FALSE)){
                     $shift_arr = explode("-", $hospital_track->shift);
@@ -205,7 +206,7 @@ class SendtoController extends Controller {
         if($hospital_track_id){
             $hospital_track = HospitalTrack::find()->where(['id'=>$hospital_track_id])->one();//print_r($hospital_track);die();
         }else{
-            $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('id desc')->one();//print_r($hospital_track);die();
+            $hospital_track = HospitalTrack::find()->where(['worker_id'=>$worker->id,'is_sms_sent'=>1])->orderBy('message_datetime desc')->one();//print_r($hospital_track);die();
         }
         
         if(!$hospital_track){
@@ -227,21 +228,21 @@ class SendtoController extends Controller {
            //print_r("read=t-שגיאהhour");die(); 
         }
         $days = [
-            'ראשון',
-            'שני',
-            'שלישי',
-            'רביעי',
-            'חמישי',
-            'שישי',
-            'שֵבָּת',
+            'רִאשוֹן',
+            'שֵנִי',
+            'שְלִישִי',
+            'רְבִיעִי',
+            'חַמִישִי',
+            'שִישִי',
+            'שַבַּת',
         ];
         $days_in_month = [
-            'ראשון',
-            'שני',
-            'שלישי',
-            'רביעי',
-            'חמישי',
-            'שישי',
+            'רִאשוֹן',
+            'שֵנִי',
+            'שְלִישִי',
+            'רְבִיעִי',
+            'חַמִישִי',
+            'שִישִי',
             'שביעי',
             'שמיני',
             'תשיעי',
@@ -250,7 +251,7 @@ class SendtoController extends Controller {
         $months = [
             'יָנוּאָר',
             'פֶבְּרוּאָר',
-            'מַרְץ',
+            'מֶרְץ',
             'אַפְּרִיל',
             'מַאי',
             'יוּנִי',
@@ -271,9 +272,10 @@ class SendtoController extends Controller {
         $shift_arr = explode("-", $hospital_track->shift);
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
-        if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
-            $day_in_week = 'מוצאי שבת';
-        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes,'is_katvanit'=>$is_katvanit];
+
+        if(strpos($shift,'לילה') !== false && $day_in_week == 'שַבַּת')
+            $day_in_week = 'מוצאי שַבַּת';
+        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes];
         return json_encode((object)['status'=>'ok','data'=>$data]);
         //return json_encode($data);         
     }

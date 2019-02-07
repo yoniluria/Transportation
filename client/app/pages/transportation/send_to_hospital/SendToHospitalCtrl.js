@@ -140,7 +140,7 @@
 	        var shift_type = shift_arr[1];// 'tt';//$shift_arr[1];
 	        if(shift.includes('לילה') && day_in_week == 'שבת')
 	            var day_in_week = 'מוצאי שבת';
-            if(worker.message_type == 1){
+            if(worker.message_type == 1&&(track.track.combined_line != 90 || track.track.combined_line != "90")){
             	$scope.messageText = worker.worker_name+'שלום רב , להלן הודעה מהמרכז רפואי מעיני הישועה בני ברק , '+
 		        shift_type+" למשמרת "+shift+" ביום "+day_in_week+' '
 		        +day+" ל"+month+' '+year+' נקבע לשעה '+hour+(+minutes!='00'?(' וְ'+minutes+' דקות '):'')+'  לאישור הַקֶש 1, לשמיעה חוזרת של ההודעה הַקֶש 2, לנציג המרכז הרפואי הַקֶש 3';

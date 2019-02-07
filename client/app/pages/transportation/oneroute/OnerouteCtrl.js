@@ -573,9 +573,9 @@
 			$http.post($rootScope.baseUrl + $scope.controller + '/addworkertoline',{track_id:$scope.currTrack.track.id,worker:$scope.worker,order:!$scope.currTrack.workers?1:$scope.currTrack.workers.length+1}).success(
 				function(data) {
 					document.getElementById('loader').style.display = 'none';
-					if(data=='exists in current track')
+					if(data.data&&data.data.includes('exists in current track'))
 						$rootScope.message = 'העובד כבר קיים במסלול זה';
-					else if(data=='exists in current shift')
+					else if(data.data&&data.data.includes('exists in current shift'))
 						$rootScope.message = 'העובד כבר משובץ  היום במסלול אחר במשמרת הנוכחית';
 					else{
 						$rootScope.message = 'העובד נוסף למסלול';
@@ -598,13 +598,14 @@
 						if(!$scope.currTrack.workers)
 							$scope.currTrack.workers = [];
 						$scope.currTrack.workers.push($scope.worker);
+						if($scope.currTrack.track.shift.indexOf('איסוף')!=-1){
+							calculateHourByWaiting($scope.currTrack);
+						//	$scope.track.workers = $filter('orderBy')($scope.track.workers, 'hour');
+						}
+						changeDuration($scope.currTrack);
 					}
 					angular.element('#saved-toggle').trigger('click');
-					if($scope.currTrack.track.shift.indexOf('איסוף')!=-1){
-						calculateHourByWaiting($scope.currTrack);
-					//	$scope.track.workers = $filter('orderBy')($scope.track.workers, 'hour');
-					}
-					changeDuration($scope.currTrack);
+					
 				})
 				.error(function(){
 					$rootScope.message = 'ארעה שגיאה בהוספת העובד למסלול';
