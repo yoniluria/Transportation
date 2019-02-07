@@ -275,7 +275,8 @@ class SendtoController extends Controller {
 
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שַבַּת')
             $day_in_week = 'מוצאי שַבַּת';
-        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes];
+
+        $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes,'is_katvanit'=>$is_katvanit];
         return json_encode((object)['status'=>'ok','data'=>$data]);
         //return json_encode($data);         
     }
