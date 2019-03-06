@@ -234,7 +234,7 @@ class SendtoController extends Controller {
             'רְבִיעִי',
             'חַמִישִי',
             'שִישִי',
-            'שַבַּת',
+            'שַבַּתּ',
         ];
         $days_in_month = [
             'רִאשוֹן',

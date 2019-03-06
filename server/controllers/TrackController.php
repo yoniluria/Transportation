@@ -1033,7 +1033,7 @@ class TrackController extends Controller
     					$hospital_track->save(false);
     				}
     			}	
-    			catch (ErrorException $e){print_r($phone);
+    			catch (ErrorException $e){//print_r($phone);
     				$index = $index+2;
                     print_r(json_encode((object)["status"=>"error","data"=>"ארעה שגיאה בקריאת האקסל בשורה ".$index,"e"=>$e]));die();
     			}
