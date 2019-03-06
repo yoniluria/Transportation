@@ -47,6 +47,104 @@ class SendtoController extends Controller {
         $voice_messages_result = $this -> send_voice_messages([$phone]);
         return json_encode($voice_messages_result);
     }
+    
+    public function actionSend_message_to_drivers()
+    {
+        date_default_timezone_set('Asia/jerusalem');
+        $data = json_decode(file_get_contents("php://input"));//print_r($data);die();
+        $tracks = $data->data;
+        $failed_sms = [];
+        $phone_numbers = [];
+        $ids = [];
+        $warnings = '';
+        foreach ($tracks as $key => $track) {
+            $shift_arr = explode("-", $track->track->shift);
+            $shift = $shift_arr[0];
+            $shift_type = $shift_arr[1];     
+            /*$days = [
+                'רִאשוֹן',
+                'שֵנִי',
+                'שְלִישִי',
+                'רְבִיעִי',
+                'חַמִישִי',
+                'שִישִי',
+                'שַבַּת',
+            ];
+            $day_in_week = $days[date('w', strtotime($track->track->track_date))];
+            if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
+                $day_in_week = 'מוצאי שבת';
+            $msg = $track->driver->name . " שלום רב,\r\n".
+            $shift_type." למשמרת "
+            .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($track->track->track_date))."\r\n";*/
+            $msg = $shift_type.' '.$shift.' '.date("d.m", strtotime($track->track->track_date));
+			/*if(count($track->workers)<5){
+				foreach ($track->workers as $key => $worker) {
+	               $number = $key+1;
+	               $msg.="\r\n".$number.".".$worker -> worker_name." ".$worker -> address."\r\n".$worker -> city." בשעה ". date('H:i',strtotime($worker->hour));
+	            }
+			}
+			else{*/
+				//$msg.=" ".date('H:i',strtotime($track->workers[0]->hour));
+				$city = null;
+				foreach ($track->workers as $key => $worker) {
+	               $msg .= "\n".($key+1).".".$worker -> address;
+	               if($city != $worker -> city)
+	                   $msg.=" ".$worker -> city;
+                   $msg.=" ".date('H:i',strtotime($worker->hour));
+                   $city = $worker -> city;
+	            }
+			/*}*/
+            $msg .= "\n"."לאישור השב 22.";
+            
+            $result = Sms::sendSms($msg,$track->driver->phone);
+             if($result->status != 'ok'){
+               array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
+             }else{
+                 $track = Track::findOne($track->track->id);
+                 if($track){
+                     $track -> is_sent = true;
+                     $track -> message_datetime = date("Y-m-d H:i:s", time());
+                     $track ->save(false);
+                 }
+             }
+             
+            
+        }
+        print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms,'warnings'=>[]]));die(); 
+        
+    }
+
+    public function actionDriver_sms_confirm()
+    {
+        //print_r($_GET);die();
+        
+        file_put_contents('sms_cnfirm.txt', json_encode(['phone'=>$_GET['phone'],'code'=>$_GET['code']]));
+        // אם הנוסע השיב 11 יש לסמן אישור הגעה לנוסע הנ"ל(ע"פ מספר טלפון)"
+        if($_GET['code']==22){
+            $phone = $_GET['phone'];
+            $driver = Messengers::find()->where(['phone'=>$phone])->one();
+            if($driver){
+                $track = Track::find()->where(['meesenger'=>$driver->id,'is_sent'=>1])->orderBy('message_datetime desc')->one();
+                $track -> is_confirm = 1;
+                if($track ->save(FALSE)){
+                    $shift_arr = explode("-", $track->shift);
+                    $shift = $shift_arr[0];
+                    $shift_type = $shift_arr[1];
+                    $msg = "אישורך ל"
+                    .$shift_type." משמרת "
+                    .$shift." ב-".date("d.m.Y", strtotime($track->track_date))
+                    ." התקבל בהצלחה.";
+                    //$result = Sms::sendSms($msg,$phone);
+                        //מה שמדפיסים חוזר כתשובה ל-SMS
+                        print_r($msg);die();
+                }
+                
+            }
+        }else{
+            
+        }
+    }
+
 
     public function actionSend_message_to_workers()
     {
@@ -110,19 +208,39 @@ class SendtoController extends Controller {
         //print_r($response);die();
         return json_decode($response);
     }
+    public function send_voice_messages2($phone_numbers)
+    {
+        $uid = "4344";
+        $un = "hasaot1";
+        $phones_string = implode(',', $phone_numbers);//print_r($phones_string);die();
+        $url = 'http://www.micropay.co.il/ExtApi/ScheduleVms.php?post=2&uid='.$uid.'&un='.$un.'&desc=Test&from=0747571289&list=0556790966&sid=2000';
+        $data = (object)['phones'=>$phones_string];
+        $url = "http://dev.sayyes.co.il/transportation/server/api.php?ApiModule=runCampaign";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        //curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response  = curl_exec($ch);
+        curl_close($ch);
+        //$data = file_get_contents("http://dev.sayyes.co.il/transportation_test/server/api.php?ApiModule=runCampaign&phones=".$phones_string);
+        //print_r($response);die();
+        return json_decode($response);
+    }
     public function send_sms_message($worker)
     {
         $shift_arr = explode("-", $worker->shift);
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
         $days = [
-            'רִאשוֹן',
-            'שֵנִי',
-            'שְלִישִי',
-            'רְבִיעִי',
-            'חַמִישִי',
-            'שִישִי',
-            'שַבַּת',
+            'ראשון',
+            'שני',
+            'שלישי',
+            'רביעי',
+            'חמישי',
+            'שישי',
+            'שבת',
         ];
         $day_in_week = $days[date('w', strtotime($worker->date))];
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
@@ -230,7 +348,7 @@ class SendtoController extends Controller {
             'רְבִיעִי',
             'חַמִישִי',
             'שִישִי',
-            'שַבַּת',
+            'שַבַּתּ',
         ];
         $days_in_month = [
             'רִאשוֹן',

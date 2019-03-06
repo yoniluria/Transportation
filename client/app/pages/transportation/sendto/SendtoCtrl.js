@@ -5,7 +5,7 @@
   angular.module('RouteSpeed.pages.sendto')
       .controller('SendtoCtrl', SendtoCtrl);
   /** @ngInject */
-  function SendtoCtrl($scope,$rootScope,$http,$location,$state,$filter) {
+  function SendtoCtrl($scope,$rootScope,$http,$location,$state,$filter,connectPOSTService) {
     	$rootScope.module=        'sendto';
     	$scope.controller=   	   'sendto';
     	$scope.sendToNames = ['בית החולים','סדרן','נהג'];
@@ -53,6 +53,49 @@
 				angular.element('#saved-toggle').trigger('click');
 				document.getElementById('loader').style.display='none';
 			});
+		}
+		$scope.sendMessageToDrivers = function  () {
+			var data = []; 
+			angular.forEach($scope.all_tracks,function(track){
+					if(track.isHospital==2&&track.driver){
+					/*angular.forEach(track.workers,function(worker){
+						worker.date = track.track.date;
+						worker.shift = track.track.shift;
+						worker.line_number = track.track.combined_line;
+					});*/
+					data.push(track);
+				}
+			});
+			if(!data.length){
+				$rootScope.message = "לא נמצאו מסלולי נהגים.";
+				angular.element('#saved-toggle').trigger('click');
+				return;
+			}
+			connectPOSTService.fn('sendto/send_message_to_drivers', {data:data}).then(function(data) {
+				if(data.data.status=='ok'){
+					$rootScope.message = "ההודעות נשלחו בהצלחה.";
+					/*
+					if(data.data.warnings != ''){
+											$rootScope.message = data.data.warnings;
+										}*/
+					
+					if(data.data.failed_sms.length){
+						$rootScope.message = data.data.failed_sms.length +" הודעות נכשלו.";
+					}
+					angular.element('#saved-toggle').trigger('click');
+					
+					
+				}else{
+					$rootScope.message = data.data.msg;
+					angular.element('#saved-toggle').trigger('click');
+				}
+				
+			}, function(e) {
+				//document.getElementById('loader').style.display='none';
+				$rootScope.message = "בעיה בשליחת SMS, נסה שוב מאוחר יותר";
+				angular.element('#saved-toggle').trigger('click');
+			});
+		  
 		}		
 		
 		$scope.getDataList = function(){

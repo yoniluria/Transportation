@@ -9,6 +9,7 @@
 </select>
 <button ng-click="sendEmail()" style="display: inline; width: 250px; float: left; margin-left: 50px;">שלח מסלול ל{{sendToNames[forward]}} במייל</button>
 <button ng-click="show_print('content')" style="display: inline; width: 250px; float: left; margin-left: 50px;">הדפס משלוח</button>
+<button  data-toggle="modal" data-target="#sendDriversMessagesModal" style="display: inline; width: 250px; float: left; margin-left: 50px;">שלח הודעת SMS לנהגים</button>
 </div>
 <div class="print_content" >
 	<!-- <div class="print_header" >
@@ -52,8 +53,8 @@
 		    	    <!-- <td style="font-weight: 700; padding: 5px;">יעד נסיעה:{{track.to}}</td>  -->
 		   		    <td style="font-weight: 700; padding:0 5px;">תאריך: {{track.track.track_date | date:'dd/MM/yyyy'}}</td>
 		   		    <td style="font-weight: 700; padding:0 5px;">נוסעים: {{track.workers.length}}</td>
-		   		    <td style="font-weight: 700; padding:0 5px;">נהג: {{track.driver.name}}</td> 
-		   		    <td style="font-weight: 700; padding:0 5px;">טל: {{track.driver.phone}}</td>  	
+		   		    <td style="font-weight: 700; padding:0 5px;" ng-style="{'font-size':track.driver?'12px':'15px'}">נהג: {{track.driver.name}}</td> 
+		   		    <td style="font-weight: 700; padding:0 5px;" ng-style="{'font-size':track.driver?'12px':'15px'}">טל: {{track.driver.phone}}</td>  	
 		   		    <td></td>	    
 		    		</tr>
 		    		<tr class="consolidation" >
@@ -126,6 +127,37 @@
 
 
 
+<div id="sendDriversMessagesModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm modal-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa fa-times" aria-hidden="true" data-dismiss="modal" ></i>
+        <h4 class="modal-title">שליחת הודעות לנהגים:</h4>
+      </div>
+      <div class="modal-body">
+			<p>האם אתה בטוח שברצונך לשלוח הודעות לנהגים שנבחרו?</p>
+			<div class="alert alert-danger"  ng-if="(selectedTracks | filter: {track:{combined_line:90}}).length">
+			  <strong>שים לב!</strong> המסלולים הנבחרים כוללים גם מסלול כתבניות.
+			</div>
+			<div class="alert alert-danger"  ng-if="(selectedTracks | filter: {track:{combined_line:93}}).length">
+			  <strong>שים לב!</strong> המסלולים הנבחרים כוללים גם מסלול רופאים.
+			</div>
+			
+			
+      </div>
+      <div class="modal-footer">
+					
+					<button type="button" style="width: 45%;float: right;margin: 0;padding: 0 5%;" class="btn" data-dismiss="modal" ng-click="sendMessageToDrivers()">
+						אישור
+						
+					</button>
+					<button type="button" style="width: 45%;float:left;margin: 0;padding: 0 5%;" class="btn"  data-dismiss="modal">
+						ביטול	
+					</button>
+				</div>
+    </div>
+  </div>
+</div>
 
 <style>
 table#t01{

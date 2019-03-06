@@ -148,6 +148,25 @@
     		
     	}
     	
+    	$scope.sendTrack = function(){
+			$rootScope.sortfilter = $scope.sortfilter;
+    		var path;
+    		$rootScope.forward = $scope.forward;
+    		$rootScope.shift_id = $scope.sortfilter.track.shift_id;
+    		
+    		if($scope.sortfilter.isHospital==1){
+    			$rootScope.ushers = $scope.ushers;
+    			path = '/send_to_hospital';
+    		}
+    		else{
+    			$rootScope.ushers = $scope.ushers;
+    			path = '/sendto';
+    		}
+    		$timeout(function(){
+    			$location.path(path);
+    		},1000);
+    	}
+    	
     	$scope.$watch(function(scope){return $rootScope.date},
 		function(){
 			getTracksByDate();
@@ -193,6 +212,7 @@
 			});
 		  
 		}
+		
 
     	
     	//first function for initialize the page

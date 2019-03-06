@@ -82,7 +82,7 @@ class TrackController extends Controller
 	$track_id = $data->data->track->id;
 	$workers = $data->data->workers;
 	$shift = Shift::find()->where(['id'=>$track->shift_id])->one();
-    $warning = null;
+    $warning = '';
 	$trackModel = Track::findOne($track_id);
 	$collecting = (strpos($trackModel->shift, 'איסוף') !== false)?1:0; 
 	//$orderby = $collecting==1?'hour':'track_order';
@@ -108,7 +108,7 @@ class TrackController extends Controller
 		$connection->instructions = $worker->instructions;
 		if(isset($worker->hour)){
 		    if(strtotime(date('H:i:s',strtotime($worker->hour)))<strtotime($shift->hour)){
-		        $warning = 'שעה מוקדמת משעת האיסוף הרגילה של המשמרת';//.strtotime(date('H:i:s',strtotime($worker->hour))).' '.strtotime($shift->hour);
+		        $warning .= 'שעה מוקדמת משעת האיסוף הרגילה של המשמרת';//.strtotime(date('H:i:s',strtotime($worker->hour))).' '.strtotime($shift->hour);
 		    }
 			$connection->hour = date('H:i:s',strtotime($worker->hour));
 			if($key==0){
@@ -140,6 +140,9 @@ class TrackController extends Controller
 		$source = $prev_track->address;
 		$destination = $connection->address;
 		$distance = Distances::find()->where(['source'=>$source,'destination'=>$destination])->orWhere(['source'=>$destination,'destination'=>$source])->one();
+        if($distance&&$distance -> duration > $newDuration){
+            $warning .= 'זמן המתנה קטן מהרגיל.';
+        }
 		/*if($distance){
 			$item = $collecting==1?$prev_track:$connection;
 			$item->duration = $distance->duration;
@@ -1033,7 +1036,7 @@ class TrackController extends Controller
     					$hospital_track->save(false);
     				}
     			}	
-    			catch (ErrorException $e){print_r($phone);
+    			catch (ErrorException $e){//print_r($phone);
     				$index = $index+2;
                     print_r(json_encode((object)["status"=>"error","data"=>"ארעה שגיאה בקריאת האקסל בשורה ".$index,"e"=>$e]));die();
     			}

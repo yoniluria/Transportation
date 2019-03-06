@@ -29,7 +29,7 @@
 	    			angular.element('#invalidHoursBtn').trigger('click');
 	    			
     			}else{
-    				if(data.msg){
+    				if(data.msg != ''){
     					document.getElementById('invalidHoursBG').style.background = '#92cfff';
     					$scope.invalidHoursMessage = data.msg;
 	    				angular.element('#invalidHoursBtn').trigger('click');    				

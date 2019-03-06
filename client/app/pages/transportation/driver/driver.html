@@ -38,8 +38,8 @@
 			<input ng-model="newMessenger.car_type" class="col-margin" placeholder="סוג הרכב:" >
 			<input type="number" ng-model="newMessenger.places_number" class="col-margin" placeholder="מספר המקומות:" >
 			<br>
-			<input type="number" ng-model="newMessenger.customer_price" class="col-margin" placeholder="מחיר לקוח:" >
-			<input type="number" ng-model="newMessenger.driver_price" class="col-margin" placeholder="מחיר נהג:" >
+			<input type="number" ng-model="newMessenger.customer_price" class="col-margin" placeholder="מחיר לקוח: ללא מעמ" >
+			<input type="number" ng-model="newMessenger.driver_price" class="col-margin" placeholder="מחיר נהג: כולל מעמ" >
 			<div class="radio-toolbar">
 			  <input type="radio" ng-model="newMessenger.is_usher" id="radio1" name="is_usher" value="0">
 			  <label for="radio1">נהג</label>
@@ -93,7 +93,7 @@
 				<td>
 				<input list="nameList" type="text" ng-model="driverfilter.name" ng-blur="selectedMessengers=messengers" placeholder="שם:"/>
 				<datalist id="nameList" >
-					<option ng-repeat="driver in messengers |unique:'name'"  value="{{driver.name}}">
+					<option ng-repeat="driver in messengers |orderBy:'name' |unique:'name'"  value="{{driver.name}}">
 				</datalist></td>
 				<td>					
 				<input list="phoneList" type="text" ng-model="driverfilter.phone" ng-blur="selectedMessengers=messengers" placeholder="טלפון:"/>

@@ -38,7 +38,7 @@
 					</p>
 					<p title="{{track.driver.name}}" style="max-width: 83px">
 						<span ng-hide="editState"> | {{track.driver.name}}</span>
-						<select style="height: auto;" ng-show="editState" ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false}">
+						<select style="height: auto;" ng-show="editState" ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false} | orderBy :'name'">
 						</select>
 					</p>
 					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="setTrackToDelete(track)" data-toggle="modal" data-target="#delTrackModal"></i>
