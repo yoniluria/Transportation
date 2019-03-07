@@ -45,8 +45,12 @@ class SendtoController extends Controller {
     public function actionSend_message_to_worker($phone)
     {
         $voice_messages_result = $this -> send_voice_messages([$phone]);
+        if($phone == '0527628585' || $phone == '0556790966'){
+           file_put_contents('testVoiceMessage.txt', null); 
+        }
         return json_encode($voice_messages_result);
     }
+
     
     public function actionSend_message_to_drivers()
     {
@@ -110,6 +114,7 @@ class SendtoController extends Controller {
              
             
         }
+
         print_r(json_encode((object)['status'=>'ok','failed_sms'=>$failed_sms,'warnings'=>[]]));die(); 
         
     }
@@ -314,6 +319,7 @@ class SendtoController extends Controller {
             }
             
         }
+       
         $worker = Worker::find()->where(['phone'=>$phone])->one();
         if(!$worker){
             return json_encode((object)['status'=>'error','data'=>' שגיאה , עובד לא קיים במערכת. מספר טלפון.n-'.$phone]);//die();
@@ -329,6 +335,7 @@ class SendtoController extends Controller {
             //print_r("read=t-hospital_trackשגיאה");die();
         }
         $tracks = Track::find()->where(['shift_id'=>$hospital_track->shift_id,'track_date'=>$hospital_track->date/*,'line_number'=>$hospital_track->combined_line*/])->all();
+        //print_r($tracks);die();
         foreach ($tracks as $track) {
             $track_for_worker = Track_for_worker::find()->where(['track_id'=>$track->id,'worker_id'=>$worker->id])->one();
             if($track_for_worker){
@@ -386,9 +393,10 @@ class SendtoController extends Controller {
         $shift_arr = explode("-", $hospital_track->shift);
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
+
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שַבַּת')
             $day_in_week = 'מוצאי שַבַּת';
-        //print_r(strpos($shift,'לילה') !== false);die();
+
         $data =(object)["name"=>$worker->name,"shift_type"=>$shift_type,"shift"=>$shift,"day_in_week"=>$day_in_week,"day"=>$day,"month" => $month,"year"=>$year,"hour"=>$hour,"minutes"=>$minutes,'is_katvanit'=>$is_katvanit];
         return json_encode((object)['status'=>'ok','data'=>$data]);
         //return json_encode($data);         

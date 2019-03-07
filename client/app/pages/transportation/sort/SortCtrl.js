@@ -122,6 +122,7 @@
 					if(selectedTracks.filter(t=>t.track.id == track.track.id).length){
 						$scope.addToSelectedTracks(track);
 					}
+					
 				});
 				$rootScope.sortfilter = $scope.sortfilter;
 	    		var path;
