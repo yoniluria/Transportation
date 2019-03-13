@@ -853,11 +853,18 @@ var xlf = document.getElementById('xlf');
     				// if($scope.oneWayError[i].workers.indexOf(id)!=-1&&$scope.oneWayError[i].shift!='לילה - איסוף'&&$scope.oneWayError[i].shift!='בוקר - פיזור')
     					worker_shifts.push($scope.oneWayError[i].shift);
     			}
-    			for(var i=0,b=-1,c=-1;i<worker_shifts.length;i++){
+    			for(var i=0,b=-1,c=-1,d=-1,e=-1;i<worker_shifts.length;i++){
     				if(b==-1)
     					b = worker_shifts[i].indexOf("איסוף");
     				if(c==-1)
     					c = worker_shifts[i].indexOf("פיזור");
+					if(d==-1)
+    					d = worker_shifts[i].indexOf("בוקר - פיזור");
+					if(e==-1)
+    					e = worker_shifts[i].indexOf("לילה - איסוף");
+    			}
+    			if(d!=-1||e!=-1){
+    				return false;
     			}
     			return (b!=-1)!=(c!=-1);
     		}

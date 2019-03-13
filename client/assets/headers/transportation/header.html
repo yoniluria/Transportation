@@ -70,13 +70,13 @@
 		</div>
 	</a>
 </div>
-<header class="header" ng-if="module!= 'login'" style="display: table !important;" >
+<header class="header" ng-if="module!= 'login'" style="display: table !important;" ng-class="{'pinkBack': headerColor() == true}" >
 	
 	<h3 style="padding-right: 13px;" class="heder_cot" >{{headline}}</h3>
 	<p class="text_print" >עמוד 1</p>   
 	<img style="width: 67px;float: left;" ng-src="{{url + 'assets/img/logo.png'}}" />
 	<!-- <div class="header-btn" ><h3>אמנון הסעות</h3></div> -->
-	<div ng-click="back()" class="header-btn" style="background-color: #b8b8b8;cursor: pointer;" ><i class="fa fa-long-arrow-left" aria-hidden="true"></i><h3>חזור למסך קודם</h3></div>
+	<div ng-click="back()" class="header-btn" style="background-color: #b8b8b8;cursor: pointer;" ><i class="fa fa-long-arrow-left" aria-hidden="true" ></i><h3>חזור למסך קודם</h3></div>
 	<div style="display: inline-block;margin-right: -134px;">
 		<md-datepicker style="padding-right: 0 !important; margin-right: 0 !important;" ng-model="$root.date" md-format="DD/MM/YYYY"></md-datepicker>
 	</div>

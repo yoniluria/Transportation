@@ -23,11 +23,11 @@
     		$http.post($rootScope.baseUrl + $scope.controller + '/save_workers',{data:$scope.currTrackForEdit})
     		.success(function(data){
     			document.getElementById('loader').style.display = 'none';
+    			$scope.warning_arr = data.warning_arr;
     			if(data.status != "ok"){
     				document.getElementById('invalidHoursBG').style.background = '#e38996f7';
     				$scope.invalidHoursMessage = data.msg;
 	    			angular.element('#invalidHoursBtn').trigger('click');
-	    			
     			}else{
     				if(data.msg != ''){
     					document.getElementById('invalidHoursBG').style.background = '#92cfff';
@@ -217,7 +217,9 @@
 			$http.post($rootScope.baseUrl+$scope.controller+'/updatetrackdetails',{data:$scope.updatedTrack,reverse_track_id:reverse_track_id})
 			.success(function(data){
 				document.getElementById('loader').style.display='none';
-				$scope.updatedTrack.track.description = data;
+				data = data.split("#");
+				$scope.updatedTrack.track.description = data[0];
+				$scope.track.driver.name=data[1];
 				// if($scope.reverseTrack){
 					// if($scope.updatedTrack.track.id==$scope.track.track.id){
 						// $scope.reverseTrack.track.combined_line = $scope.track.track.combined_line;

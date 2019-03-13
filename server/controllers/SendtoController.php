@@ -64,7 +64,7 @@ class SendtoController extends Controller {
         foreach ($tracks as $key => $track) {
             $shift_arr = explode("-", $track->track->shift);
             $shift = $shift_arr[0];
-            $shift_type = $shift_arr[1];     
+            $shift_type = $shift_arr[1];  
             /*$days = [
                 'רִאשוֹן',
                 'שֵנִי',
@@ -79,8 +79,14 @@ class SendtoController extends Controller {
                 $day_in_week = 'מוצאי שבת';
             $msg = $track->driver->name . " שלום רב,\r\n".
             $shift_type." למשמרת "
-            .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($track->track->track_date))."\r\n";*/
-            $msg = $shift_type.' '.$shift.' '.date("d.m", strtotime($track->track->track_date));
+            .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($track->track->track_date))."\r\n";*/  
+            $time = '';
+			if($shift_type==' פיזור'){
+				$shift_id = $track->track->shift_id;
+				$shift_model = Shift::findOne($shift_id);
+				$time = date('H:i',strtotime($shift_model->hour));
+			}
+            $msg = $shift_type.' '.$shift.' '.date("d.m", strtotime($track->track->track_date)).' '.$time;
 			/*if(count($track->workers)<5){
 				foreach ($track->workers as $key => $worker) {
 	               $number = $key+1;
@@ -91,10 +97,14 @@ class SendtoController extends Controller {
 				//$msg.=" ".date('H:i',strtotime($track->workers[0]->hour));
 				$city = null;
 				foreach ($track->workers as $key => $worker) {
-	               $msg .= "\n".($key+1).".".$worker -> address;
+	               $msg .= "\r\n".($key+1).".";
+				   if($shift_type==' פיזור')
+				   	   $msg.=$worker -> worker_name." ";
+				   $msg.=$worker -> address;
 	               if($city != $worker -> city)
 	                   $msg.=" ".$worker -> city;
-                   $msg.=" ".date('H:i',strtotime($worker->hour));
+				   if($time=='')
+                   	   $msg.=" ".date('H:i',strtotime($worker->hour));
                    $city = $worker -> city;
 	            }
 			/*}*/
@@ -866,7 +876,28 @@ class SendtoController extends Controller {
     
                 $mail_sent=$mail->send();
           
-    }   
+    }  
+
+	public function actionReport_one()
+	{
+		$data = json_decode(file_get_contents("php://input"));
+        $date = $data->date;
+		$date = date('Y-m-d H:i:s', strtotime($date));
+		$numDays = date('t', strtotime($date));
+		$table="<table id='yourHtmTable' border='2px'>".
+				"<tr>".
+				"<td colspan='$numDays' width='930px;' >בס''ד</td>".
+				"</tr><tr>".
+				'<td colspan="'.$numDays.'" >אמנון אהרון הסעות בע"מ
+דו"ח מרוכז מספר 1 - מסלולי איסוף בימי החול בתאריכים:  28/2/19 - 1/2/19</td>'.
+				"</tr><tr>";
+		for ($i=1; $i <= $numDays; $i++) { 
+			$table.="<td width='30px;' >".$i."</td>";
+		}
+		$table.="</tr></table>";
+		echo $table;
+		die();
+	} 
     
 
 }

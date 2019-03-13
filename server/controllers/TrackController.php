@@ -89,6 +89,7 @@ class TrackController extends Controller
 	$orderby = 'track_order';
     //בדיקה האם השעות תקינות-מופיעות לפי הסדר-בסדר עולה - כל שעה גדולה מהשעה שלפניה
     $prev_hour = null;
+	$warning_arr = [];
     foreach ($workers as $key=>$worker) {
         $hour = strtotime($worker->hour);
         if($prev_hour && $prev_hour > $hour){
@@ -143,6 +144,9 @@ class TrackController extends Controller
         if($distance&&$distance -> duration > $newDuration){
             $warning .= 'זמן המתנה קטן מהרגיל.';
         }
+		if($collecting&&$prev_track->duration>abs(strtotime($connection->hour) - strtotime($prev_track->hour)) / 60){
+			$warning_arr[$prev_track->worker_id] = 1;
+		}
 		/*if($distance){
 			$item = $collecting==1?$prev_track:$connection;
 			$item->duration = $distance->duration;
@@ -167,7 +171,8 @@ class TrackController extends Controller
 		$prev_track = $connection;
 		/*----------------------------*/
 	}
-    print_r(json_encode(['status'=>"ok","msg"=>$warning]));die();  	
+	//$status = $warning==''?'ok':'nook';   
+    print_r(json_encode(['status'=>'ok',"msg"=>$warning,'warning_arr'=>$warning_arr]));die();  	
   }
   
   public function actionGet_one_route()
@@ -3629,7 +3634,9 @@ public function find_worker_to_track($row,$track,$i,$index)
 			$track->save(false);
 		}
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		return $description;
+		$driver = Messengers::findOne($track->meesenger);
+		$driverName = $driver?$driver->name:'';
+		return $description.'#'.$driverName;
 	}	  
 		   
 	public function actionGet_reverse_track()

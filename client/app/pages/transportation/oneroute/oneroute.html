@@ -65,6 +65,8 @@
 							dnd-effect-allowed="move"
 							dnd-dragstart="copyList(track,worker)"
 							dnd-dragend="updateWorkerOrder(track,track.workers)"
+							data-worker="{{worker.id}}"
+							ng-class="{'big_duration' :warning_arr&&warning_arr[worker.id]==1}"
 							style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
 								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.hour|date:"HH:mm"}}</p>
@@ -149,6 +151,7 @@
 							dnd-moved="newTrack.workers.splice($index, 1)"
 							dnd-effect-allowed="move"
 							dnd-dragstart="copyList(newTrack,worker)"
+							
 							>
 								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.hour|date:"HH:mm"}}</p>
