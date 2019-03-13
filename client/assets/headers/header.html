@@ -30,7 +30,7 @@
 	</div>
 	</a>
 </div>
-<header ng-if="module!= 'login'">
+<header ng-if="module!= 'login'" ng-class="{'pinkBack': headerColor() == true}" >
 <button type="button" class="open-mobile hidden-lg hidden-md hidden-sm" data-toggle="modal" data-target="#mobile_menu">
 	<img src="assets/img/mobile_menu_icon.png" />
 </button>

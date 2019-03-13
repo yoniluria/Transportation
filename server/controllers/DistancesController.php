@@ -108,8 +108,15 @@ class DistancesController extends Controller
      * @param string $destination
      * @return mixed
      */
-    public function actionDelete($source, $destination)
+    public function actionDelete()
     {
+        $data = json_decode(file_get_contents("php://input"));
+        $distance = $data->distance;
+        $model = Distances::find()->where(['source'=>$distance->source,'destination'=>$distance->destination])->one();
+        if($model){
+            $model->delete();
+        }
+        echo '1';die();
         $this->findModel($source, $destination)->delete();
 
         return $this->redirect(['index']);

@@ -8,12 +8,14 @@
 				<th> כתובת יעד</th>
 				<th> משך זמן</th>
 				<th></th>
+				<th></th>
 			</tr>
 			<tr ng-repeat="distance in distances" >
 				<td ng-bind="distance.source" ></td>
 				<td ng-bind="distance.destination" ></td>
 				<td class="td_small" ><input type="text" ng-model="distance.duration" ></td>
 				<td class="td_small" ><button ng-click="setDuration(distance.source,distance.destination,distance.duration)" >שמור</button></td>
+				<td class="td_small" ><button ng-click="deleteDistance(distance.source,distance.destination,distance.duration)" >מחק</button></td>
 			</tr>
 		</tbody>
 	</table>

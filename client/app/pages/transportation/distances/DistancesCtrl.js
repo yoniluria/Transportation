@@ -39,6 +39,22 @@
 				angular.element('#saved-toggle').trigger('click');
 			});
     	}
+    	$scope.deleteDistance = function(source,destination,duration){
+    		var dis = {source:source,destination:destination,duration:duration};
+    		document.getElementById('loader').style.display = 'block';
+    		$http.post($rootScope.baseUrl + $scope.controller + '/delete',{distance:dis}).success(
+			function(data) {
+				document.getElementById('loader').style.display = 'none';
+				$rootScope.message = 'נמחק בהצלחה';
+				angular.element('#saved-toggle').trigger('click');
+				$scope.searchDistance();
+			})
+			.error(function(){
+				document.getElementById('loader').style.display = 'none';
+				$rootScope.message = 'ארעה שגיאה';
+				angular.element('#saved-toggle').trigger('click');
+			});
+    	}
 		
 }
 

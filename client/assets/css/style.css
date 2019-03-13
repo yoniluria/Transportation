@@ -1889,8 +1889,12 @@ table.search td{
 .table_workers td,.table_workers th{
 	padding: 0 !important;
 }
-
-
+.pinkBack{
+ 	background-color: #ffa5a5;
+}
+.big_duration{
+	background-color: rgba(132, 150, 247, 0.41);
+}
 
 
 

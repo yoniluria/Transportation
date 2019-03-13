@@ -38,7 +38,7 @@
 					</p>
 					<p title="{{track.driver.name}}" style="max-width: 83px">
 						<span ng-hide="editState"> | {{track.driver.name}}</span>
-						<select style="height: auto;" ng-show="editState" ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false}">
+						<select style="height: auto;" ng-show="editState" ng-model="track.track.meesenger" ng-options="driver.id as driver.name for driver in drivers | filter:{is_usher:false} | orderBy :'name'">
 						</select>
 					</p>
 					<i title="מחק קו זה" style="float: left;font-size: 23px;margin-top: -1px;cursor: pointer;" class="fa fa-trash" aria-hidden="true" ng-click="setTrackToDelete(track)" data-toggle="modal" data-target="#delTrackModal"></i>
@@ -65,6 +65,8 @@
 							dnd-effect-allowed="move"
 							dnd-dragstart="copyList(track,worker)"
 							dnd-dragend="updateWorkerOrder(track,track.workers)"
+							data-worker="{{worker.id}}"
+							ng-class="{'big_duration' :warning_arr&&warning_arr[worker.id]==1}"
 							style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
 								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="collecting">{{worker.hour|date:"HH:mm"}}</p>
@@ -149,6 +151,7 @@
 							dnd-moved="newTrack.workers.splice($index, 1)"
 							dnd-effect-allowed="move"
 							dnd-dragstart="copyList(newTrack,worker)"
+							
 							>
 								 <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; height: 40px; margin-bottom: 6px;">
 									<p class="col-md-1" style="padding-right: 5px; padding-top: 10px;" ng-if="!collecting">{{worker.hour|date:"HH:mm"}}</p>

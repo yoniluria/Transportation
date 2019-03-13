@@ -125,7 +125,6 @@ function getMessage2(){
     $data = file_get_contents('http://dev.sayyes.co.il/transportation/server/web/index.php?r=sendto/phone_message&phone='.$phone);
     $data = json_decode($data);//print_r($data);die();
     if($data -> status != 'ok'){
-        
         $msg ='id_list_message=t-'.$data -> data.'&go_to_folder=hangup';//echo $msg;die();
     }else{
        $data = $data -> data;
