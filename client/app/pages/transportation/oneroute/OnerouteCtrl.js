@@ -219,6 +219,7 @@
 				document.getElementById('loader').style.display='none';
 				data = data.split("#");
 				$scope.updatedTrack.track.description = data[0];
+				$scope.track.driver = {};
 				$scope.track.driver.name=data[1];
 				// if($scope.reverseTrack){
 					// if($scope.updatedTrack.track.id==$scope.track.track.id){

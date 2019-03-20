@@ -882,18 +882,70 @@ class SendtoController extends Controller {
 	{
 		$data = json_decode(file_get_contents("php://input"));
         $date = $data->date;
-		$date = date('Y-m-d H:i:s', strtotime($date));
+		$date = date('Y-m-d H:i:s', strtotime($date));  
+		$daysArr = ['0'=>'א','1'=>'ב','2'=>'ג','3'=>'ד','4'=>'ה','5'=>'ו','6'=>'ז'];
 		$numDays = date('t', strtotime($date));
+		$columns = intval($numDays)+intval(6);      
 		$table="<table id='yourHtmTable' border='2px'>".
 				"<tr>".
-				"<td colspan='$numDays' width='930px;' >בס''ד</td>".
+				"<td colspan='2' >בס''ד</td>".
 				"</tr><tr>".
-				'<td colspan="'.$numDays.'" >אמנון אהרון הסעות בע"מ
+				'<td colspan="'.$columns.'" style="text-align: center;font-weight: bold;text-decoration: underline;font-size:20px;" >אמנון אהרון הסעות בע"מ'.'<br>
 דו"ח מרוכז מספר 1 - מסלולי איסוף בימי החול בתאריכים:  28/2/19 - 1/2/19</td>'.
 				"</tr><tr>";
-		for ($i=1; $i <= $numDays; $i++) { 
-			$table.="<td width='30px;' >".$i."</td>";
+		$table.="<td rowspan='2' >מס' מסלול</td><td>תאריך ◄</td>";
+		$newDate = date('Y-m-01 H:i:s', strtotime($date)); 
+		for ($i=1; $i <= $numDays; $i++) {
+			$day =  date("w", strtotime($newDate));
+			$table.="<td>".$daysArr[$day]."</td>";
+			$newDate = date('Y-m-d H:i:s', strtotime($newDate. ' + 1 days'));
 		}
+		$table.="<td rowspan='2' >תוספת</td><td rowspan='2' >כמות</td><td rowspan='2' >מחיר לא כולל מע''מ</td><td rowspan='2' >סה''כ מחיר לא כולל מע''מ</td></tr><tr><td>שם מסלול ▼</td>";
+		for ($i=1; $i <= $numDays; $i++) { 
+			$table.="<td>".$i."</td>";
+		}
+		$table.="</tr>";
+		
+		$sql="SELECT date , shift , combined_line , region , COUNT(*) as cnt  FROM `hospital_track` 
+		where MONTH(date) = '".date("m", strtotime($date))."' and YEAR(date) = '".date("Y", strtotime($date))."' 
+		group by date ,shift_id , `combined_line`
+		order by  combined_line , date";
+		$allDates=Yii::$app->db->createCommand($sql)->queryAll();
+		
+		$prevLine = 0;
+		$prevDate = "";  
+		
+		for ($i=0; $i < count($allDates); $i++) {
+			if($allDates[$i]["combined_line"]!=$prevLine){
+				$prevDate = "";
+				if($prevLine!=0){
+					$table.="</tr>";
+				}
+				$table.="<tr><td>".$allDates[$i]["combined_line"]."</td><td>".$allDates[$i]["region"]."</td>";
+			}
+			else if($allDates[$i]["date"]!=$prevDate)
+			{
+				if($prevDate!="")
+					$table.="</td>";
+				if(intval(date("m", strtotime($allDates[$i]["date"])))-intval(1)!=date('m', strtotime($prevDate))){
+					$diff = intval(date("d", strtotime($allDates[$i]["date"]))) - intval(date('d', strtotime($prevDate)));
+					$diff = intval($diff) - intval(1);
+					if($diff>0){
+						for ($j=0; $j < $diff; $j++) { 
+							$table.="<td></td>";
+						}
+					}
+				}
+			}
+				
+		
+			$cnt = $allDates[$i]["cnt"]>4?'ג':'ק';
+			$table.=$allDates[$i]["date"]!=$prevDate?"<td>":" ";
+			$table.=$cnt;	
+			$prevLine = $allDates[$i]['combined_line'];
+			$prevDate = $allDates[$i]['date']; 
+		}
+		
 		$table.="</tr></table>";
 		echo $table;
 		die();
