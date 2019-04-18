@@ -1896,5 +1896,13 @@ table.search td{
 	background-color: rgba(132, 150, 247, 0.41);
 }
 
+.select_shifts{
+	width: 206px;
+    margin: 10px !important;
+}
+.select_shifts .ui-select-match-item>span{
+    margin-right: 12px;
+}
+
 
 

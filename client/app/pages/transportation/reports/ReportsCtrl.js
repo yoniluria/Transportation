@@ -8,6 +8,9 @@
   function ReportsCtrl($scope,$rootScope,$http,$location,$state,$filter) {
   	var monthFormat =  buildLocaleProvider("MMM-YYYY");
   	var ymdFormat =  buildLocaleProvider( "YYYY-MM-DD");
+  	$scope.selected_shifts = [];
+  	$scope.selected_drivers = "";
+  	
   	
   	function buildLocaleProvider(formatString) {
         return {
@@ -32,7 +35,7 @@
 			
 			var dateReport = $scope.dateReport;
 			document.getElementById('loader').style.display = 'block';
-			$http.post($rootScope.baseUrl + 'sendto/report_one' ,{date:dateReport})
+			$http.post($rootScope.baseUrl + 'sendto/report_one' ,{date:dateReport,shifts:$scope.selected_shifts,driver:$scope.selected_drivers})
     		.success(function(data){
     			document.getElementById('loader').style.display = 'none';
 				var data = data;
@@ -56,6 +59,27 @@
 			$scope.exportExcel('day');
 		}
 		
+		$scope.init = function(){
+			$http.post($rootScope.baseUrl+'shift/getallshifts')
+			.success(function(data){
+				$scope.all_shift = data.shifts;
+			})
+			.error(function(){
+				
+			});
+			
+			$http.post($rootScope.baseUrl+'messengers/getallmessengers')
+			.success(function(data){
+				$scope.all_driver = data;
+				$scope.all_driver = $scope.all_driver.filter(function(x) { return x.name.indexOf("דקר")==-1; });
+			})
+			.error(function(){
+				
+			});	
+		}
+		
+		$scope.init();
+		
     
     /*var startDate = new Date();
 	
@@ -68,6 +92,7 @@
 	        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
 	        $('.to').datepicker('setStartDate', startDate);
 	    });*/ 
+	    
 	    
   }
 
