@@ -13,6 +13,7 @@
 			<option ng-repeat="driver in drivers | filter:{is_usher:false} track by driver.id" ng-selected="newLine.driver_id==driver.id" value="{{driver.id}}">{{driver.name}}</option>
 		</select>
 		<input class="col-margin" type="number" min="1" ng-model="newLine.line_order" placeholder="סדר הצגה:" >
+		<input class="col-margin" type="number" min="1" ng-model="newLine.price" placeholder="מחיר:" >
 		<div style="display: inline-block;">
 			<span>האם פעיל ביום חול?</span>
 			<input type="checkbox" ng-model="newLine.is_active" >
@@ -27,6 +28,7 @@
 				<th class="col-md-5">תאור קו</th>
 				<th class="col-md-2">נהג</th>
 				<th class="col-md-1">סדר הצגה</th>
+				<th class="col-md-1">מחיר</th>
 				<th class="col-md-1">פעיל ליום חול?</th>
 				<th class="col-md-2"></th>
 			</tr>
@@ -38,6 +40,7 @@
 				<td class="col-md-5"><p>{{line.description}}</p></td>
 				<td class="col-md-2"><p>{{line.driver.name}}</p></td>
 				<td class="col-md-1"><p>{{line.line_order}}</p></td>
+				<td class="col-md-1"><p>{{line.price}}</p></td>
 				<td class="col-md-1"><input type="checkbox" ng-checked="line.is_active" disabled="disabled" /></td>
 				<td class="col-md-1 td-btn btn" ng-click="editLine(line)"><button>ערוך</button></td>
 				<td class="col-md-1 td-btn btn" ng-click="setLineToDelete(line)" data-toggle="modal" data-target="#delLineModal" style="padding-left: 4px !important;" ><button>מחק</button></td>

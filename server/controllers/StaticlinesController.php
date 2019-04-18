@@ -144,6 +144,7 @@ class StaticlinesController extends Controller
 			$all_static_lines[$index]['driver'] = Messengers::findOne($static_line->driver_id);
 			$all_static_lines[$index]['line_order'] = $static_line->line_order;
 			$all_static_lines[$index]['is_active'] = $static_line->is_active;
+			$all_static_lines[$index]['price'] = $static_line->price;
 			$index++;
 		}
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -184,6 +185,7 @@ class StaticlinesController extends Controller
 		if(isset($data->line_order)){
 			$model->line_order = $data->line_order;
 		}
+		$model->price = $data->price;
 		if(isset($data->is_active)){
 			$model->is_active = $data->is_active;
 		}

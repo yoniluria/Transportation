@@ -30,7 +30,7 @@ class Staticlines extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['line_number', 'driver_id', 'line_order','combined_line'], 'integer'],
+            [['line_number', 'driver_id', 'line_order','combined_line','price'], 'integer'],
             [['is_active'], 'boolean'],
             [['description'], 'string', 'max' => 256],
         ];

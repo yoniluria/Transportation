@@ -175,6 +175,8 @@ class SendtoController extends Controller {
             }else{
                 $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
                 if(!$hospital_track -> is_confirm){
+                    
+                    //message_type 1- voice message message_type 2- sms message
                     if(($worker->message_type == 1||$worker->message_type == "1")&&($worker -> line_number !=90 || $worker -> line_number != "90")){
                         //שליחה רגילה למספרי הניהול
                         if($worker -> phone == '0527628585' || $worker -> phone == '0556790966'){
@@ -209,26 +211,6 @@ class SendtoController extends Controller {
     {
         
         $phones_string = implode(':', $phone_numbers);//print_r($phones_string);die();
-        $data = (object)['phones'=>$phones_string];
-        $url = "http://dev.sayyes.co.il/transportation/server/api.php?ApiModule=runCampaign";
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        //curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response  = curl_exec($ch);
-        curl_close($ch);
-        //$data = file_get_contents("http://dev.sayyes.co.il/transportation_test/server/api.php?ApiModule=runCampaign&phones=".$phones_string);
-        //print_r($response);die();
-        return json_decode($response);
-    }
-    public function send_voice_messages2($phone_numbers)
-    {
-        $uid = "4344";
-        $un = "hasaot1";
-        $phones_string = implode(',', $phone_numbers);//print_r($phones_string);die();
-        $url = 'http://www.micropay.co.il/ExtApi/ScheduleVms.php?post=2&uid='.$uid.'&un='.$un.'&desc=Test&from=0747571289&list=0556790966&sid=2000';
         $data = (object)['phones'=>$phones_string];
         $url = "http://dev.sayyes.co.il/transportation/server/api.php?ApiModule=runCampaign";
         $ch = curl_init();
@@ -876,78 +858,314 @@ class SendtoController extends Controller {
     
                 $mail_sent=$mail->send();
           
-    }  
+    } 
+
+	public function getColumn($shift,$column,$day)
+	{
+		switch ($shift) {
+				
+				case 'בוקר - איסוף':
+					if($column!=""&&strpos($column, 'בוקר')===false){
+						$col = $column==$day?"לילה":$column;
+						$column = "בוקר-".$col;
+					}		
+					else if($column=="")
+						$column = "בוקר";
+					break;
+					
+				case 'צהריים - איסוף':
+					if($column!=""&&strpos($column, 'צהריים')===false){
+						if(strpos($column, 'בוקר')&&strpos($column, 'לילה'))
+							$column = "בוקר-צהריים-לילה";
+						else if(strpos($column, 'בוקר'))
+							$column = "בוקר-צהריים";
+						else
+							$column = "צהריים-לילה";
+					}
+						
+					else if($column=="")
+						$column = "צהריים";
+					break;
+					
+				case 'לילה - איסוף':
+					if($column!=""&&strpos($column, 'לילה')===false&&(strpos($column, 'בוקר')!==false||strpos($column, 'צהריים')!==false))
+						$column = $column."-לילה";
+					else if($column=="")
+						$column = $day;
+					break;
+					
+				default:
+					if($column!=""&&strpos($column, 'לילה')===false&&(strpos($column, 'בוקר')!==false||strpos($column, 'צהריים')!==false))
+						$column = $column."-לילה";
+					else if($column=="")
+						$column = $day;
+					break;
+			}
+			return $column;
+	} 
 
 	public function actionReport_one()
 	{
 		$data = json_decode(file_get_contents("php://input"));
         $date = $data->date;
-		$date = date('Y-m-d H:i:s', strtotime($date));  
+		$date = date('Y-m-d H:i:s', strtotime($date)); 
 		$daysArr = ['0'=>'א','1'=>'ב','2'=>'ג','3'=>'ד','4'=>'ה','5'=>'ו','6'=>'ז'];
 		$numDays = date('t', strtotime($date));
-		$columns = intval($numDays)+intval(6);      
-		$table="<table id='yourHtmTable' border='2px'>".
+		$columns = intval($numDays)+intval(6);
+		$tableArr = [];   
+		$countArr = [];   
+		$sql="SELECT t.id , track_date as date , t.line_number , t.combined_line , region , count(tw.id) as cnt , shift
+		from track t
+		inner join static_lines s on t.line_number=s.combined_line
+		inner join track_for_worker tw on t.id=tw.track_id
+		where MONTH(track_date) = '".date("m", strtotime($date))."' and YEAR(track_date) = '".date("Y", strtotime($date))."' and shift like '%איסוף%' and s.is_active = 1
+		group by `combined_line` , track_date , shift_id
+		order by line_number , track_date , shift_id";
+		$allDates=Yii::$app->db->createCommand($sql)->queryAll();  
+		foreach ($allDates as $key => $value) { // שורה בטבלה של ימים בחודש
+			$day = date('j', strtotime($value["date"]));
+			$index = intval($day)-intval(1);
+			$tableArr[$index] = $this->getColumn($value["shift"],isset($tableArr[$index])&&$tableArr[$index]?$tableArr[$index]:"",$day);
+		} 
+		$tableTd1 = [];
+		$tableNumCols = [];
+		$daysLine = "";
+		$newDate = date('Y-m-01 H:i:s', strtotime($date));
+		for ($i=1; $i <= $numDays; $i++) {
+			$col = isset($tableArr[intval($i)-intval(1)])?$tableArr[intval($i)-intval(1)]:"";
+			$text = $col!=""?$col:$i;
+			$n = explode('-', $text);
+			$span = "";
+			if(count($n)==3){
+				$span = "colspan='3'";
+			}
+			else if(count($n)==2){
+				$span = "colspan='2'";
+			}
+			array_push($tableTd1,"<td $span >".$text."</td>");
+			$day =  date("w", strtotime($newDate));
+			$daysLine.="<td $span >".$daysArr[$day]."</td>";
+			$newDate = date('Y-m-d H:i:s', strtotime($newDate. ' + 1 days'));
+			array_push($tableNumCols,$col!=""?count(explode("-", $col)):1); 
+		}
+		
+		
+		$table1="<table id='yourHtmTable' border='2px'>". // כותרת ושורה של תאריכים בטבלה
 				"<tr>".
 				"<td colspan='2' >בס''ד</td>".
 				"</tr><tr>".
 				'<td colspan="'.$columns.'" style="text-align: center;font-weight: bold;text-decoration: underline;font-size:20px;" >אמנון אהרון הסעות בע"מ'.'<br>
 דו"ח מרוכז מספר 1 - מסלולי איסוף בימי החול בתאריכים:  28/2/19 - 1/2/19</td>'.
 				"</tr><tr>";
-		$table.="<td rowspan='2' >מס' מסלול</td><td>תאריך ◄</td>";
+		$table1.="<td rowspan='2' >מס' מסלול</td><td>תאריך ◄</td>";
 		$newDate = date('Y-m-01 H:i:s', strtotime($date)); 
-		for ($i=1; $i <= $numDays; $i++) {
+		/*for ($i=1; $i <= $numDays; $i++) {
 			$day =  date("w", strtotime($newDate));
-			$table.="<td>".$daysArr[$day]."</td>";
+			$table1.="<td>".$daysArr[$day]."</td>";
 			$newDate = date('Y-m-d H:i:s', strtotime($newDate. ' + 1 days'));
-		}
-		$table.="<td rowspan='2' >תוספת</td><td rowspan='2' >כמות</td><td rowspan='2' >מחיר לא כולל מע''מ</td><td rowspan='2' >סה''כ מחיר לא כולל מע''מ</td></tr><tr><td>שם מסלול ▼</td>";
-		for ($i=1; $i <= $numDays; $i++) { 
-			$table.="<td>".$i."</td>";
-		}
-		$table.="</tr>";
+		}*/
+		$table1.=$daysLine;
+		//echo $table1;die();
+		$table1.="<td rowspan='2' >תוספת</td><td rowspan='2' >כמות</td><td rowspan='2' >מחיר לא כולל מע''מ</td><td rowspan='2' >סה''כ מחיר לא כולל מע''מ</td></tr><tr><td>שם מסלול ▼</td>";
 		
-		$sql="SELECT date , shift , combined_line , region , COUNT(*) as cnt  FROM `hospital_track` 
-		where MONTH(date) = '".date("m", strtotime($date))."' and YEAR(date) = '".date("Y", strtotime($date))."' 
-		group by date ,shift_id , `combined_line`
-		order by  combined_line , date";
-		$allDates=Yii::$app->db->createCommand($sql)->queryAll();
-		
+		$table2 = ""; // התוכן הפנימי של הטבלה
+		$table2.="</tr>";
 		$prevLine = 0;
 		$prevDate = "";  
-		
+		$prevShift = "";
 		for ($i=0; $i < count($allDates); $i++) {
-			if($allDates[$i]["combined_line"]!=$prevLine){
-				$prevDate = "";
-				if($prevLine!=0){
-					$table.="</tr>";
-				}
-				$table.="<tr><td>".$allDates[$i]["combined_line"]."</td><td>".$allDates[$i]["region"]."</td>";
-			}
-			else if($allDates[$i]["date"]!=$prevDate)
-			{
-				if($prevDate!="")
-					$table.="</td>";
-				if(intval(date("m", strtotime($allDates[$i]["date"])))-intval(1)!=date('m', strtotime($prevDate))){
-					$diff = intval(date("d", strtotime($allDates[$i]["date"]))) - intval(date('d', strtotime($prevDate)));
-					$diff = intval($diff) - intval(1);
-					if($diff>0){
-						for ($j=0; $j < $diff; $j++) { 
-							$table.="<td></td>";
+			/*if($allDates[$i]["line_number"]==12)     
+			break;*/
+			$day =  date("d", strtotime($allDates[$i]["date"]));
+			$numCols = $tableNumCols[intval($day)-intval(1)]; 
+			if($allDates[$i]["line_number"]!=$prevLine){ // קו חדש
+				
+				
+				if($prevLine!=0){ // קו חדש וקודם היה קו אחר
+					/*----------------------------- מחוץ לאיפיון - בדיקה אם יש משמרות ריקות בתאריך אחרון שהיה -----------------------------*/
+					$p_shift = str_replace(" - איסוף", "", $prevShift);
+					$e = date('j', strtotime($prevDate));  
+					$shiftText = $tableArr[intval($e)-intval(1)];
+					$shiftArray = explode("-",$shiftText);					
+					$num = $tableNumCols[intval($e)-intval(1)];
+					if($num==3&&$prevShift=="בוקר - איסוף"){
+						$table2.="<td></td><td></td>";
+					}
+					else if(($num==3&&$prevShift=="צהריים - איסוף")||($num==2&&$p_shift!=$shiftArray[intval(count($shiftArray))-intval(1)])){
+						$table2.="<td></td>";
+					}
+					/*----------------------------------------------------------*/
+					if($numDays!=date('d', strtotime($prevDate))){ // השלמת עמודות לתאריכים בקו קודם
+						$dif = intval($numDays) - intval(date('d', strtotime($prevDate)));
+						if($dif>0){
+							for ($a=date('d', strtotime($prevDate. ' + 1 days')); $a <= $numDays; $a++) {
+								$num = $tableNumCols[intval($a)-intval(1)];
+								for ($l=0; $l < $num; $l++) { 
+									$table2.="<td></td>";
+								}	 
+							}
+						}
+					}
+					$table2.="<td></td><td></td><td></td><td></td>";
+					$table2.="</tr>";
+				} 
+				$prevShift = "";
+				$prevAllShift = $allDates[$i]["shift"];
+				$table2.="<tr><td>".$allDates[$i]["line_number"]."</td><td>".$allDates[$i]["region"]."</td><td>";
+				/*----------------------------------------------------------*/
+				if(date('d', strtotime($allDates[$i]["date"]))!='01'){ // השלמת עמודות לתאריכים בקו קודם
+					$cur_day = date('j', strtotime($allDates[$i]["date"]));
+					$dif = intval($cur_day) - intval(1);
+					if($dif>0){
+						for ($a=1; $a < $cur_day; $a++) {
+							$num = $tableNumCols[intval($a)-intval(1)];
+							for ($l=0; $l < $num; $l++) { 
+								$table2.="<td></td>";
+							}	 
 						}
 					}
 				}
-			}
+				/*----------------------------- מחוץ לאיפיון - בדיקה אם יש משמרות ריקות בתאריך נוכחי -----------------------------*/
+				$shift = str_replace(" - איסוף", "", $allDates[$i]["shift"]);  
+				$shiftText = $tableArr[intval($day)-intval(1)];
+				$shiftArray = explode("-",$shiftText);
 				
-		
+				
+				if($shift==$shiftArray[0]){ // אם משמרת ראשונה שמוגדרת שווה למשמרת נוכחית
+					//$table2.="<td>";
+				}
+				else if($prevShift==""&&($shift=="צהריים"||($shift=="לילה"&&($shiftText=="בוקר-לילה"||$shiftText=="צהריים-לילה")))){
+					$table2.="</td><td>";
+				}
+				else {
+					$table2.="</td><td></td><td>";
+				}
+				/*----------------------------------------------------------*/
+				$prevDate = "";
+			}
+			else{ // אם לא קו חדש
+				if($allDates[$i]["date"]!=$prevDate){ // אם תאריך חדש
+					/*----------------------------- מחוץ לאיפיון - בדיקה אם יש משמרות ריקות בתאריך אחרון שהיה -----------------------------*/
+					$p_shift = str_replace(" - איסוף", "", $prevShift);
+					$e = date('j', strtotime($prevDate));  
+					$shiftText = $tableArr[intval($e)-intval(1)];
+					$shiftArray = explode("-",$shiftText);					
+					$num = $tableNumCols[intval($e)-intval(1)];
+					if($num==3&&$prevShift=="בוקר - איסוף"){
+						$table2.="<td></td><td></td>";
+					}
+					else if(($num==3&&$prevShift=="צהריים - איסוף")||($num==2&&$p_shift!=$shiftArray[intval(count($shiftArray))-intval(1)])){
+						$table2.="<td></td>";
+					}
+					/*----------------------------------------------------------*/
+					if(intval($day)-intval(1)!=date('d', strtotime($prevDate))){ // אם ההפרש בין תאריך נוכחי לתאריך קודם הוא יותר מ-1
+						$diff = intval($day) - intval(date('d', strtotime($prevDate)));
+						$diff = intval($diff) - intval(1);
+						if($diff>0){
+							for ($j=date('d', strtotime($prevDate. ' + 1 days')); $j < $day; $j++) {
+								$num = $tableNumCols[intval($j)-intval(1)];
+								for ($l=0; $l < $num; $l++) { 
+									$table2.="<td></td>";
+								}					 
+							}
+						}
+					}
+				}
+				if($allDates[$i]["date"]!=$prevDate) // אם תאריך חדש
+				{
+					$prevShift = "";
+					if($prevDate!=""){ // אם היה תאריך קודם
+						$table2.="</td>";
+					} 
+					
+					/*------------------------------------------------------------------------------*/
+					/*$l = intval($i) - intval(1); // הוספת משמרות קודמות כאשר לדוגמא בתאריך זה יש בוקר צהררים לילה אך בקו נוכחי יש רק לילה איסוף
+					$day =  date("d", strtotime($allDates[$l]["date"]));
+					$numCols = $tableNumCols[intval($day)-intval(1)];
+					$shift = str_replace(" - איסוף", "", $allDates[$l]["shift"]);  
+					$shiftText = $tableArr[intval($day)-intval(1)];
+					$shiftArray = explode("-",$shiftText);
+					if($shift=="לילה"){
+						if($numCols==2)
+							$table2.="<td></td>";
+						else if($numCols==3)
+							$table2.="<td></td><td></td>";
+					}
+					if($shift=="צהריים"&&($numCols==3||($numCols==2&&strpos($prevAllShift, 'בוקר') === false))){
+						$table2.="<td></td>";
+					}
+					$prevAllShift = "";*/
+					/*------------------------------------------------------------------------------*/	
+							
+					//$table2.="<td>";
+					if($numCols==1){ // אם מספר משמרות בתאריך שווה ל-1
+						$table2.="<td>";
+					}
+					else{
+						$shift = str_replace(" - איסוף", "", $allDates[$i]["shift"]);  
+						$shiftText = $tableArr[intval($day)-intval(1)];
+						$shiftArray = explode("-",$shiftText);
+						if($shift==$shiftArray[0]){ // אם משמרת ראשונה שמוגדרת שווה למשמרת נוכחית
+							$table2.="<td>";
+						}
+						else if($prevShift==""&&($shift=="צהריים"||($shift=="לילה"&&($shiftText=="בוקר-לילה"||$shiftText=="צהריים-לילה")))){
+							$table2.="<td></td><td>";
+						}
+						else {
+							$table2.="<td></td><td></td><td>";
+						}
+					}
+					
+				}
+				else if($allDates[$i]["shift"]!=$prevShift)
+				{
+					$table2.="</td>"; 
+					$prevAllShift.=$allDates[$i]["shift"];
+					if($allDates[$i]["shift"]=='לילה - איסוף'&&$prevShift=="בוקר - איסוף"&&$tableArr[intval($day)-intval(1)]=="בוקר-צהריים-לילה"){
+						$table2.="<td></td>";
+					}
+					$table2.="<td>";
+				}
+			}
+
+			/* בדיקה אם יש משמרות ריקות */
+			/*$num = $tableNumCols[intval($day)-intval(1)];
+			if($num==2&&$prevShift==""&&$prevShift!=$allDates[$i]["shift"]){
+				$table2.="<td></td>";
+			}
+			else if($num==3&&(($prevShift=="בוקר - איסוף"&&$shift=="לילה")||($prevShift==""&&$shift=="צהריים"))){
+				$table2.="<td></td>";
+			}
+			else if($num==3&&$prevShift==""&&$shift=="לילה"){
+				$table2.="<td></td><td></td>";
+			}
+			if(!($allDates[$i]["shift"]==$prevShift&&$allDates[$i]["date"]==$prevDate))
+				$table2.="<td>";*/
 			$cnt = $allDates[$i]["cnt"]>4?'ג':'ק';
-			$table.=$allDates[$i]["date"]!=$prevDate?"<td>":" ";
-			$table.=$cnt;	
-			$prevLine = $allDates[$i]['combined_line'];
-			$prevDate = $allDates[$i]['date']; 
+			//$table2.=$allDates[$i]["date"]!=$prevDate?"<td>":" ";
+			$table2.=$cnt;	
+			$prevLine = $allDates[$i]['line_number'];
+			$prevDate = $allDates[$i]['date'];
+			$prevShift =  $allDates[$i]['shift'];
+			/*if($allDates[$i]['date']=='2019-03-03'){
+				echo $table2; die();
+			}*/
 		}
-		
-		$table.="</tr></table>";
-		echo $table;
+		if($numDays!=date('d', strtotime($prevDate))){ // השלמת עמודות לתאריכים בקו קודם
+			$dif = intval($numDays) - intval(date('d', strtotime($prevDate)));
+			if($dif>0){
+				for ($a=date('d', strtotime($prevDate)); $a < $numDays; $a++) {
+					$num = $tableNumCols[intval($a)-intval(1)];
+					for ($l=0; $l < $num; $l++) { 
+						$table2.="<td></td>";
+					}	 
+				}
+			}
+		}
+		$table2.="<td></td><td></td><td></td><td></td>";
+		$table2.="</tr></table>";
+		$table = implode("", $tableTd1);
+		echo $table1.$table.$table2;   
 		die();
 	} 
     

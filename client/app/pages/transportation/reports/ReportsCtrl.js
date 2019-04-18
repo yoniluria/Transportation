@@ -48,6 +48,14 @@
     		});
 		}
 		
+		$scope.exportExcelMonthly = function(){
+			$scope.exportExcel('month');
+		}
+		
+		$scope.exportExcelDayly = function(){
+			$scope.exportExcel('day');
+		}
+		
     
     /*var startDate = new Date();
 	
