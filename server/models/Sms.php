@@ -8,10 +8,10 @@ class Sms extends \yii\db\ActiveRecord {
 
     static function sendSms($msg,$to) {
         //file_put_contents('sms_cnfirm.txt', $msg);//return;
-        $uid = "4344";
-        $un = "hasaot1";
+        $uid = "4344";//user id
+        $un = "hasaot1";//user name
         $charset = "utf-8";
-        $from = "0559663051";
+        $from = "0559663051";//from phone
         sleep(1);
         /*
         $recipient = "michale@sayyes.co.il";

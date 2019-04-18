@@ -168,10 +168,10 @@
     		},1000);
     	}
     	
-    	$scope.$watch(function(scope){return $rootScope.date},
+    	/*$scope.$watch(function(scope){return $rootScope.date},
 		function(){
 			getTracksByDate();
-		});    	
+		});*/    	
 
 		$scope.sendMessageToWorkers = function  () {
 			var workers = []; 
