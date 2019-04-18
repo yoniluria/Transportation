@@ -862,18 +862,19 @@ class SendtoController extends Controller {
 
 	public function getColumn($shift,$column,$day)
 	{
-		switch ($shift) {
+		switch (true) {
 				
-				case 'בוקר - איסוף':
+				case ($shift=="בוקר - איסוף"||$shift=="בוקר - פיזור"):
 					if($column!=""&&strpos($column, 'בוקר')===false){
 						$col = $column==$day?"לילה":$column;
 						$column = "בוקר-".$col;
+						//$column = "בוקר-".$column;
 					}		
 					else if($column=="")
 						$column = "בוקר";
 					break;
 					
-				case 'צהריים - איסוף':
+				case ($shift=="צהריים - איסוף"||$shift=="צהריים - פיזור"):
 					if($column!=""&&strpos($column, 'צהריים')===false){
 						if(strpos($column, 'בוקר')&&strpos($column, 'לילה'))
 							$column = "בוקר-צהריים-לילה";
@@ -885,13 +886,23 @@ class SendtoController extends Controller {
 						
 					else if($column=="")
 						$column = "צהריים";
+					/*if($column!=""&&strpos($column, 'צהריים')===false){
+						$column = "צהריים-".$column;
+					}		
+					else if($column=="")
+						$column = "צהריים";*/
 					break;
 					
-				case 'לילה - איסוף':
+				case ($shift=="לילה - איסוף"||$shift=="לילה - פיזור"):
 					if($column!=""&&strpos($column, 'לילה')===false&&(strpos($column, 'בוקר')!==false||strpos($column, 'צהריים')!==false))
 						$column = $column."-לילה";
 					else if($column=="")
 						$column = $day;
+					/*if($column!=""&&strpos($column, 'לילה')===false){
+						$column = "לילה-".$column;
+					}		
+					else if($column=="")
+						$column = "לילה";*/
 					break;
 					
 				default:
@@ -899,6 +910,11 @@ class SendtoController extends Controller {
 						$column = $column."-לילה";
 					else if($column=="")
 						$column = $day;
+					/*if($column!=""&&strpos($column, 'לילה')===false){
+						$column = "לילה-".$column;
+					}		
+					else if($column=="")
+						$column = "לילה";*/
 					break;
 			}
 			return $column;
@@ -908,17 +924,40 @@ class SendtoController extends Controller {
 	{
 		$data = json_decode(file_get_contents("php://input"));
         $date = $data->date;
+		$shifts = $data->shifts;
+		$driver = $data->driver;
 		$date = date('Y-m-d H:i:s', strtotime($date)); 
 		$daysArr = ['0'=>'א','1'=>'ב','2'=>'ג','3'=>'ד','4'=>'ה','5'=>'ו','6'=>'ז'];
 		$numDays = date('t', strtotime($date));
 		$columns = intval($numDays)+intval(6);
+		$cur_month = date("m", strtotime(date("Y-m-d")));
+		$con_date = "";
+		$con_shift = "";
+		$con_driver = "";
+		if($cur_month==date("m", strtotime($date))){
+			$con_date = " and track_date <= '".date("Y-m-d")."' ";
+		}
+		if(count($shifts)!=0&&!(count($shifts)==1&&$shifts[0]==0)){
+			$con_shift = " and shift_id in (".implode(",",$shifts).") ";
+		}
+		if($driver!=""&&$driver==-1){
+			$sql = "select id from messengers where name like '%דקר%'";
+			$messengers=Yii::$app->db->createCommand($sql)->queryAll();
+			$str = "";  
+			foreach ($messengers as $key => $value) {
+				$str.=$str==""?$value['id']:",".$value['id'];
+			}
+			$con_driver = " and meesenger in (".$str.") ";
+		}
+		else if($driver!=""&&$driver>0){
+			$con_driver = " and meesenger = ".$driver." ";
+		}
 		$tableArr = [];   
 		$countArr = [];   
 		$sql="SELECT t.id , track_date as date , t.line_number , t.combined_line , region , count(tw.id) as cnt , shift
 		from track t
-		inner join static_lines s on t.line_number=s.combined_line
 		inner join track_for_worker tw on t.id=tw.track_id
-		where MONTH(track_date) = '".date("m", strtotime($date))."' and YEAR(track_date) = '".date("Y", strtotime($date))."' and shift like '%איסוף%' and s.is_active = 1
+		where MONTH(track_date) = '".date("m", strtotime($date))."' and YEAR(track_date) = '".date("Y", strtotime($date))."' ".$con_date." ".$con_shift." ".$con_driver."
 		group by `combined_line` , track_date , shift_id
 		order by line_number , track_date , shift_id";
 		$allDates=Yii::$app->db->createCommand($sql)->queryAll();  
@@ -954,7 +993,9 @@ class SendtoController extends Controller {
 				"<tr>".
 				"<td colspan='2' >בס''ד</td>".
 				"</tr><tr>".
-				'<td colspan="'.$columns.'" style="text-align: center;font-weight: bold;text-decoration: underline;font-size:20px;" >אמנון אהרון הסעות בע"מ'.'<br>
+				'<td colspan="'.$columns.'" style="text-align: center;font-weight: bold;text-decoration: underline;font-size:20px;" >
+				<img width="66" height="51" src="http://185.70.251.252/transportation/client/assets/img/logo.png">
+				אמנון אהרון הסעות בע"מ'.'<br>
 דו"ח מרוכז מספר 1 - מסלולי איסוף בימי החול בתאריכים:  28/2/19 - 1/2/19</td>'.
 				"</tr><tr>";
 		$table1.="<td rowspan='2' >מס' מסלול</td><td>תאריך ◄</td>";
@@ -983,15 +1024,20 @@ class SendtoController extends Controller {
 				
 				if($prevLine!=0){ // קו חדש וקודם היה קו אחר
 					/*----------------------------- מחוץ לאיפיון - בדיקה אם יש משמרות ריקות בתאריך אחרון שהיה -----------------------------*/
-					$p_shift = str_replace(" - איסוף", "", $prevShift);
+					if(strpos($prevShift, 'איסוף') !== false){
+						$p_shift = str_replace(" - איסוף", "", $prevShift);
+					}
+					else {
+						$p_shift = str_replace(" - פיזור", "", $prevShift);
+					}
 					$e = date('j', strtotime($prevDate));  
 					$shiftText = $tableArr[intval($e)-intval(1)];
 					$shiftArray = explode("-",$shiftText);					
 					$num = $tableNumCols[intval($e)-intval(1)];
-					if($num==3&&$prevShift=="בוקר - איסוף"){
+					if($num==3&&($prevShift=="בוקר - איסוף"||$prevShift=="בוקר - פיזור")){
 						$table2.="<td></td><td></td>";
 					}
-					else if(($num==3&&$prevShift=="צהריים - איסוף")||($num==2&&$p_shift!=$shiftArray[intval(count($shiftArray))-intval(1)])){
+					else if(($num==3&&($prevShift=="צהריים - איסוף"||$prevShift=="צהריים - פיזור"))||($num==2&&$p_shift!=$shiftArray[intval(count($shiftArray))-intval(1)])){
 						$table2.="<td></td>";
 					}
 					/*----------------------------------------------------------*/
@@ -1026,7 +1072,12 @@ class SendtoController extends Controller {
 					}
 				}
 				/*----------------------------- מחוץ לאיפיון - בדיקה אם יש משמרות ריקות בתאריך נוכחי -----------------------------*/
-				$shift = str_replace(" - איסוף", "", $allDates[$i]["shift"]);  
+				if(strpos($allDates[$i]["shift"], 'איסוף') !== false){
+					$shift = str_replace(" - איסוף", "", $allDates[$i]["shift"]);  
+				}
+				else{
+					$shift = str_replace(" - פיזור", "", $allDates[$i]["shift"]);  
+				}
 				$shiftText = $tableArr[intval($day)-intval(1)];
 				$shiftArray = explode("-",$shiftText);
 				
@@ -1037,7 +1088,7 @@ class SendtoController extends Controller {
 				else if($prevShift==""&&($shift=="צהריים"||($shift=="לילה"&&($shiftText=="בוקר-לילה"||$shiftText=="צהריים-לילה")))){
 					$table2.="</td><td>";
 				}
-				else {
+				else if($shift=="לילה"&&$shiftText=="בוקר-צהריים-לילה"){
 					$table2.="</td><td></td><td>";
 				}
 				/*----------------------------------------------------------*/
@@ -1046,15 +1097,20 @@ class SendtoController extends Controller {
 			else{ // אם לא קו חדש
 				if($allDates[$i]["date"]!=$prevDate){ // אם תאריך חדש
 					/*----------------------------- מחוץ לאיפיון - בדיקה אם יש משמרות ריקות בתאריך אחרון שהיה -----------------------------*/
-					$p_shift = str_replace(" - איסוף", "", $prevShift);
+					if(strpos($prevShift, 'איסוף') !== false){
+						$p_shift = str_replace(" - איסוף", "", $prevShift);
+					}
+					else{
+						$p_shift = str_replace(" - פיזור", "", $prevShift);
+					}
 					$e = date('j', strtotime($prevDate));  
 					$shiftText = $tableArr[intval($e)-intval(1)];
 					$shiftArray = explode("-",$shiftText);					
 					$num = $tableNumCols[intval($e)-intval(1)];
-					if($num==3&&$prevShift=="בוקר - איסוף"){
+					if($num==3&&($prevShift=="בוקר - איסוף"||$prevShift=="בוקר - פיזור")){
 						$table2.="<td></td><td></td>";
 					}
-					else if(($num==3&&$prevShift=="צהריים - איסוף")||($num==2&&$p_shift!=$shiftArray[intval(count($shiftArray))-intval(1)])){
+					else if(($num==3&&($prevShift=="צהריים - איסוף"||$prevShift=="צהריים - פיזור"))||($num==2&&$p_shift!=$shiftArray[intval(count($shiftArray))-intval(1)])){
 						$table2.="<td></td>";
 					}
 					/*----------------------------------------------------------*/
@@ -1102,7 +1158,12 @@ class SendtoController extends Controller {
 						$table2.="<td>";
 					}
 					else{
-						$shift = str_replace(" - איסוף", "", $allDates[$i]["shift"]);  
+						if(strpos($allDates[$i]["shift"], 'איסוף') !== false){
+							$shift = str_replace(" - איסוף", "", $allDates[$i]["shift"]);  
+						}
+						else{
+							$shift = str_replace(" - פיזור", "", $allDates[$i]["shift"]);  
+						}
 						$shiftText = $tableArr[intval($day)-intval(1)];
 						$shiftArray = explode("-",$shiftText);
 						if($shift==$shiftArray[0]){ // אם משמרת ראשונה שמוגדרת שווה למשמרת נוכחית
@@ -1121,7 +1182,7 @@ class SendtoController extends Controller {
 				{
 					$table2.="</td>"; 
 					$prevAllShift.=$allDates[$i]["shift"];
-					if($allDates[$i]["shift"]=='לילה - איסוף'&&$prevShift=="בוקר - איסוף"&&$tableArr[intval($day)-intval(1)]=="בוקר-צהריים-לילה"){
+					if((($allDates[$i]["shift"]=='לילה - איסוף'&&$prevShift=="בוקר - איסוף")||($allDates[$i]["shift"]=='לילה - פיזור'&&$prevShift=="בוקר - פיזור"))&&$tableArr[intval($day)-intval(1)]=="בוקר-צהריים-לילה"){
 						$table2.="<td></td>";
 					}
 					$table2.="<td>";

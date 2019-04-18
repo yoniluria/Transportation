@@ -1,9 +1,30 @@
-<md-datepicker ng-model="dateReport" style="float: right;" md-mode="month">
+<md-datepicker ng-model="dateReport" style="float: right;margin: 10px;padding-right: 0;" md-mode="month">
 </md-datepicker>
 <div style="clear: both;" ></div>
-<button style="width: 100px;" ng-click="exportExcel()" >יצא דוח אקסל לפי חודש</button>
 
-<button style="width: 100px;" ng-click="exportExcelDayly()" >יצא דוח אקסל לפי יום</button>
+
+<!--<ui-select multiple sortable="true" ng-model="selected_shifts" theme="select2" class="form-control select_shifts" title="Choose a person">
+	<ui-select-match placeholder="בחר משמרות">{{$item.name}}</ui-select-match>
+	<ui-select-choices repeat="item in all_shift | filter: $select.search">
+	  <div ng-bind-html="item.name | highlight: $select.search"></div> 
+	  <small ng-bind-html="item.name | highlight: $select.search"></small>
+	</ui-select-choices>
+</ui-select>-->
+<p style="margin-right: 10px;" >משמרות</p>
+<select style="width: 143px;height: 133px;margin: 10px;" name="multipleSelect" id="multipleSelect" ng-model="selected_shifts" multiple>
+  <option value="0">בחר הכל</option>
+  <option ng-repeat="s in all_shift" value="{{s.id}}">{{s.name}}</option>
+</select>
+<p style="margin-right: 10px;" >נהגים</p>
+<select style="width: 143px;margin: 10px;display: block;" ng-model="selected_drivers" >
+  <option value="0">בחר הכל</option>
+  <option value="-1">דקר</option>
+  <option ng-repeat="d in all_driver" value="{{d.id}}">{{d.name}}</option>
+</select>
+
+<button style="width: 100px;margin: 10px;display: block;" ng-click="exportExcel()" >יצא דוח אקסל לפי חודש</button>
+
+<!-- <button style="width: 100px;" ng-click="exportExcelDayly()" >יצא דוח אקסל לפי יום</button> -->
 
 <!-- <table id="yourHtmTable" style="float: right;" >
 	<tr><td>אא</td><td>בב</td></tr>
@@ -12,4 +33,7 @@
 <div id="hideTable" style="display: none;" ></div>
 
 <a id="csv" style="display: none;" ></a>
+
+
+
 
