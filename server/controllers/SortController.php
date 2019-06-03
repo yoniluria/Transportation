@@ -22,7 +22,7 @@ class SortController extends Controller
      */
      
      
-      public function beforeAction($action)
+      public function beforeAction($action) 
     {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
@@ -30,8 +30,7 @@ class SortController extends Controller
     
     //get tracks by date
     public function actionGettracksbydate()
-    {
-        
+    { 
         $data = json_decode(file_get_contents("php://input"));
         $date = $data->date;
         $tracks = [];

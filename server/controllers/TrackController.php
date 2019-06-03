@@ -2259,7 +2259,7 @@ public function find_worker_to_track($row,$track,$i,$index)
                 if($workers){
     				$track[$i]['track'] = $value;
     				$static_line = Staticlines::findOne(['line_number'=>$value['line_number']]); 
-    				$track[$i]['track']['track_order'] = $static_line->line_order;
+    				$track[$i]['track']['track_order'] = $static_line?$static_line->line_order:1;
     				$driver = Messengers::find()->where(['id'=>$value['meesenger']])->asArray()->all();
     				foreach ($driver as $x) {
     					$track[$i]['driver'] = $x;

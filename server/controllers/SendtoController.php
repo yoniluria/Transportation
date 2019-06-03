@@ -55,14 +55,15 @@ class SendtoController extends Controller {
     public function actionSend_message_to_drivers()
     {
         date_default_timezone_set('Asia/jerusalem');
-        $data = json_decode(file_get_contents("php://input"));//print_r($data);die();
-        $tracks = $data->data;
+        $data = json_decode(file_get_contents("php://input"),true);//print_r($data);die();
+        $tracks = $data['data'];
         $failed_sms = [];
         $phone_numbers = [];
         $ids = [];
         $warnings = '';
+		$tracks = (array)$tracks;
         foreach ($tracks as $key => $track) {
-            $shift_arr = explode("-", $track->track->shift);
+            $shift_arr = explode("-", $track['track']['shift']);
             $shift = $shift_arr[0];
             $shift_type = $shift_arr[1];  
             /*$days = [
@@ -82,11 +83,11 @@ class SendtoController extends Controller {
             .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($track->track->track_date))."\r\n";*/  
             $time = '';
 			if($shift_type==' פיזור'){
-				$shift_id = $track->track->shift_id;
+				$shift_id = $track['track']['shift_id'];
 				$shift_model = Shift::findOne($shift_id);
 				$time = date('H:i',strtotime($shift_model->hour));
 			}
-            $msg = $shift_type.' '.$shift.' '.date("d.m", strtotime($track->track->track_date)).' '.$time;
+            $msg = $shift_type.' '.$shift.' '.date("d.m", strtotime($track['track']['track_date'])).' '.$time;
 			/*if(count($track->workers)<5){
 				foreach ($track->workers as $key => $worker) {
 	               $number = $key+1;
@@ -96,25 +97,25 @@ class SendtoController extends Controller {
 			else{*/
 				//$msg.=" ".date('H:i',strtotime($track->workers[0]->hour));
 				$city = null;
-				foreach ($track->workers as $key => $worker) {
+				foreach ($track['workers'] as $key => $worker) {
 	               $msg .= "\r\n".($key+1).".";
 				   if($shift_type==' פיזור')
-				   	   $msg.=$worker -> worker_name." ";
-				   $msg.=$worker -> address;
-	               if($city != $worker -> city)
-	                   $msg.=" ".$worker -> city;
+				   	   $msg.=$worker['worker_name']." ";
+				   $msg.=$worker['address'];
+	               if(isset($worker['city'])&&$city != $worker['city'])
+	                   $msg.=" ".$worker['city'];
 				   if($time=='')
-                   	   $msg.=" ".date('H:i',strtotime($worker->hour));
-                   $city = $worker -> city;
+                   	   $msg.=" ".date('H:i',strtotime($worker['hour']));
+                   $city = isset($worker['city'])?$worker['city']:"";
 	            }
 			/*}*/
             $msg .= "\n"."לאישור השב 22.";
             
-            $result = Sms::sendSms($msg,$track->driver->phone);
+            $result = Sms::sendSms($msg,$track['driver']['phone']);
              if($result->status != 'ok'){
                array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
              }else{
-                 $track = Track::findOne($track->track->id);
+                 $track = Track::findOne($track['track']['id']);
                  if($track){
                      $track -> is_sent = true;
                      $track -> message_datetime = date("Y-m-d H:i:s", time());
@@ -163,28 +164,29 @@ class SendtoController extends Controller {
 
     public function actionSend_message_to_workers()
     {
-        $data = json_decode(file_get_contents("php://input"));//print_r($data);die();
-        $workers = $data->data;
+        $data = json_decode(file_get_contents("php://input"),true);   //print_r($data);die();
+        $workers = $data['data'];
         $failed_sms = [];
         $phone_numbers = [];
         $ids = [];
         $warnings = '';
+		$workers = (array)$workers;
         foreach ($workers as $key => $worker) {
-            if(!preg_match("/^0\d([\d]{0,1})([-]{0,1})\d{7}$/", $worker->phone)) {
-                $warnings .= " מספר טלפון לא חוקי לעובד ".$worker->worker_name." ".$worker->phone;
+            if(!preg_match("/^0\d([\d]{0,1})([-]{0,1})\d{7}$/", $worker['phone'])) {
+                $warnings .= " מספר טלפון לא חוקי לעובד ".$worker['worker_name']." ".$worker['phone']; 
             }else{
-                $hospital_track = HospitalTrack::find()->where(['id'=>$worker->hospital_track_id])->one();
+                $hospital_track = HospitalTrack::find()->where(['id'=>$worker['hospital_track_id']])->one();
                 if(!$hospital_track -> is_confirm){
                     
                     //message_type 1- voice message message_type 2- sms message
-                    if(($worker->message_type == 1||$worker->message_type == "1")&&($worker -> line_number !=90 || $worker -> line_number != "90")){
+                    if(($worker['message_type'] == 1||$worker['message_type'] == "1")&&($worker['line_number'] !=90 || $worker['line_number'] != "90")){
                         //שליחה רגילה למספרי הניהול
-                        if($worker -> phone == '0527628585' || $worker -> phone == '0556790966'){
+                        if($worker['phone'] == '0527628585' || $worker['phone'] == '0556790966'){
                            file_put_contents('testVoiceMessage.txt', null); 
                         }
-                        array_push($phone_numbers,$worker -> phone);
-                        array_push($ids,$worker->hospital_track_id);
-                    }else if($worker->message_type == 2||$worker->message_type == "2"){
+                        array_push($phone_numbers,$worker['phone']);
+                        array_push($ids,$worker['hospital_track_id']);
+                    }else if($worker['message_type'] == 2||$worker['message_type'] == "2"){
                         $result = $this -> send_sms_message($worker);
                         if($result->status != 'ok'){
                             array_push($failed_sms,(object)['worker'=>$worker,'msg'=>$result->msg]);
@@ -227,7 +229,7 @@ class SendtoController extends Controller {
     }
     public function send_sms_message($worker)
     {
-        $shift_arr = explode("-", $worker->shift);
+        $shift_arr = explode("-", $worker['shift']);
         $shift = $shift_arr[0];
         $shift_type = $shift_arr[1];
         $days = [
@@ -239,18 +241,18 @@ class SendtoController extends Controller {
             'שישי',
             'שבת',
         ];
-        $day_in_week = $days[date('w', strtotime($worker->date))];
+        $day_in_week = $days[date('w', strtotime($worker['date']))];
         if(strpos($shift,'לילה') !== false && $day_in_week == 'שבת')
             $day_in_week = 'מוצאי שבת';
-        $msg = $worker->worker_name . " שלום רב,\r\n".
-        (($worker -> line_number ==90 || $worker -> line_number == "90")?("נא אשר/י הגעתך למשמרת "): ($shift_type." למשמרת "))
-        .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($worker->date)).
-        (($worker -> line_number ==90 || $worker -> line_number == "90")?'': (" נקבע לשעה ". date('H:i',strtotime($worker->hour))))
+        $msg = $worker['worker_name'] . " שלום רב,\r\n".
+        (($worker['line_number'] ==90 || $worker['line_number'] == "90")?("נא אשר/י הגעתך למשמרת "): ($shift_type." למשמרת "))
+        .$shift." ביום ".$day_in_week." ב-".date("d.m.Y", strtotime($worker['date'])).
+        (($worker['line_number'] ==90 || $worker['line_number'] == "90")?'': (" נקבע לשעה ". date('H:i',strtotime($worker['hour']))))
         . ".\r\n לאישור השיב/י 11 ,לנציג המרכז הרפואי 035771149‏.";
         
-        $result = Sms::sendSms($msg,$worker->phone);
+        $result = Sms::sendSms($msg,$worker['phone']);
         if($result->status == 'ok'){
-            $this -> track_sent_update($worker->hospital_track_id); 
+            $this -> track_sent_update($worker['hospital_track_id']); 
         }
         return $result;
     }
