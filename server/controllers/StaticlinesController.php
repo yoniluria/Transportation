@@ -185,7 +185,9 @@ class StaticlinesController extends Controller
 		if(isset($data->line_order)){
 			$model->line_order = $data->line_order;
 		}
-		$model->price = $data->price;
+		if(isset($data->price)){
+			$model->price = $data->price;
+		}
 		if(isset($data->is_active)){
 			$model->is_active = $data->is_active;
 		}

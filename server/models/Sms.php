@@ -11,7 +11,7 @@ class Sms extends \yii\db\ActiveRecord {
         $uid = "4344";//user id
         $un = "hasaot1";//user name
         $charset = "utf-8";
-        $from = "0559663051";//from phone
+        $from = "0559663016";//from phone
         sleep(1);
         /*
         $recipient = "michale@sayyes.co.il";

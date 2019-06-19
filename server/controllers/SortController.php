@@ -136,7 +136,7 @@ class SortController extends Controller
                             $curr_worker->phone = $w->phone;
                             $curr_worker->department = $worker->department;
                             $curr_worker->is_confirm = $worker->is_confirm;
-                            //$w = Worker::findOne($worker -> worker_id);
+                            $w = Worker::findOne($worker -> worker_id);
                             $curr_worker->message_type = isset($w->message_type)?$w->message_type:1;
                             $curr_worker->is_sent_message = $worker->is_sms_sent;
                             $tracks[$index]['workers'][] = $curr_worker;

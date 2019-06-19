@@ -133,7 +133,7 @@ class SendtoController extends Controller {
     public function actionDriver_sms_confirm()
     {
         //print_r($_GET);die();
-        
+        file_put_contents('aaa.txt', 'aaa');
         file_put_contents('sms_cnfirm.txt', json_encode(['phone'=>$_GET['phone'],'code'=>$_GET['code']]));
         // אם הנוסע השיב 11 יש לסמן אישור הגעה לנוסע הנ"ל(ע"פ מספר טלפון)"
         if($_GET['code']==22){
